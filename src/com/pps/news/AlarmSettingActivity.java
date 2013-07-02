@@ -9,11 +9,13 @@ import com.pps.news.bean.AlarmModel;
 import com.pps.news.bean.Week;
 import com.pps.news.database.AlarmHelper;
 import com.pps.news.util.UIUtil;
+import com.pps.news.widget.BaseAlertDialog;
 import com.pps.news.widget.WeekPickerDialog;
 import com.pps.news.widget.WeekPickerDialog.OnItemChangedListener;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -36,6 +38,7 @@ import android.widget.Toast;
  */
 public class AlarmSettingActivity extends BaseActivity implements OnClickListener, OnItemChangedListener {
 	private static final int SETTING_DIALOG_ID_TIME = 0x0;
+	private static final int SETTING_DIALOG_ID_DELETE = 0x1;
 	
 	private static final int SETTING_ALARM_EDIT_ITEM = 0x200;
 	private static final int SETTING_ALARM_ADD_ITEM = 0x201;
@@ -124,6 +127,17 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			}, cal.get(Calendar.HOUR_OF_DAY), 
 			   cal.get(Calendar.MINUTE), 
 			   DateFormat.is24HourFormat(this));
+		case SETTING_DIALOG_ID_DELETE:
+			return new BaseAlertDialog(this).setMessage(R.string.delete_tips)
+			.setPositiveClickListener(new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					if (model!=null && alarmHelper.delete(model.getId())>0) {
+						dialog.dismiss();
+						finish();
+					}
+				}
+			});
 		}
 		return super.onCreateDialog(id);
 	}
@@ -147,9 +161,7 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			startActivityForResult(UIUtil.newRingtoneIntent(null), 0x100);
 			break;
 		case R.id.delete:
-			if (model!=null && alarmHelper.delete(model.getId())>0) {
-				finish();
-			}
+			showDialog(SETTING_DIALOG_ID_DELETE);
 			break;
 		case R.id.confirm:
 			model.setHour(hourOfDay);

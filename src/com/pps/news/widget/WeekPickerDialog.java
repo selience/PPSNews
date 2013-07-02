@@ -34,7 +34,7 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dialog_layout);
+		setContentView(R.layout.week_dialog_layout);
 		
 		findViewById(R.id.ic_back).setVisibility(View.GONE);
 		((TextView)findViewById(R.id.subTitle)).setText("Week");
@@ -120,7 +120,7 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			StateHolder mHolder = null;
 			if (convertView == null) {
-				convertView = View.inflate(context, R.layout.dialog_list_item, null);
+				convertView = View.inflate(context, R.layout.week_dialog_list_item, null);
 				mHolder = new StateHolder();
 				mHolder.textView = (TextView) convertView.findViewById(R.id.textView);
 				mHolder.ckSelect = (CheckBox) convertView.findViewById(R.id.ckSelect);
