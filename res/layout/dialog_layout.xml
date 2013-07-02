@@ -1,56 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialog"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/news_color" >
-    <include layout="@layout/news_common_title" />
-    <LinearLayout
-        android:id="@+id/footer"
+    android:layout_height="wrap_content"
+    android:background="@color/news_color"
+    android:orientation="vertical" >
+    <TextView
+        android:id="@+id/message"
         android:layout_width="fill_parent"
-        android:layout_height="45dip"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal" >
-        <TextView
-            android:id="@+id/confirm"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/confirm"
-            android:textColor="#474747" />
-        <View
-            android:layout_width="0.5dip"
-            android:layout_height="fill_parent"
-            android:background="#d1d1d1" />
-        <TextView
-            android:id="@+id/cancel"
-            android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/cancel"
-            android:textColor="#474747" />
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dip"
+        android:layout_marginTop="20dip"
+        android:gravity="center"
+        android:textColor="@color/news_font_color"
+        android:textSize="18sp" />
     <View
-        android:id="@+id/footer_divider"
         android:layout_width="fill_parent"
         android:layout_height="1dip"
-        android:layout_above="@+id/footer"
         android:background="@color/news_divide" />
-    <ListView
-        android:id="@android:id/list"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/footer_divider"
-        android:layout_below="@+id/title_bar"
-        android:cacheColorHint="@android:color/transparent"
-        android:divider="@color/news_divide"
-        android:dividerHeight="0.5dip"
-        android:drawSelectorOnTop="false"
-        android:fadingEdgeLength="0dip"
-        android:scrollbars="none" >
-    </ListView>
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip" >
+        <FrameLayout
+            android:id="@+id/cancel"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_confirm"
+                android:drawablePadding="5dip"
+                android:singleLine="true"
+                android:text="@string/cancel"
+                android:textColor="@color/news_font_color"
+                android:textSize="16sp" />
+        </FrameLayout>
+        <View
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:background="@color/news_divide" />
+        <FrameLayout
+            android:id="@+id/confirm"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_cancel"
+                android:drawablePadding="5dip"
+                android:singleLine="true"
+                android:text="@string/confirm"
+                android:textColor="@color/news_font_color"
+                android:textSize="16sp" />
+        </FrameLayout>
+    </LinearLayout>
+</LinearLayout>
