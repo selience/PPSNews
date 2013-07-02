@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.pps.news.bean.AlarmModel;
+import com.pps.news.bean.Week;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;

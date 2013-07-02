@@ -84,7 +84,7 @@ public class AlarmAdapter extends BaseAdapter implements CompoundButton.OnChecke
 			mHolder.ckEnable.setOnCheckedChangeListener(this);
 			
 			mHolder.txtTime.setText(UIUtil.parseTimeString(model.getHour(), model.getMinute()));
-			mHolder.txtRepeat.setText(Week.split(model.getWeek().split(","), ' '));
+			mHolder.txtRepeat.setText(Week.appendValuesAtKey(model.getWeek().split(","), ' '));
 			Ringtone ringtone = UIUtil.getRingtoneWithUri(context, Uri.parse(model.getRingtone()));
 			if (ringtone != null) {
 				mHolder.txtRingtone.setText(ringtone.getTitle(context));

@@ -16,6 +16,12 @@ import com.pps.news.app.BaseActivity;
 import com.pps.news.bean.AlarmModel;
 import com.pps.news.database.AlarmHelper;
 
+/**
+ * @file AlarmActivity.java
+ * @create 2013-7-2 下午05:40:36
+ * @author lilong
+ * @description TODO 闹钟设置
+ */
 public class AlarmActivity extends BaseActivity implements OnClickListener {
 
 	private ListView listView;

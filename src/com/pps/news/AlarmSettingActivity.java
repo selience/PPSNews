@@ -1,8 +1,9 @@
 package com.pps.news;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
-
 import com.pps.news.app.BaseActivity;
 import com.pps.news.bean.AlarmModel;
 import com.pps.news.bean.Week;
@@ -10,7 +11,6 @@ import com.pps.news.database.AlarmHelper;
 import com.pps.news.util.UIUtil;
 import com.pps.news.widget.WeekPickerDialog;
 import com.pps.news.widget.WeekPickerDialog.OnItemChangedListener;
-
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
@@ -28,6 +28,12 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+/**
+ * @file AlarmSettingActivity.java
+ * @create 2013-7-2 下午05:40:18
+ * @author lilong
+ * @description TODO  闹钟编辑
+ */
 public class AlarmSettingActivity extends BaseActivity implements OnClickListener, OnItemChangedListener {
 	private static final int SETTING_DIALOG_ID_TIME = 0x0;
 	
@@ -48,6 +54,7 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 	private int hourOfDay, minute;
 	private Uri ringtoneUri;
 	private String weeks;
+	private List<String> mKeys = new ArrayList<String>(7);
 	
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
@@ -80,19 +87,23 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			ringtoneUri = Uri.parse(model.getRingtone());
 			ckEnable.setChecked(model.isEnable());
 			ckVibrate.setChecked(model.isVibrate());
-			txtTime.setText(UIUtil.parseTimeString(model.getHour(), model.getMinute()));
-			weeks = model.getWeek();
-			txtWeekDays.setText(Week.split(weeks.split(","), ' '));
 			btnDelte.setEnabled(true);
+			txtTime.setText(UIUtil.parseTimeString(model.getHour(), model.getMinute()));
+			// 默认选中项
+			weeks = model.getWeek();
+			mKeys = Arrays.asList(weeks.split(","));
+			txtWeekDays.setText(Week.appendValuesAtKey(weeks.split(","), ' '));
 		} else {
+			model = new AlarmModel();
 			status = SETTING_ALARM_ADD_ITEM;
 			hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
 			minute = cal.get(Calendar.MINUTE);
-			weeks = Week.join(Week.allKeys(), ',');
 			ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); // 获取默认铃声
-			txtWeekDays.setText(Week.join(Week.SHORT_WEEKDAYS, ' '));
 			txtTime.setText(UIUtil.parseTimeString(hourOfDay, minute));
 			btnDelte.setEnabled(false);
+			// 默认选中每一天
+			weeks = Week.join(Week.DAY_MAP, ',');
+			txtWeekDays.setText(Week.join(Week.SHORT_WEEKDAYS, ' '));
 		}
 		Ringtone ringtone = UIUtil.getRingtoneWithUri(this, ringtoneUri);
 		txtRingTone.setText(ringtone.getTitle(this));
@@ -128,7 +139,7 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			showDialog(SETTING_DIALOG_ID_TIME);
 			break;
 		case R.id.setting_repeat:
-			WeekPickerDialog dialog = new WeekPickerDialog(this, R.style.Theme_Dialog);
+			WeekPickerDialog dialog = new WeekPickerDialog(this, R.style.Theme_Dialog, mKeys);
 			dialog.setOnClickListener(this);
 			dialog.show();
 			break;
@@ -141,9 +152,6 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			}
 			break;
 		case R.id.confirm:
-			if (model == null) {
-				model = new AlarmModel();
-			}
 			model.setHour(hourOfDay);
 			model.setMinute(minute);
 			model.setWeek(weeks);
@@ -167,9 +175,8 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 
 	@Override
 	public void onItemClick(View v, List<String> keys) {
-		// TODO Auto-generated method stub
 		weeks = Week.join(keys, ',');
-		txtWeekDays.setText(Week.split(keys, ' '));
+		txtWeekDays.setText(Week.appendValuesAtKey(keys, ' '));
 	}
 	
 	@Override

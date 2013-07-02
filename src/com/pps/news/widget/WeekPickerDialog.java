@@ -1,7 +1,6 @@
 package com.pps.news.widget;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import com.pps.news.R;
 import com.pps.news.bean.Week;
@@ -22,16 +21,14 @@ import android.widget.TextView;
 
 public class WeekPickerDialog extends Dialog implements OnClickListener {
 
-	private boolean[] defaultValues;
+	private List<String> defaultKeys;
+	private List<String> mKeys = new ArrayList<String>(7);
 	private OnItemChangedListener mOnClickListener;
-	private List<String> keys = new ArrayList<String>();
 	
-	public WeekPickerDialog(Context context) {
-		super(context);
-	}
-	
-	public WeekPickerDialog(Context context, int theme) {
+	public WeekPickerDialog(Context context, int theme, List<String> data) {
 		super(context, theme);
+		this.defaultKeys = data;
+		this.mKeys.addAll(data);
 	}
 	
 	@Override
@@ -44,11 +41,7 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 		((TextView)findViewById(R.id.title)).setText("重复设置");
 		findViewById(R.id.confirm).setOnClickListener(this);
 		findViewById(R.id.cancel).setOnClickListener(this);
-
-		defaultValues = new boolean[Week.SHORT_WEEKDAYS.length];
 		ListView listView = (ListView) findViewById(android.R.id.list);
-		WeekAdapter adapter = new WeekAdapter(getContext(), Arrays.asList(Week.SHORT_WEEKDAYS));
-		listView.setAdapter(adapter);
 		
 		int width = UIUtil.getScreenWidth(getContext()) - 80;
 		int height = UIUtil.getScreenHeight(getContext()) - 230;
@@ -63,6 +56,8 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 		}
 		rl.setLayoutParams(lp);
 		
+		WeekAdapter adapter = new WeekAdapter(getContext(), Week.SHORT_WEEKDAYS);
+		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			
 			@Override
@@ -75,11 +70,10 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 
 	@Override
 	public void onClick(View v) { 
-		// TODO Auto-generated method stub
 		switch (v.getId()) {
 		case R.id.confirm:
 			if (mOnClickListener!=null) {
-				mOnClickListener.onItemClick(v, keys);
+				mOnClickListener.onItemClick(v, mKeys);
 				dismiss();
 			}
 			break;
@@ -87,10 +81,6 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 			dismiss();
 			break;
 		}
-	}
-	
-	public void setValues(boolean[] values) {
-		this.defaultValues = values;
 	}
 	
 	public void setOnClickListener(OnItemChangedListener listener) {
@@ -102,62 +92,48 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 		void onItemClick(View v, List<String> data);
 	}
 	
-	class WeekAdapter extends BaseAdapter {
-		private List<String> list;
+	class WeekAdapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
+		private String[] WEEKS;
 		private Context context;
 		
-		public WeekAdapter(Context context, List<String> data) {
-			this.list = data;
+		public WeekAdapter(Context context, String[] data) {
 			this.context = context;
+			this.WEEKS = data;
 		}
 		
 		@Override
 		public int getCount() {
-			// TODO Auto-generated method stub
-			return list.size();
+			return WEEKS.length;
 		}
 
 		@Override
 		public Object getItem(int position) {
-			// TODO Auto-generated method stub
-			return list.get(position);
+			return WEEKS[position];
 		}
 
 		@Override
 		public long getItemId(int position) {
-			// TODO Auto-generated method stub
 			return position;
 		}
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
 			StateHolder mHolder = null;
 			if (convertView == null) {
 				convertView = View.inflate(context, R.layout.dialog_list_item, null);
 				mHolder = new StateHolder();
 				mHolder.textView = (TextView) convertView.findViewById(R.id.textView);
 				mHolder.ckSelect = (CheckBox) convertView.findViewById(R.id.ckSelect);
-				mHolder.ckSelect.setTag(position);
-				mHolder.ckSelect.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-						String key = buttonView.getTag().toString();
-						if (isChecked) {
-							keys.add(key);
-						} else {
-							if (keys.contains(key)) {
-								keys.remove(key);
-							}
-						}
-					}
-				});
 				convertView.setTag(mHolder);
 			} else {
 				mHolder = (StateHolder)convertView.getTag();
 			}
-			mHolder.textView.setText(list.get(position));
-			mHolder.ckSelect.setChecked(defaultValues[position]);
+			String key = String.valueOf(Week.DAY_MAP[position]);
+			mHolder.textView.setText(WEEKS[position]);
+			mHolder.ckSelect.setTag(key);
+			mHolder.ckSelect.setOnCheckedChangeListener(null);
+			mHolder.ckSelect.setChecked(defaultKeys.contains(key));
+			mHolder.ckSelect.setOnCheckedChangeListener(this);
 			
 			return convertView;
 		}
@@ -166,6 +142,19 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 		class StateHolder {
 			TextView textView;
 			CheckBox ckSelect;
+		}
+
+
+		@Override
+		public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+			String key = buttonView.getTag().toString();
+			if (isChecked) {
+				mKeys.add(key);
+			} else {
+				if (mKeys.contains(key)) {
+					mKeys.remove(key);
+				}
+			}
 		}
 	}
 }
