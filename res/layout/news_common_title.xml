@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/title_bar"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/nav_bg_title"
+    android:paddingLeft="15dip"
+    android:paddingRight="20dip" >
+    <ImageView
+        android:id="@+id/ic_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:contentDescription="@string/empty"
+        android:scaleType="center"
+        android:src="@drawable/icon_alarm" />
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dip"
+        android:layout_marginRight="10dip"
+        android:layout_toRightOf="@+id/ic_back"
+        android:singleLine="true"
+        android:text="@string/alarm_setting"
+        android:textColor="#474747"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/subTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="20dip"
+        android:minWidth="20dip"
+        android:singleLine="true"
+        android:textColor="#A70000"
+        android:textSize="16sp" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/subTitle"
+        android:layout_toRightOf="@+id/title"
+        android:contentDescription="@string/empty"
+        android:src="@drawable/nav_title_line" />
+</RelativeLayout>

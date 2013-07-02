@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/news_color"
+        android:orientation="vertical" >
+        <include layout="@layout/news_common_title" />
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/alarm_item_height"
+            android:paddingLeft="@dimen/alarm_item_padding" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:text="@string/alarm_enable_clock"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+            <CheckBox
+                android:id="@+id/sub_enable"
+                style="@style/checkBoxstyle"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="15dip"
+                android:checked="true" />
+        </FrameLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/news_divide" />
+        <FrameLayout
+            android:id="@+id/setting_time"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/alarm_item_height"
+            android:clickable="true"
+            android:descendantFocusability="blocksDescendants"
+            android:paddingLeft="@dimen/alarm_item_padding"
+            android:paddingRight="@dimen/alarm_item_padding" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:text="@string/alarm_time"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/sub_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:text="00:00"
+                android:textColor="@color/setting_font_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/news_divide" />
+        <FrameLayout
+            android:id="@+id/setting_repeat"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/alarm_item_height"
+            android:clickable="true"
+            android:descendantFocusability="blocksDescendants"
+            android:paddingLeft="@dimen/alarm_item_padding"
+            android:paddingRight="@dimen/alarm_item_padding" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:text="@string/alarm_repeat"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/sub_weekdays"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:textColor="@color/setting_font_color"
+                android:textSize="12sp" />
+        </FrameLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/news_divide" />
+        <FrameLayout
+            android:id="@+id/setting_ringtone"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/alarm_item_height"
+            android:clickable="true"
+            android:descendantFocusability="blocksDescendants"
+            android:paddingLeft="@dimen/alarm_item_padding"
+            android:paddingRight="@dimen/alarm_item_padding" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:text="@string/alarm_ringtone"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+            <TextView
+                android:id="@+id/sub_ringtone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:textColor="@color/setting_font_color"
+                android:textSize="14sp" />
+        </FrameLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/news_divide" />
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/alarm_item_height"
+            android:paddingLeft="@dimen/alarm_item_padding" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:text="@string/alarm_vibrate"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+            <CheckBox
+                android:id="@+id/sub_vibrate"
+                style="@style/checkBoxstyle"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="15dip"
+                android:checked="false" />
+        </FrameLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/news_divide" />
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/alarm_item_height"
+            android:paddingLeft="@dimen/alarm_item_padding"
+            android:paddingRight="@dimen/alarm_item_padding" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left|center_vertical"
+                android:text="@string/alarm_delete"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+            <Button
+                android:id="@+id/delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:background="@drawable/bg_delete"
+                android:enabled="false"
+                android:text="@string/delete"
+                android:textColor="@color/setting_font_color" />
+        </FrameLayout>
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dip"
+            android:background="@color/news_divide" />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="25dip"
+        android:paddingLeft="@dimen/alarm_item_padding"
+        android:paddingRight="@dimen/alarm_item_padding" >
+        <TextView
+            android:id="@+id/confirm"
+            android:layout_width="120dip"
+            android:layout_height="35dip"
+            android:layout_gravity="left"
+            android:background="#A80000"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="120dip"
+            android:layout_height="35dip"
+            android:layout_gravity="right"
+            android:background="#2A2A2C"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+    </FrameLayout>
+</merge>

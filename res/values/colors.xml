@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="news_default_bg">#3E3E3F</color>
+    <color name="news_color">#F5F6F5</color>
+    <color name="news_divide">#D1D1D1</color>
+    <color name="setting_font_color">#999999</color>
+</resources>

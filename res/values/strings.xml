@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PPS新闻</string>
+    <string name="menu_settings">Settings</string>
+    <string name="list_empty">No data</string>
+    <string name="empty" />
+    <string name="nav_login_lable">您还未登录</string>
+    <string name="nav_sub_desc">可同步您的评论,收藏...</string>
+    <string name="nav_my_comment">我的评论</string>
+    <string name="nav_offline_download">离线下载</string>
+    <string name="nav_setting">设置</string>
+	<string name="news_pull_to_refresh_label">头条联播</string>
+    
+    <string name="news_detail_comment_hint">我要评论</string>
+    <string name="news_detail_source">来源：%1$s</string>
+    <string name="news_detail_comment_title">精彩评论</string>
+    <string name="news_detail_comment_label">我要评论</string>
+    <string name="news_detail_comment_src">来源：[%1$s]</string>
+
+    <string name="comment_title_label">我的评论</string>
+    <string name="schedule_add_task">添加任务 +</string>
+    
+    <string name="alarm_setting">闹钟设置</string>
+    <string name="alarm_repeat_setting">重复设置</string>
+    <string name="alarm_enable_clock">启用闹钟</string>
+    <string name="alarm_time">时间</string>
+    <string name="alarm_repeat">重复</string>
+    <string name="alarm_ringtone">铃声</string>
+    <string name="alarm_vibrate">震动</string>
+    <string name="alarm_delete">删除闹铃</string>
+    
+    <string name="switch_on">ON</string>
+    <string name="switch_off">OFF</string>
+    
+    <string name="delete">删除</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="back">返回</string>
+    <string name="send">发送</string>
+    <string name="setting">设置</string>
+    
+</resources>

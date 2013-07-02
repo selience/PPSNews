@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:paddingBottom="5dip"
+    android:paddingLeft="15dip"
+    android:paddingRight="10dip"
+    android:paddingTop="5dip" >
+    <CheckBox
+        android:id="@+id/ckEnable"
+        style="@style/checkBoxstyle"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:checked="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/ckEnable"
+        android:orientation="vertical" >
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:text="TextView"
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/txtRepeat"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:singleLine="true"
+            android:text="TextView"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/txtRingtone"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dip"
+            android:singleLine="true"
+            android:text="TextView"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>

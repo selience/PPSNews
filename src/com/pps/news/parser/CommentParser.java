@@ -1,0 +1,68 @@
+package com.pps.news.parser;
+
+import java.util.Iterator;
+import org.json.JSONException;
+import org.json.JSONObject;
+import com.pps.news.bean.Comment;
+import com.pps.news.bean.Group;
+
+public class CommentParser extends Parser<Comment> {
+
+	@Override
+	public Comment parse(JSONObject json) throws JSONException {
+		Comment comment = new Comment();
+		comment.setRn(json.optInt("rn"));
+		comment.setAddtime(json.optString("addtime"));
+		comment.setCmt_id(json.optLong("cmt_id"));
+		comment.setUpload_id(json.optLong("upload_id"));
+		comment.setP_id(json.optInt("p_id"));
+		comment.setUser_id(json.optLong("user_id"));
+		comment.setNick_name(json.optString("nick_name"));
+		comment.setCmt_text(json.optString("cmt_text"));
+		comment.setUser_face(json.optString("user_face"));
+		comment.setUser_type(json.optInt("user_type"));
+		comment.setCmt_flag(json.optInt("cmt_flag"));
+		comment.setCmd_type(json.optInt("cmd_type"));
+		comment.setChannel_id(json.optInt("channel_id"));
+		comment.setUrllink(json.optString("urllink"));
+		comment.setPic(json.optString("pic"));
+		comment.setReply_count(json.optInt("reply_count"));
+		comment.setVot_up(json.optInt("vot_up"));
+		comment.setVot_down(json.optInt("vot_down"));
+		comment.setIs_top_quality(json.optInt("is_top_quality"));
+		comment.setPinglun(json.optString("pinglun"));
+		comment.setTimeline(json.optString("timeline"));
+		if (json.has("reply_info")) {
+			JSONObject obj = json.getJSONObject("reply_info");
+			comment.setReply_count(obj.optInt("total"));
+			
+		}
+		return comment;
+	}
+
+	public Group<Comment> parse(String content) {
+		Group<Comment> comments = new Group<Comment>();
+		try {
+			JSONObject json = new JSONObject(content);
+			if (json.has("data")) {
+				json = json.getJSONObject("data");
+				Object object = json.get("datas");
+				// 有评论信息时返回对象，反之返回数组；
+				if (object != null && object instanceof JSONObject) {
+					JSONObject datas = (JSONObject) object;
+					Iterator<?> iterator = datas.keys();
+					while (iterator.hasNext()) {
+						String key = iterator.next().toString();
+						JSONObject itemJson = datas.optJSONObject(key);
+						if (itemJson != null) {
+							comments.add(parse(itemJson));
+						}
+					}
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return comments;
+	}
+}
