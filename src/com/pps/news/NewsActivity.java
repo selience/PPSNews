@@ -60,11 +60,17 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		navigationView.setMenu(R.layout.news_nav_item);
 		navigationView.setBehindOffsetRes(R.dimen.news_nav_offset);
 		navigationView.setMode(SlideNavigationView.RIGHT);
+		navigationView.setShadowWidthRes(R.dimen.slide_shadow_width);
+		navigationView.setShadowDrawable(R.drawable.slide_shadow_right);
 		navigationView.setTouchModeAbove(SlideNavigationView.TOUCHMODE_FULLSCREEN);
 		setContentView(navigationView);
 
-		findViewById(R.id.my_comment).setOnClickListener(this);
 		findViewById(R.id.setting).setOnClickListener(this);
+		findViewById(R.id.comment).setOnClickListener(this);
+		findViewById(R.id.offline).setOnClickListener(this);
+		findViewById(R.id.rl_alarm).setOnClickListener(this);
+		findViewById(R.id.rl_weather).setOnClickListener(this);
+		findViewById(R.id.icon_avatar).setOnClickListener(this);
 		slideMenu = (ImageView) findViewById(R.id.slide_menu);
 		slideMenu.setOnClickListener(this);
 		mPullToRefreshViewPager = (PullToRefreshVerticalViewPager) findViewById(R.id.pull_refresh_vertical_viewpager);
@@ -93,10 +99,10 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		case R.id.slide_menu:
 			navigationView.toggle(true);
 			break;
-		case R.id.my_comment:
+		case R.id.comment:
 			startActivity(new Intent(this, CommentActivity.class));
 			break;
-		case R.id.setting:
+		case R.id.rl_alarm:
 			startActivity(new Intent(this, AlarmActivity.class));
 			break;
 		}

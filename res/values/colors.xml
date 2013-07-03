@@ -3,6 +3,6 @@
     <color name="news_default_bg">#3E3E3F</color>
     <color name="news_color">#F5F6F5</color>
     <color name="news_font_color">#474747</color>
-    <color name="news_divide">#D1D1D1</color>
+    <color name="news_divide">#d9d9d9</color>
     <color name="setting_font_color">#999999</color>
 </resources>

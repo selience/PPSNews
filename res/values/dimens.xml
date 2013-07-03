@@ -5,4 +5,5 @@
     <dimen name="alarm_item_height">49dip</dimen>
     <dimen name="alarm_item_padding">20dip</dimen>
     <dimen name="dialog_button_height">45dip</dimen>
+    <dimen name="slide_shadow_width">20dip</dimen>
 </resources>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.pps.news.adapter.AlarmAdapter;
@@ -22,12 +23,13 @@ import com.pps.news.database.AlarmHelper;
  * @author lilong
  * @description TODO 闹钟设置
  */
-public class AlarmActivity extends BaseActivity implements OnClickListener {
+public class AlarmActivity extends BaseActivity implements OnClickListener,AdapterView.OnItemClickListener {
 
 	private ListView listView;
 	private AlarmAdapter mAdapter;
 	private AlarmHelper alarmHelper;
 	private TextView txtSummary;
+	private ProgressBar mProgressBar;
 	
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
@@ -36,17 +38,9 @@ public class AlarmActivity extends BaseActivity implements OnClickListener {
 		findViewById(R.id.add).setOnClickListener(this);
 		listView = (ListView) findViewById(android.R.id.list);
 		txtSummary = (TextView) findViewById(R.id.subTitle);
+		mProgressBar = (ProgressBar)findViewById(R.id.progress);
 		alarmHelper = new AlarmHelper(this);
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				AlarmModel model = (AlarmModel)parent.getItemAtPosition(position);
-				Intent intent = new Intent(AlarmActivity.this, AlarmSettingActivity.class);
-				intent.putExtra("alarm", model);
-				startActivity(intent);
-			}
-		});
+		listView.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -91,7 +85,16 @@ public class AlarmActivity extends BaseActivity implements OnClickListener {
 		protected void onPostExecute(List<AlarmModel> data) {
 			txtSummary.setText(data.size()+"");
 			onRefresh(data);
+			mProgressBar.setVisibility(View.GONE);
 		}
 		
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		AlarmModel model = (AlarmModel)parent.getItemAtPosition(position);
+		Intent intent = new Intent(this, AlarmSettingActivity.class);
+		intent.putExtra("alarm", model);
+		startActivity(intent);
 	}
 }

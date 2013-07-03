@@ -88,7 +88,7 @@ public class CommentPanel extends LinearLayout implements Observer {
 			Bitmap bitmap = imageFetcher.displayBitmap(photoUrl);
 			imageView.setImageBitmap(bitmap);
 		} else {
-			imageView.setImageResource(R.drawable.ic_face);
+			imageView.setImageResource(R.drawable.ic_avatar);
 			if (!mPhotosMap.containsKey(photoUrl)) {
 				mPhotosMap.put(photoUrl, imageView);
 			}

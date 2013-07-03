@@ -20,6 +20,7 @@
     <string name="comment_title_label">我的评论</string>
     <string name="schedule_add_task">添加任务 +</string>
     
+    <string name="alarm_title">闹钟</string>
     <string name="alarm_setting">闹钟设置</string>
     <string name="alarm_repeat_setting">重复设置</string>
     <string name="alarm_enable_clock">启用闹钟</string>
