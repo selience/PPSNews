@@ -147,12 +147,13 @@
             <Button
                 android:id="@+id/delete"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="25dip"
                 android:layout_gravity="right|center_vertical"
                 android:background="@drawable/bg_delete"
                 android:enabled="false"
                 android:text="@string/delete"
-                android:textColor="@color/setting_font_color" />
+                android:textColor="@color/setting_font_color"
+                android:textSize="14sp" />
         </FrameLayout>
         <View
             android:layout_width="fill_parent"

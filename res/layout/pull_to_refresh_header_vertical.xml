@@ -15,7 +15,7 @@
             android:singleLine="true"
             android:text="@string/news_pull_to_refresh_label"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#A70000"
+            android:textColor="#C10000"
             android:textStyle="bold" />
         <FrameLayout
             android:layout_width="fill_parent"
@@ -50,6 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:singleLine="true"
+                    android:textColor="#FFFFFF"
                     android:textAppearance="?android:attr/textAppearance"
                     android:textStyle="bold" />
                 <TextView
@@ -58,7 +59,7 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="#7F7F7F"
+                    android:textColor="#a2a2a2"
                     android:visibility="gone" />
             </LinearLayout>
         </FrameLayout>

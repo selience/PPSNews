@@ -4,4 +4,5 @@
     <dimen name="news_nav_offset">50dip</dimen>
     <dimen name="alarm_item_height">49dip</dimen>
     <dimen name="alarm_item_padding">20dip</dimen>
+    <dimen name="dialog_button_height">45dip</dimen>
 </resources>

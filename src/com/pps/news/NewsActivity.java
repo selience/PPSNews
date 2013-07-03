@@ -82,8 +82,8 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	private void setLastUpdateTimeStamp() {
 		long lastUpdateTimestamp = PreferenceUtils.getLastUpdateTimeStamp(this);
 		if (lastUpdateTimestamp > 0) {
-			String dateString = UIUtil.formatDate(lastUpdateTimestamp, "yyyy-MM-dd HH:mm:ss");
-			mPullToRefreshViewPager.getLoadingLayoutProxy().setLastUpdatedLabel("上次更新:"+dateString);
+			String dateString = UIUtil.formatDate(lastUpdateTimestamp, "HH:mm");
+			mPullToRefreshViewPager.getLoadingLayoutProxy().setLastUpdatedLabel("更新时间:"+dateString);
 		}
 	}
 	
