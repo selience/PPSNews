@@ -4,6 +4,7 @@ import java.util.List;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.pps.news.adapter.CommentsAdapter;
@@ -19,15 +20,20 @@ import com.pps.news.util.Utility;
 public class CommentActivity extends BaseActivity implements OnClickListener {
 
 	private TextView txtTitle;
+	private TextView txtSummuy;
 	private ListView listView;
+	private ImageView imageView;
 	private CommentsAdapter commentAdapter;
 	
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.comment_layout);
-		findViewById(R.id.back).setOnClickListener(this);
 		txtTitle = (TextView) findViewById(R.id.title);
+		imageView = (ImageView) findViewById(R.id.ic_back);
+		txtSummuy = (TextView) findViewById(R.id.subTitle);
 		listView = (ListView) findViewById(android.R.id.list);
+		txtTitle.setText(R.string.comment_title_label);
+		imageView.setImageResource(R.drawable.ic_comment);
 		
 		Group<Comment> comments = new CommentParser().parse(Utility.readComment(this));
 		onRefresh(comments);
@@ -36,7 +42,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
+		case R.id.ic_back:
 			finish();
 			break;
 		}
@@ -44,7 +50,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener {
 
 	private void onRefresh(List<Comment> data) {
 		if (data != null && data.size() > 0) {
-			txtTitle.setText(getTitle()+"("+data.size()+")");
+			txtSummuy.setText(data.size()+"");
 			if (commentAdapter == null) {
 				commentAdapter = new CommentsAdapter(this, data);
 				listView.setAdapter(commentAdapter);

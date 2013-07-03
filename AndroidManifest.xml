@@ -36,7 +36,13 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".NewsDetailActivity"
+            android:screenOrientation="portrait" />
+         <activity
+            android:name=".SettingActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".CommentActivity"
@@ -47,7 +53,9 @@
             android:screenOrientation="portrait" />
          <activity
             android:name=".AlarmSettingActivity"
-            android:label="@string/alarm_setting"
+            android:screenOrientation="portrait" />
+         <activity
+            android:name=".DownloadActivity"
             android:screenOrientation="portrait" />
          
          <receiver android:name="com.pps.news.receiver.BootBroadcastReceiver">

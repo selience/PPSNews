@@ -1,41 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F6F5"
-    android:orientation="vertical" >
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="44dip"
-        android:background="#2a2a2c"
-        android:paddingLeft="15dip"
-        android:paddingRight="15dip" >
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left|center_vertical"
-            android:contentDescription="@string/empty"
-            android:src="@drawable/ic_back" />
-        <TextView
-            android:id="@+id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:singleLine="true"
-            android:text="@string/comment_title_label"
-            android:textColor="@android:color/white"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-    </FrameLayout>
+    android:background="@color/news_color" >
+    <include
+        android:id="@+id/title_bar"
+        layout="@layout/news_common_title" />
+    <ImageView
+        android:id="@+id/icon_trash"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dip"
+        android:layout_marginTop="10dip"
+        android:clickable="true"
+        android:contentDescription="@string/empty"
+        android:src="@drawable/ic_trash" />
+    <View
+        android:id="@+id/divide"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_above="@+id/icon_trash"
+        android:background="@color/news_divide" />
     <ListView
         android:id="@android:id/list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/divide"
+        android:layout_below="@+id/title_bar"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:drawSelectorOnTop="false"
         android:fadingEdgeLength="0dip"
-        android:padding="8dip"
+        android:headerDividersEnabled="false"
+        android:listSelector="@drawable/list_item_selector"
+        android:paddingLeft="8dip"
+        android:paddingRight="8dip"
         android:scrollbarStyle="outsideInset" >
     </ListView>
-</LinearLayout>
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:indeterminateOnly="true"
+        android:visibility="gone" />
+</RelativeLayout>

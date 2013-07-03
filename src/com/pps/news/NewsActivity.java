@@ -73,10 +73,12 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		findViewById(R.id.icon_avatar).setOnClickListener(this);
 		slideMenu = (ImageView) findViewById(R.id.slide_menu);
 		slideMenu.setOnClickListener(this);
+		
 		mPullToRefreshViewPager = (PullToRefreshVerticalViewPager) findViewById(R.id.pull_refresh_vertical_viewpager);
 		mPullToRefreshViewPager.setOnRefreshListener(this);
 		mPullToRefreshViewPager.setOnPullEventListener(this);
 		mPullToRefreshViewPager.setRefreshing(false);
+		mPullToRefreshViewPager.setScrollingWhileRefreshingEnabled(false);
 		setLastUpdateTimeStamp();
 		
 		registeredFragments = new SparseArray<Fragment>(2);
@@ -99,8 +101,17 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		case R.id.slide_menu:
 			navigationView.toggle(true);
 			break;
+		case R.id.icon_avatar:
+			startActivity(new Intent(this, LoginActivity.class));
+			break;
 		case R.id.comment:
 			startActivity(new Intent(this, CommentActivity.class));
+			break;
+		case R.id.offline:
+			startActivity(new Intent(this, DownloadActivity.class));
+			break;
+		case R.id.setting:
+			startActivity(new Intent(this, SettingActivity.class));
 			break;
 		case R.id.rl_alarm:
 			startActivity(new Intent(this, AlarmActivity.class));

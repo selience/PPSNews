@@ -91,6 +91,8 @@ public abstract class BaseActivity extends FragmentActivity {
 			} else if (ex instanceof UnknownHostException ||
 					ex instanceof HttpHostConnectException) {
 				Toast.makeText(this, "网络连接异常", Toast.LENGTH_SHORT).show();
+			} else {
+				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
