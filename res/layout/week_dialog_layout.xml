@@ -9,7 +9,7 @@
         layout="@layout/news_common_title" />
     <include
         android:id="@+id/button_bar"
-        layout="@layout/dialog_button_bar" />
+        layout="@layout/dialog_button_view" />
     <View
         android:id="@+id/footer_divider"
         android:layout_width="fill_parent"

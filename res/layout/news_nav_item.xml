@@ -50,7 +50,7 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dip"
                 android:contentDescription="@string/empty"
-                android:src="@drawable/icon_setting" />
+                android:src="@drawable/btn_setting_selector" />
             <View
                 android:id="@+id/nav_divide"
                 android:layout_width="1dip"
@@ -147,14 +147,14 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingLeft="30dip" >
+            android:paddingLeft="25dip" >
             <ImageView
                 android:id="@+id/ic_clock"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/empty"
-                android:src="@drawable/ic_weather" />
+                android:src="@drawable/btn_weather_selector" />
             <TextView
                 android:id="@+id/weather"
                 android:layout_width="wrap_content"
@@ -192,7 +192,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/empty"
-                android:src="@drawable/ic_clock" />
+                android:src="@drawable/btn_alarm_selector" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

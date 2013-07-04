@@ -14,7 +14,7 @@
         android:clickable="true"
         android:contentDescription="@string/empty"
         android:scaleType="center"
-        android:src="@drawable/icon_alarm" />
+        android:src="@drawable/ic_alarm" />
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"

@@ -43,5 +43,5 @@
         android:layout_marginTop="-10dip"
         android:contentDescription="@string/empty"
         android:scaleType="fitXY"
-        android:src="@drawable/news_bottom_divide" />
+        android:src="@drawable/news_up_divide" />
 </merge>

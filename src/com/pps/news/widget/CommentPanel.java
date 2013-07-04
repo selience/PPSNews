@@ -55,8 +55,10 @@ public class CommentPanel extends LinearLayout implements Observer {
 		if (comments == null) return;
 		
 		View view = null;
+		int index = 0;
 		for (Comment comment : comments) {
 			view = View.inflate(getContext(), R.layout.comment_list_item, null);
+			View line = view.findViewById(R.id.line);
 			ImageView commentIcon = (ImageView) view.findViewById(R.id.comment_icon);
 			TextView commentTime = (TextView) view.findViewById(R.id.comment_time);
 			TextView commentTitle = (TextView) view.findViewById(R.id.comment_title);
@@ -78,6 +80,10 @@ public class CommentPanel extends LinearLayout implements Observer {
 			commentTime.setText(UIUtil.formatDate(d.getTime()));
 			commentDesc.setText(comment.getCmt_text());
 			
+			index++;
+			if (index == comments.size()) 
+				line.setVisibility(View.GONE);
+			
 			addView(view);
 		}
 	}
@@ -89,9 +95,7 @@ public class CommentPanel extends LinearLayout implements Observer {
 			imageView.setImageBitmap(bitmap);
 		} else {
 			imageView.setImageResource(R.drawable.ic_avatar);
-			if (!mPhotosMap.containsKey(photoUrl)) {
-				mPhotosMap.put(photoUrl, imageView);
-			}
+			mPhotosMap.put(photoUrl, imageView);
 			imageFetcher.request(photoUrl);
 		}
 	}

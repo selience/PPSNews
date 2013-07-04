@@ -16,7 +16,7 @@
         android:layout_marginTop="10dip"
         android:clickable="true"
         android:contentDescription="@string/empty"
-        android:src="@drawable/ic_trash" />
+        android:src="@drawable/btn_delete_selector" />
     <View
         android:id="@+id/divide"
         android:layout_width="fill_parent"
@@ -31,13 +31,8 @@
         android:layout_below="@+id/title_bar"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
-        android:drawSelectorOnTop="false"
         android:fadingEdgeLength="0dip"
-        android:headerDividersEnabled="false"
-        android:listSelector="@drawable/list_item_selector"
-        android:paddingLeft="8dip"
-        android:paddingRight="8dip"
-        android:scrollbarStyle="outsideInset" >
+        android:listSelector="@drawable/list_item_selector" >
     </ListView>
     <ProgressBar
         android:id="@+id/progress"

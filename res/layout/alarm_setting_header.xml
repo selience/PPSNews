@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dialog_button_height"
+    android:background="#29a6ef" >
+    <FrameLayout
+        android:id="@+id/cancel"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_cancel_normal"
+            android:drawablePadding="5dip"
+            android:singleLine="true"
+            android:text="@string/cancel"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+    </FrameLayout>
+    <View
+        android:layout_width="1dip"
+        android:layout_height="fill_parent"
+        android:background="#0e9bed" />
+    <FrameLayout
+        android:id="@+id/confirm"
+        android:layout_width="0dip"
+        android:layout_height="fill_parent"
+        android:layout_weight="1" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableLeft="@drawable/ic_confirm_normal"
+            android:drawablePadding="5dip"
+            android:singleLine="true"
+            android:text="@string/confirm"
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
+    </FrameLayout>
+</LinearLayout>

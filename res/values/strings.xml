@@ -33,6 +33,7 @@
     <string name="alarm_ringtone">铃声</string>
     <string name="alarm_vibrate">震动</string>
     <string name="alarm_delete">删除闹铃</string>
+    <string name="alarm_select_ringtone">选择铃声</string>
     
     <string name="delete_tips">确认删除?</string>
     

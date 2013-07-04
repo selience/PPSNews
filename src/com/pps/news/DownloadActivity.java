@@ -24,7 +24,7 @@ public class DownloadActivity extends BaseActivity implements OnClickListener {
 		iconBack.setImageResource(R.drawable.ic_download);
 		iconBack.setOnClickListener(this);
 		ImageView iconTrash = (ImageView)findViewById(R.id.add);
-		iconTrash.setImageResource(R.drawable.ic_trash);
+		iconTrash.setImageResource(R.drawable.btn_delete_selector);
 		iconTrash.setOnClickListener(this);
 		txtSummury = (TextView)findViewById(R.id.subTitle);
 		listView = (ListView)findViewById(android.R.id.list);

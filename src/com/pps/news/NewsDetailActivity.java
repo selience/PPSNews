@@ -1,11 +1,11 @@
 package com.pps.news;
 
+import java.util.List;
 import org.apache.http.message.BasicNameValuePair;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.pps.news.app.BaseActivity;
@@ -33,14 +33,12 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 	private TextView txtCommentNum;
 	private TextView txtSource;
 	private TextView txtDesc;
+	private TextView txtSummuy;
+	private ImageView iconDown;
+	private CommentPanel commentPanel;
 	private ImageView iconBack;
 	private ImageView iconShare;
-	private ImageView iconDown;
-	private TextView repostBtn;
-	private CommentPanel commentPanel;
-	private View repostBar;
-	private EditText repostMsg;
-	private TextView sendBtn;
+	private ImageView iconPost;
 	
 	private long newsId;
 	private int lineCount;
@@ -53,29 +51,25 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 		setContentView(R.layout.news_detail);
 		News news = getIntent().getParcelableExtra("news");
 		newsId = news.getInfo_id();
-
-		txtTitle = (TextView) findViewById(R.id.news_detail_title);
-		txtDate = (TextView) findViewById(R.id.news_detail_date);
-		txtCommentNum = (TextView) findViewById(R.id.news_detail_video_num);
-		txtSource = (TextView) findViewById(R.id.news_detail_src);
-		txtDesc = (TextView) findViewById(R.id.news_detail_desc);
-		iconBack = (ImageView) findViewById(R.id.back);
+		txtTitle = (TextView)findViewById(R.id.news_detail_title);
+		txtDate = (TextView)findViewById(R.id.news_detail_date);
+		txtCommentNum = (TextView)findViewById(R.id.news_detail_video_num);
+		txtSource = (TextView)findViewById(R.id.news_detail_src);
+		txtDesc = (TextView)findViewById(R.id.news_detail_desc);
+		txtSummuy = (TextView)findViewById(R.id.subTitle);
+		iconDown = (ImageView)findViewById(R.id.ic_down);
+		iconBack = (ImageView)findViewById(R.id.icon_back);
 		iconBack.setOnClickListener(this);
-		iconShare = (ImageView) findViewById(R.id.share);
+		iconShare = (ImageView)findViewById(R.id.icon_share);
 		iconShare.setOnClickListener(this);
-		iconDown = (ImageView) findViewById(R.id.ic_down);
-		iconDown.setOnClickListener(this);
-		repostBtn = (TextView) findViewById(R.id.repost_btn);
-		repostBtn.setOnClickListener(this);
+		iconPost = (ImageView)findViewById(R.id.icon_comment);
+		iconPost.setOnClickListener(this);
 		commentPanel = (CommentPanel) findViewById(R.id.news_detail_comment);
-		repostBar = findViewById(R.id.news_repost_bar);
-		repostMsg = (EditText) findViewById(R.id.edt_comment_conent);
-		sendBtn = (TextView) findViewById(R.id.btn_comment_send);
-		sendBtn.setOnClickListener(this);
+		((TextView)findViewById(R.id.title)).setText(R.string.news_detail_comment_title);
+		((ImageView)findViewById(R.id.ic_back)).setImageResource(R.drawable.ic_post);
 		
-		onRefeshUi(news);
+		ensureUi(news);
 		new GetNewsCommentsTask(this, GET_COMMENT_LIST_TASK).execute();
-		
 		txtDesc.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 			@Override
 			public void onGlobalLayout() {
@@ -84,49 +78,53 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 					lineCount = txtDesc.getLineCount();
 					txtDesc.setMaxLines(maxLine);
 					if (lineCount <= maxLine) {
-						iconDown.setVisibility(View.INVISIBLE);
+						iconDown.setVisibility(View.GONE);
 					}
 				}
 			}
 		});
 	}
-	
-	private void onRefeshUi(News news) {
+
+	private void ensureUi(News news) {
 		if (news != null) {
 			txtTitle.setText(news.getMain_title());
 			txtDate.setText(news.getShow_date());
 			txtCommentNum.setText(String.valueOf(news.getStart_count()));
 			txtSource.setText(getString(R.string.news_detail_source,news.getNews_from()));
 			txtDesc.setText("\u3000\u3000"+news.getDesc_title());
-			commentPanel.setItems(CacheUtil.getCommentCache(newsId));
+			onRefresh(CacheUtil.getCommentCache(newsId));
 		}
+	}
+
+	private void onRefresh(List<Comment> comments) {
+		txtSummuy.setText(comments.size()+"");
+		commentPanel.setItems(comments);
 	}
 	
 	private void showAllText() {
 		if (!isExpand) {
 			isExpand = true;
 			txtDesc.setMaxLines(lineCount);
-			iconDown.setImageResource(R.drawable.ic_up);
-		} else {
+			iconDown.setImageResource(R.drawable.ic_expand);
+		} /*else {
 			txtDesc.setMaxLines(maxLine);
 			isExpand = false;
 			iconDown.setImageResource(R.drawable.ic_down);
-		}
+		}*/
 	}
 	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.back:
-			finish();
-			break;
 		case R.id.ic_down:
 			showAllText();
 			break;
-		case R.id.repost_btn:
-			repostBar.setVisibility(View.VISIBLE);
+		case R.id.icon_back:
+			finish();
 			break;
-		case R.id.btn_comment_send:
+		case R.id.icon_share:
+			break;
+		case R.id.icon_comment:
 			break;
 		}
 	}
@@ -141,7 +139,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 		if (taskName.equals(GET_COMMENT_LIST_TASK)) {
 			if (result.getValue() != null) {
 				Group<Comment> comments = (Group<Comment>) result.getValue();
-				commentPanel.setItems(comments);
+				onRefresh(comments);
 				CacheUtil.saveCommentCache(newsId, comments);
 			}
 		}
@@ -152,6 +150,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 		commentPanel.deleteObservers();
 		super.onDestroy();
 	}
+	
 	
 	class GetNewsCommentsTask extends GenericTask {
 
@@ -180,7 +179,5 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 			result.addResult(comments);
 			return result;
 		}
-		
 	}
-
 }

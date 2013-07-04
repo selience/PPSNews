@@ -24,8 +24,8 @@ import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -64,13 +64,12 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 		setContentView(R.layout.alarm_setting);
 		model = getIntent().getParcelableExtra("alarm");
 		
-		findViewById(R.id.ic_back).setOnClickListener(this);
 		findViewById(R.id.setting_time).setOnClickListener(this);
 		findViewById(R.id.setting_repeat).setOnClickListener(this);
 		findViewById(R.id.setting_ringtone).setOnClickListener(this);
 		findViewById(R.id.cancel).setOnClickListener(this);
 		findViewById(R.id.confirm).setOnClickListener(this);
-		Button btnDelte = (Button)findViewById(R.id.delete);
+		ImageView btnDelte = (ImageView)findViewById(R.id.delete);
 		btnDelte.setOnClickListener(this);
 		
 		txtTime = (TextView) findViewById(R.id.sub_time);
@@ -78,7 +77,6 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 		txtRingTone = (TextView) findViewById(R.id.sub_ringtone);
 		ckEnable = (CheckBox) findViewById(R.id.sub_enable);
 		ckVibrate = (CheckBox) findViewById(R.id.sub_vibrate);
-		((TextView)findViewById(R.id.subTitle)).setText("Alarm");
 		
 		alarmHelper=new AlarmHelper(this);
 		cal = Calendar.getInstance();
@@ -145,7 +143,6 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.ic_back:
 		case R.id.cancel:
 			finish();
 			break;
@@ -158,7 +155,7 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			dialog.show();
 			break;
 		case R.id.setting_ringtone:
-			startActivityForResult(UIUtil.newRingtoneIntent(null), 0x100);
+			startActivityForResult(UIUtil.newRingtoneIntent(ringtoneUri.toString()), 0x100);
 			break;
 		case R.id.delete:
 			showDialog(SETTING_DIALOG_ID_DELETE);
