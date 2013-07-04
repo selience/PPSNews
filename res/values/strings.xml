@@ -46,6 +46,9 @@
     <string name="remember_password">记住密码</string>
     <string name="forget_password">找回密码?</string>
     
+    <string name="setting_auto_clear">自动清除过期新闻</string>
+    <string name="setting_clear_cache">清除缓存</string>
+    
     <string name="delete">删除</string>
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>

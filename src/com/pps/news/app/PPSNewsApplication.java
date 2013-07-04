@@ -1,10 +1,9 @@
 package com.pps.news.app;
 
-import com.pps.news.common.CommonOperate;
+import com.pps.news.constant.Constants;
+import com.pps.news.constant.PreferenceUtils;
 import com.pps.news.util.ImageCache;
 import android.app.Application;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
 /**
  * @file PPSNewsApplication.java
@@ -13,9 +12,6 @@ import android.preference.PreferenceManager;
  * @description TODO 自定义Application基类
  */
 public class PPSNewsApplication extends Application {
-	private static final String TAG = "PPSNews";
-	
-	public static SharedPreferences mPrefs;
 	private static PPSNewsApplication _instance;
 
 	@Override
@@ -26,20 +22,19 @@ public class PPSNewsApplication extends Application {
 		initialize();
 	}
 
-	@Override
-	public void onLowMemory() {
-		ImageCache.getInstance().clearCache();
-		super.onLowMemory();
-	}
-	
 	public static PPSNewsApplication getInstance() {
 		return _instance;
 	}
 
 	private void initialize() {
 		ImageCache.initInstance("PPSNews");
-		mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-		CommonOperate.startAlarmService(this);
+		// 设置自动清除过期新闻的全局状态
+		Constants.needAutoClearCache = PreferenceUtils.getIsAutoClearCache(this);
 	}
 
+	@Override
+	public void onLowMemory() {
+		ImageCache.getInstance().clearCache();
+		super.onLowMemory();
+	}
 }

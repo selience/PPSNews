@@ -4,4 +4,39 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <include layout="@layout/news_common_title" />
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/alarm_item_height"
+        android:paddingLeft="@dimen/alarm_item_padding" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|center_vertical"
+            android:text="@string/setting_auto_clear"
+            android:textColor="@color/news_font_color"
+            android:textSize="16sp" />
+        <CheckBox
+            android:id="@+id/setting_auto_clear"
+            style="@style/checkBoxstyle"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="15dip"
+            android:checked="false" />
+    </FrameLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/news_divide" />
+    <TextView
+        android:id="@+id/setting_clear_cache"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/alarm_item_height"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="@dimen/alarm_item_padding"
+        android:text="@string/setting_clear_cache"
+        android:textColor="@color/news_font_color"
+        android:textSize="16sp" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="@color/news_divide" />
 </LinearLayout>
