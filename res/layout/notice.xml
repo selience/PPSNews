@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_notice"
+    android:orientation="vertical"
+    android:paddingBottom="20dip"
+    android:paddingTop="20dip" >
+    <TextView
+        android:id="@+id/turn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/notice_ic_clock"
+        android:drawablePadding="5dip"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/alarm_close_clock"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+    <TextView
+        android:id="@+id/turn_and_update"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:drawableLeft="@drawable/notice_ic_news"
+        android:drawablePadding="5dip"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/alarm_close_and_update_news"
+        android:textColor="@android:color/white"
+        android:textSize="16sp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:background="@drawable/notice_bg_time_normal"
+        android:clickable="true"
+        android:descendantFocusability="blocksDescendants" >
+        <LinearLayout
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dip"
+            android:gravity="center" >
+            <TextView
+                android:id="@+id/hour"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="13"
+                android:textColor="#697856"
+                android:textSize="40sp" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dip"
+                android:layout_marginRight="15dip"
+                android:contentDescription="@string/empty"
+                android:src="@drawable/notice_ic_sign" />
+            <TextView
+                android:id="@+id/minute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="24"
+                android:textColor="#697856"
+                android:textSize="40sp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/dateString"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/date"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="5dip"
+            android:singleLine="true"
+            android:text="7月1日  周一"
+            android:textColor="#697856"
+            android:textSize="14sp" />
+    </RelativeLayout>
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/turn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dip"
+        android:contentDescription="@string/empty"
+        android:src="@drawable/notice_up" />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/turn_and_update"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dip"
+        android:contentDescription="@string/empty"
+        android:src="@drawable/notice_down" />
+</RelativeLayout>

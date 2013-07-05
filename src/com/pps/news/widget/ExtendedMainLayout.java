@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public class ExtendedLinearLayout extends LinearLayout {
+public class ExtendedMainLayout extends LinearLayout {
 
 	private NewsItemView news_top;
 	private NewsItemView news_left_top;
@@ -19,29 +19,23 @@ public class ExtendedLinearLayout extends LinearLayout {
 	private NewsItemView news_right_bottom;
 	private LinearLayout news_middle, news_bottom;
 	
-	private Context context;
-	private int itemSpace;
-	private int mWidth, mHeight;
+	private int mHeight;
 	
-	public ExtendedLinearLayout(Context context) {
+	public ExtendedMainLayout(Context context) {
 		super(context);
-		this.context = context;
-		init();
+		init(context);
 	}
 	
-	public ExtendedLinearLayout(Context context, AttributeSet attrs) {
+	public ExtendedMainLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.context = context;
-		init();
+		init(context);
 	}
 
-	private void init() {
-		mWidth = UIUtil.getScreenWidth(context);
+	private void init(Context context) {
 		mHeight = UIUtil.getScreenHeight(context);
-		itemSpace = UIUtil.dip2px(context, itemSpace);
 		setOrientation(LinearLayout.VERTICAL);
 		
-		LayoutInflater.from(context).inflate(R.layout.ll_container_view, this, true);
+		LayoutInflater.from(context).inflate(R.layout.main_container_view, this, true);
 		news_middle = (LinearLayout) findViewById(R.id.news_middle);
 		news_bottom = (LinearLayout) findViewById(R.id.news_bottom);
 		news_top = (NewsItemView) findViewById(R.id.news_top);
@@ -79,7 +73,8 @@ public class ExtendedLinearLayout extends LinearLayout {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		
-		int height = mHeight / 3 - 22;
+		int height = mHeight - UIUtil.dip2px(getContext(), 20);
+		height = height / 3;
 		ViewGroup.LayoutParams lp = news_top.getLayoutParams();
 		lp.height = height;
 		news_top.setLayoutParams(lp);
@@ -90,11 +85,11 @@ public class ExtendedLinearLayout extends LinearLayout {
 		news_bottom.setLayoutParams(lp);
 		
 		lp = news_left_top.getLayoutParams();
-		lp.width = UIUtil.dip2px(context, 150);
+		lp.width = UIUtil.dip2px(getContext(), 150);
 		news_left_top.setLayoutParams(lp);
 		
 		lp = news_left_bottom.getLayoutParams();
-		lp.width = UIUtil.dip2px(context, 175);
+		lp.width = UIUtil.dip2px(getContext(), 175);
 		news_left_bottom.setLayoutParams(lp);
 	}
 	

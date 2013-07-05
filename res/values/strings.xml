@@ -34,11 +34,10 @@
     <string name="alarm_vibrate">震动</string>
     <string name="alarm_delete">删除闹铃</string>
     <string name="alarm_select_ringtone">选择铃声</string>
+    <string name="alarm_close_clock">取消闹钟</string>
+    <string name="alarm_close_and_update_news">取消闹钟并更新新闻</string>
     
     <string name="delete_tips">确认删除?</string>
-    
-    <string name="switch_on">ON</string>
-    <string name="switch_off">OFF</string>
     
     <string name="login">登录</string>
     <string name="register">注册</string>
@@ -49,6 +48,10 @@
     
     <string name="setting_auto_clear">自动清除过期新闻</string>
     <string name="setting_clear_cache">清除缓存</string>
+    
+    <string name="share_sina_weibo">新浪微博</string>
+    <string name="share_tencent_weibo">腾讯微博</string>
+    <string name="share_qzone">QQ空间</string>
     
     <string name="delete">删除</string>
     <string name="confirm">确定</string>

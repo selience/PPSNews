@@ -2,12 +2,21 @@ package com.pps.news;
 
 import java.util.List;
 import org.apache.http.message.BasicNameValuePair;
+
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.pps.news.app.BaseActivity;
 import com.pps.news.bean.Comment;
 import com.pps.news.bean.Group;
@@ -19,9 +28,11 @@ import com.pps.news.parser.CommentParser;
 import com.pps.news.task.GenericTask;
 import com.pps.news.task.TaskListener;
 import com.pps.news.util.CacheUtil;
+import com.pps.news.util.ToastUtils;
 import com.pps.news.util.UIUtil;
 import com.pps.news.util.Utility;
 import com.pps.news.widget.CommentPanel;
+import com.pps.news.widget.SharePopupWindow;
 
 public class NewsDetailActivity extends BaseActivity implements TaskListener, OnClickListener {
 
@@ -123,8 +134,16 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 			finish();
 			break;
 		case R.id.icon_share:
+			SharePopupWindow popup = new SharePopupWindow(this);
+			popup.showPopupWindow(findViewById(R.id.divide));
+			popup.setOnClickListener(this);
 			break;
 		case R.id.icon_comment:
+			break;
+		case R.id.ic_sina:
+		case R.id.ic_tencent:
+		case R.id.ic_qzone:
+			ToastUtils.showMessage(this, ((TextView)v).getText(), Toast.LENGTH_SHORT);
 			break;
 		}
 	}

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+    <LinearLayout
+        android:id="@+id/news_middle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+        <com.pps.news.widget.NewsItemView
+            android:id="@+id/news_left_top"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent" />
+        <com.pps.news.widget.NewsItemView
+            android:id="@+id/news_right_top"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="2dip" />
+    </LinearLayout>
+    <com.pps.news.widget.NewsItemView
+        android:id="@+id/news_top"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dip" />
+    <LinearLayout
+        android:id="@+id/news_bottom"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dip"
+        android:orientation="horizontal" >
+        <com.pps.news.widget.NewsItemView
+            android:id="@+id/news_left_bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent" />
+        <com.pps.news.widget.NewsItemView
+            android:id="@+id/news_right_bottom"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="2dip" />
+    </LinearLayout>
+</merge>

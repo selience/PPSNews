@@ -8,6 +8,12 @@
     <uses-sdk
         android:minSdkVersion="4"
         android:targetSdkVersion="8" />
+    <supports-screens
+	    android:anyDensity="true"
+	    android:largeScreens="true"
+	    android:normalScreens="true"
+	    android:resizeable="true"
+	    android:smallScreens="true" />
     
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -37,6 +43,7 @@
         </activity>
         <activity
             android:name=".LoginActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:screenOrientation="portrait" />
         <activity
             android:name=".NewsDetailActivity"
@@ -51,11 +58,14 @@
         <activity
             android:name=".AlarmActivity"
             android:screenOrientation="portrait" />
-         <activity
+         <activity 
             android:name=".AlarmSettingActivity"
             android:screenOrientation="portrait" />
          <activity
             android:name=".DownloadActivity"
+            android:screenOrientation="portrait" />
+         <activity
+            android:name=".NoticeActivity"
             android:screenOrientation="portrait" />
          
          <receiver android:name="com.pps.news.receiver.BootBroadcastReceiver">

@@ -36,12 +36,4 @@
             android:layout_height="fill_parent"
             android:layout_marginLeft="2dip" />
     </LinearLayout>
-    <ImageView
-        android:id="@+id/news_divide"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-10dip"
-        android:contentDescription="@string/empty"
-        android:scaleType="fitXY"
-        android:src="@drawable/news_up_divide" />
 </merge>

@@ -30,4 +30,9 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:button">@drawable/btn_switch_selector</item>
     </style>
+    
+    <style name="PopupWindowAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
+    </style>
 </resources>

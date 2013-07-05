@@ -14,6 +14,7 @@ import com.pps.news.bean.News;
 import com.pps.news.bean.Result;
 import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
+import com.pps.news.fragment.MainFragment;
 import com.pps.news.fragment.NewsFragment;
 import com.pps.news.network.BetterHttp;
 import com.pps.news.parser.NewsParser;
@@ -116,6 +117,9 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		case R.id.rl_alarm:
 			startActivity(new Intent(this, AlarmActivity.class));
 			break;
+		case R.id.rl_weather:
+			startActivity(new Intent(this, NoticeActivity.class));
+			break;
 		}
 	}
 	
@@ -198,11 +202,10 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 
 		@Override
 		public Fragment getItem(int position) {
-			Fragment fragment = new NewsFragment();
-			Bundle bundle = new Bundle();
-			bundle.putInt("pageNo", position+1);
-			fragment.setArguments(bundle);
-			return fragment;
+			if (position == 0)
+				return NewsFragment.newInstance(position+1);
+			else 
+				return MainFragment.newInstance(position+1);
 		}
 
 		@Override

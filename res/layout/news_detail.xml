@@ -124,6 +124,7 @@
             android:src="@drawable/btn_post_selector" />
     </LinearLayout>
     <View
+        android:id="@+id/divide"
         android:layout_width="match_parent"
         android:layout_height="1dip"
         android:layout_above="@+id/bottomBar"

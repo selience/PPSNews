@@ -13,25 +13,25 @@ import com.pps.news.NewsActivity.OnRefreshItemListener;
 import com.pps.news.app.BaseFragment;
 import com.pps.news.bean.News;
 import com.pps.news.util.CacheUtil;
-import com.pps.news.widget.ExtendedMainLayout;
+import com.pps.news.widget.ExtendedSubLayout;
 
-public class NewsFragment extends BaseFragment implements OnClickListener, OnRefreshItemListener {
+public class MainFragment extends BaseFragment implements OnClickListener, OnRefreshItemListener {
 	private int pageNo = 1;
 
-	public static NewsFragment newInstance(int pageNum) {
-		NewsFragment fragment = new NewsFragment();
+	private ExtendedSubLayout mPanel;
+	
+	public static MainFragment newInstance(int pageNum) {
+		MainFragment fragment = new MainFragment();
 		Bundle bundle = new Bundle();
 		bundle.putInt("pageNo", pageNum);
 		fragment.setArguments(bundle);
 		return fragment;
 	}
 	
-	private ExtendedMainLayout mPanel;
-	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mPanel = new ExtendedMainLayout(getActivity());
+		mPanel = new ExtendedSubLayout(getActivity());
 		mPanel.setOnItemsClickListener(this);
 		return mPanel;
 	}
