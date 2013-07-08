@@ -9,6 +9,7 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshVerticalViewPager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.pps.news.app.BaseActivity;
+import com.pps.news.app.NewsApplication;
 import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
 import com.pps.news.bean.Result;
@@ -89,7 +90,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	}
 
 	private void setLastUpdateTimeStamp() {
-		long lastUpdateTimestamp = PreferenceUtils.getLastUpdateTimeStamp(this);
+		long lastUpdateTimestamp = PreferenceUtils.getLastUpdateTimeStamp(NewsApplication.mPrefs);
 		if (lastUpdateTimestamp > 0) {
 			String dateString = UIUtil.formatDate(lastUpdateTimestamp, "HH:mm");
 			mPullToRefreshViewPager.getLoadingLayoutProxy().setLastUpdatedLabel("更新时间:"+dateString);
@@ -141,7 +142,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	public void onTaskFinished(String taskName, Result result) {
 		notifyErrorMessage(result.getException());
 		mPullToRefreshViewPager.onRefreshComplete();
-		PreferenceUtils.saveLastUpdateTimeStamp(this, System.currentTimeMillis());
+		PreferenceUtils.saveLastUpdateTimeStamp(NewsApplication.mPrefs, System.currentTimeMillis());
 		if (result.getValue() != null) {
 			Group<News> listNews = (Group<News>)result.getValue();
 			for (int i=0;i<registeredFragments.size();i++) {

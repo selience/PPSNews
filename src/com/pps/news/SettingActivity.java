@@ -10,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pps.news.app.BaseActivity;
+import com.pps.news.app.NewsApplication;
+import com.pps.news.constant.Config;
 import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
 
@@ -30,7 +32,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener, On
 		txtSummury.setText("Setting");
 		findViewById(R.id.setting_clear_cache).setOnClickListener(this);
 		ckIsAuto = (CheckBox)findViewById(R.id.setting_auto_clear);
-		ckIsAuto.setChecked(Constants.needAutoClearCache);
+		ckIsAuto.setChecked(Config.needAutoClearCache);
 		ckIsAuto.setOnCheckedChangeListener(this);
 	}
 
@@ -49,8 +51,8 @@ public class SettingActivity extends BaseActivity implements OnClickListener, On
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		// TODO Auto-generated method stub
-		Constants.needAutoClearCache = isChecked;
-		PreferenceUtils.storeIsAutoClearCache(this, isChecked);
+		Config.needAutoClearCache = isChecked;
+		PreferenceUtils.storeIsAutoClearCache(NewsApplication.mPrefs, isChecked);
 	}
 
 }

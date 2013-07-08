@@ -31,7 +31,7 @@
             android:hint="@string/account"
             android:singleLine="true"
             android:textColor="@color/news_font_color"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/userpass"
@@ -59,7 +59,7 @@
             android:inputType="textPassword"
             android:singleLine="true"
             android:textColor="@color/news_font_color"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </LinearLayout>
     <FrameLayout
         android:layout_width="fill_parent"
@@ -92,6 +92,7 @@
         android:id="@+id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="45dip"
+        android:background="@color/news_color"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal" >
         <TextView

@@ -11,13 +11,14 @@ public class Constants {
 	public static final String APP_NAME = "PPSNews";
 	
 	// 开发者模式，Release版本更改为false；
-	public static final boolean DEVELOP_MODE = true;
+	public static final boolean DEVELOP_MODE = false;
 	
 	/** 服务器请求URL */
 	public static final String SERVER_URL = "http://dy.ugc.pps.tv/api";
-	
-	/** 默认自动清除过期新闻   */
-	public static boolean needAutoClearCache = true;
+
+	public static final String NEWS_DETAIL_EXTRAS = "_extras";
+	public static final int NEWS_DETAIL_SELF_COMMENT = 0x1;
+	public static final int NEWS_DETAIL_FRIEND_COMMENT = 0x2;
 	
 	
 	

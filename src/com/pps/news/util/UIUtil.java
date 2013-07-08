@@ -18,6 +18,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 /**
  * @file UIUtil.java
@@ -63,6 +65,13 @@ public final class UIUtil {
 		return (int) (pxValue / scale + 0.5f);
 	}
 
+	public static void hideSoftInputFromWindow(View view) {
+		InputMethodManager imm = (InputMethodManager)view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		if(imm.isActive()) {
+			imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+		} 
+	}
+	
 	public static String md5ForString(String key) {
 		String cacheKey;
 		try {

@@ -3,6 +3,7 @@ package com.pps.news;
 import java.util.List;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
@@ -139,6 +140,9 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 			popup.setOnClickListener(this);
 			break;
 		case R.id.icon_comment:
+			Intent intent = new Intent(this, CommentActivity.class);
+			intent.putExtra(Constants.NEWS_DETAIL_EXTRAS, Constants.NEWS_DETAIL_FRIEND_COMMENT);
+			startActivity(intent);
 			break;
 		case R.id.ic_sina:
 		case R.id.ic_tencent:
