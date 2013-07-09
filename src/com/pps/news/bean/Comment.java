@@ -3,7 +3,12 @@ package com.pps.news.bean;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.pps.news.util.CacheUtil;
+import com.pps.news.util.ParcelUtil;
 
 /**
  * @file Comment.java
@@ -11,7 +16,7 @@ import com.pps.news.util.CacheUtil;
  * @author lilong (dreamxsky@gmail.com)
  * @description TODO 新闻评论实体对象
  */
-public class Comment {
+public class Comment implements Parcelable {
 
 	private int rn;
 	private String addtime;
@@ -35,6 +40,34 @@ public class Comment {
 	private String pinglun;
 	private String timeline;
 	private int reply_info_total;
+
+	public Comment() {
+	}
+
+	private Comment(Parcel in) {
+		rn = ParcelUtil.readIntFromParcel(in);
+		addtime = ParcelUtil.readStringFromParcel(in);
+		cmt_id = ParcelUtil.readIntFromParcel(in);
+		upload_id = ParcelUtil.readIntFromParcel(in);
+		p_id = ParcelUtil.readIntFromParcel(in);
+		user_id = ParcelUtil.readIntFromParcel(in);
+		nick_name = ParcelUtil.readStringFromParcel(in);
+		cmt_text = ParcelUtil.readStringFromParcel(in);
+		user_face = ParcelUtil.readStringFromParcel(in);
+		user_type = ParcelUtil.readIntFromParcel(in);
+		cmt_flag = ParcelUtil.readIntFromParcel(in);
+		cmd_type = ParcelUtil.readIntFromParcel(in);
+		channel_id = ParcelUtil.readIntFromParcel(in);
+		urllink = ParcelUtil.readStringFromParcel(in);
+		pic = ParcelUtil.readStringFromParcel(in);
+		reply_count = ParcelUtil.readIntFromParcel(in);
+		vot_up = ParcelUtil.readIntFromParcel(in);
+		vot_down = ParcelUtil.readIntFromParcel(in);
+		is_top_quality = ParcelUtil.readIntFromParcel(in);
+		pinglun = ParcelUtil.readStringFromParcel(in);
+		timeline = ParcelUtil.readStringFromParcel(in);
+		reply_info_total = ParcelUtil.readIntFromParcel(in);
+	}
 
 	public int getRn() {
 		return rn;
@@ -236,7 +269,7 @@ public class Comment {
 		CacheUtil.writeString(out, timeline);
 		CacheUtil.writeInt(out, reply_info_total);
 	}
-	
+
 	public Comment readToInputStream(DataInputStream in) throws IOException {
 		rn = CacheUtil.readInt(in);
 		addtime = CacheUtil.readString(in);
@@ -262,4 +295,48 @@ public class Comment {
 		reply_info_total = CacheUtil.readInt(in);
 		return this;
 	}
+
+	@Override
+	public int describeContents() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel out, int flags) {
+		// TODO Auto-generated method stub
+		ParcelUtil.writeIntToParcel(out, rn);
+		ParcelUtil.writeStringToParcel(out, addtime);
+		ParcelUtil.writeLongToParcel(out, cmt_id);
+		ParcelUtil.writeLongToParcel(out, upload_id);
+		ParcelUtil.writeIntToParcel(out, p_id);
+		ParcelUtil.writeLongToParcel(out, user_id);
+		ParcelUtil.writeStringToParcel(out, nick_name);
+		ParcelUtil.writeStringToParcel(out, cmt_text);
+		ParcelUtil.writeStringToParcel(out, user_face);
+		ParcelUtil.writeIntToParcel(out, user_type);
+		ParcelUtil.writeIntToParcel(out, cmt_flag);
+		ParcelUtil.writeIntToParcel(out, cmd_type);
+		ParcelUtil.writeIntToParcel(out, channel_id);
+		ParcelUtil.writeStringToParcel(out, urllink);
+		ParcelUtil.writeStringToParcel(out, pic);
+		ParcelUtil.writeIntToParcel(out, reply_count);
+		ParcelUtil.writeIntToParcel(out, vot_up);
+		ParcelUtil.writeIntToParcel(out, vot_down);
+		ParcelUtil.writeIntToParcel(out, is_top_quality);
+		ParcelUtil.writeStringToParcel(out, pinglun);
+		ParcelUtil.writeStringToParcel(out, timeline);
+		ParcelUtil.writeIntToParcel(out, reply_info_total);
+	}
+
+	public static final Parcelable.Creator<Comment> CREATOR = new Parcelable.Creator<Comment>() {
+		public Comment createFromParcel(Parcel in) {
+			return new Comment(in);
+		}
+
+		public Comment[] newArray(int size) {
+			return new Comment[size];
+		}
+	};
+
 }

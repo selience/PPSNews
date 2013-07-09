@@ -1,7 +1,6 @@
 package com.pps.news;
 
 import java.util.List;
-
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnPullEventListener;
@@ -22,9 +21,7 @@ import com.pps.news.parser.NewsParser;
 import com.pps.news.task.GenericTask;
 import com.pps.news.task.TaskListener;
 import com.pps.news.util.CacheUtil;
-import com.pps.news.util.UIUtil;
 import com.pps.news.widget.SlideNavigationView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,6 +29,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.VerticalViewPager;
 import android.support.v4.view.VerticalViewPager.OnPageChangeListener;
+import android.text.format.DateFormat;
 import android.util.SparseArray;
 import android.view.KeyEvent;
 import android.view.View;
@@ -92,7 +90,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	private void setLastUpdateTimeStamp() {
 		long lastUpdateTimestamp = PreferenceUtils.getLastUpdateTimeStamp(NewsApplication.mPrefs);
 		if (lastUpdateTimestamp > 0) {
-			String dateString = UIUtil.formatDate(lastUpdateTimestamp, "HH:mm");
+			CharSequence dateString = DateFormat.format("kk:mm", lastUpdateTimestamp);
 			mPullToRefreshViewPager.getLoadingLayoutProxy().setLastUpdatedLabel("更新时间:"+dateString);
 		}
 	}
@@ -175,7 +173,6 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 				}
 			}, 200L);
 		} else if (state == State.RELEASE_TO_REFRESH) {
-			
 		}
 	}
 	

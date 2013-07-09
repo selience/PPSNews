@@ -55,6 +55,9 @@
         <activity
             android:name=".CommentActivity"
             android:screenOrientation="portrait" />
+         <activity
+            android:name=".CommentProfileActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".AlarmActivity"
             android:screenOrientation="portrait" />

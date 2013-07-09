@@ -1,6 +1,9 @@
 package com.pps.news;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -26,9 +29,10 @@ public class CommentActivity extends BaseActivity implements OnClickListener {
 	private ListView listView;
 	private ImageView imageView;
 	private ImageView imageTrash;
-	private CommentsAdapter commentAdapter;
 	
 	private int status;
+	private ArrayList<Comment> comments;
+	private CommentsAdapter commentAdapter;
 	
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
@@ -49,7 +53,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener {
 			imageTrash.setVisibility(View.GONE);
 			txtTitle.setText(R.string.comment_title_friend_label);
 		}
-		Group<Comment> comments = new CommentParser().parse(Utility.readComment(this));
+		comments = new CommentParser().parse(Utility.readComment(this));
 		onRefresh(comments);
 	}
 
@@ -58,6 +62,11 @@ public class CommentActivity extends BaseActivity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.ic_back:
 			finish();
+			break;
+		case R.id.icon_trash:
+			Intent intent = new Intent(this, CommentProfileActivity.class);
+			intent.putParcelableArrayListExtra(Constants.NEWS_DETAIL_EXTRAS, comments);
+			startActivity(intent);
 			break;
 		}
 	}
