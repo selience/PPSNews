@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dip"
+            android:layout_marginTop="5dip"
             android:gravity="center" >
             <TextView
                 android:id="@+id/hour"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/date"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="5dip"
+            android:layout_marginTop="2dip"
             android:singleLine="true"
             android:text="7月1日  周一"
             android:textColor="#697856"

@@ -1,13 +1,13 @@
 package com.pps.news;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 import com.pps.news.app.BaseActivity;
-import com.pps.news.bean.AlarmModel;
-import com.pps.news.bean.Week;
-import com.pps.news.database.AlarmHelper;
+import com.pps.news.bean.Alarm;
+import com.pps.news.bean.DaysOfWeek;
+import com.pps.news.constant.Constants;
+import com.pps.news.database.DatabaseHelper;
+import com.pps.news.util.DateUtils;
+import com.pps.news.util.ToastUtils;
 import com.pps.news.util.UIUtil;
 import com.pps.news.widget.BaseAlertDialog;
 import com.pps.news.widget.WeekPickerDialog;
@@ -48,21 +48,21 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 	private TextView txtRingTone;
 	private CheckBox ckEnable;
 	private CheckBox ckVibrate;
-
-	private int status;
-	private AlarmModel model;
-	private AlarmHelper alarmHelper;
+	private WeekPickerDialog dialog;
 	
-	private Calendar cal;
+	private int status;
+	private Alarm alarm;
+	private Calendar c;
+	private DatabaseHelper helper;
+	
 	private int hourOfDay, minute;
 	private Uri ringtoneUri;
-	private String weeks;
-	private List<String> mKeys = new ArrayList<String>(7);
+	private DaysOfWeek daysOfWeek;
 	
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.alarm_setting);
-		model = getIntent().getParcelableExtra("alarm");
+		alarm = getIntent().getParcelableExtra(Constants.ALARM_EXTRAS);
 		
 		findViewById(R.id.setting_time).setOnClickListener(this);
 		findViewById(R.id.setting_repeat).setOnClickListener(this);
@@ -78,39 +78,46 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 		ckEnable = (CheckBox) findViewById(R.id.sub_enable);
 		ckVibrate = (CheckBox) findViewById(R.id.sub_vibrate);
 		
-		alarmHelper=new AlarmHelper(this);
-		cal = Calendar.getInstance();
+		c = Calendar.getInstance();
+		helper = new DatabaseHelper(this);
 		
-		if (model != null) {
+		if (alarm != null) {
 			status = SETTING_ALARM_EDIT_ITEM;
-			hourOfDay = model.getHour();
-			minute = model.getMinute();
-			ringtoneUri = Uri.parse(model.getRingtone());
-			ckEnable.setChecked(model.isEnable());
-			ckVibrate.setChecked(model.isVibrate());
+			hourOfDay = alarm.hour;
+			minute = alarm.minutes;
+			ringtoneUri = alarm.alert;
+			daysOfWeek = alarm.daysOfWeek;
+	    	ckEnable.setChecked(alarm.enabled);
+			ckVibrate.setChecked(alarm.vibrate);
 			btnDelte.setEnabled(true);
-			txtTime.setText(UIUtil.parseTimeString(model.getHour(), model.getMinute()));
-			// 默认选中项
-			weeks = model.getWeek();
-			mKeys = Arrays.asList(weeks.split(","));
-			txtWeekDays.setText(Week.appendValuesAtKey(weeks.split(","), ' '));
 		} else {
-			model = new AlarmModel();
+			alarm = new Alarm();
 			status = SETTING_ALARM_ADD_ITEM;
-			hourOfDay = cal.get(Calendar.HOUR_OF_DAY);
-			minute = cal.get(Calendar.MINUTE);
-			ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); // 获取默认铃声
-			txtTime.setText(UIUtil.parseTimeString(hourOfDay, minute));
+			hourOfDay = c.get(Calendar.HOUR_OF_DAY);
+			minute = c.get(Calendar.MINUTE);
+			ringtoneUri = alarm.alert;
+			daysOfWeek = alarm.daysOfWeek;
 			btnDelte.setEnabled(false);
-			// 默认选中每一天
-			weeks = Week.join(Week.DAY_MAP, ',');
-			txtWeekDays.setText(Week.join(Week.SHORT_WEEKDAYS, ' '));
 		}
+		updateTime();
+		txtWeekDays.setText(alarm.daysOfWeek.toString(this, true));
 		Ringtone ringtone = UIUtil.getRingtoneWithUri(this, ringtoneUri);
-		txtRingTone.setText(ringtone.getTitle(this));
-		ringtone.stop();
+		if (ringtone != null) {
+			txtRingTone.setText(ringtone.getTitle(this));
+			ringtone.stop();
+		}
+		dialog = new WeekPickerDialog(this);
+		dialog.setDaysOfWeek(daysOfWeek);
+		dialog.setOnItemChangedListener(this);
 	}
 
+	private void updateTime() {
+		c.clear();
+		c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+		c.set(Calendar.MINUTE, minute);
+		txtTime.setText(DateUtils.formatTime(this, c));
+	}
+	
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
@@ -120,17 +127,17 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 				public void onTimeSet(TimePicker view, int newHour, int newMinute) {
 					hourOfDay = newHour;
 					minute = newMinute;
-					txtTime.setText(UIUtil.parseTimeString(newHour, newMinute));
+					updateTime();
 				}
-			}, cal.get(Calendar.HOUR_OF_DAY), 
-			   cal.get(Calendar.MINUTE), 
-			   DateFormat.is24HourFormat(this));
+			}, hourOfDay, minute, DateFormat.is24HourFormat(this));
 		case SETTING_DIALOG_ID_DELETE:
 			return new BaseAlertDialog(this).setMessage(R.string.delete_tips)
 			.setPositiveClickListener(new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					if (model!=null && alarmHelper.delete(model.getId())>0) {
+					if (alarm!=null) {
+						helper.delete(alarm.id);
+						DateUtils.setNextAlert(AlarmSettingActivity.this);
 						dialog.dismiss();
 						finish();
 					}
@@ -150,8 +157,6 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			showDialog(SETTING_DIALOG_ID_TIME);
 			break;
 		case R.id.setting_repeat:
-			WeekPickerDialog dialog = new WeekPickerDialog(this, R.style.Theme_Dialog, mKeys);
-			dialog.setOnClickListener(this);
 			dialog.show();
 			break;
 		case R.id.setting_ringtone:
@@ -161,31 +166,31 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			showDialog(SETTING_DIALOG_ID_DELETE);
 			break;
 		case R.id.confirm:
-			model.setHour(hourOfDay);
-			model.setMinute(minute);
-			model.setWeek(weeks);
-			model.setEnable(ckEnable.isChecked());
-			model.setVibrate(ckVibrate.isChecked());
-			model.setRingtone(ringtoneUri.toString());
-			
+			long time = 0;
+			if (!daysOfWeek.isRepeatSet()) {
+				time = DateUtils.calculateAlarm(hourOfDay, minute, daysOfWeek).getTimeInMillis();
+			} 
+			alarm.hour = hourOfDay;
+			alarm.minutes = minute;
+			alarm.daysOfWeek = daysOfWeek;
+			alarm.enabled = ckEnable.isChecked();
+			alarm.vibrate = ckVibrate.isChecked();
+			alarm.alert = ringtoneUri;
+			alarm.time = time;
 			if (status == SETTING_ALARM_ADD_ITEM) {
-				if (alarmHelper.add(model) > 0) {
-					Toast.makeText(this, "添加成功", Toast.LENGTH_SHORT).show();
+				if (helper.insert(alarm) > 0) {
+					DateUtils.setNextAlert(this);
+					ToastUtils.showMessage(this, R.string.add_success_tips, Toast.LENGTH_SHORT);
 				}
 			} else if (status == SETTING_ALARM_EDIT_ITEM) {
-				if (alarmHelper.update(model) > 0) {
-					Toast.makeText(this, "编辑成功", Toast.LENGTH_SHORT).show();
+				if (helper.update(alarm) > 0) {
+					DateUtils.setNextAlert(this);
+					ToastUtils.showMessage(this, R.string.update_success_tips, Toast.LENGTH_SHORT);
 				}
 			}
 			finish();
 			break;
 		}
-	}
-
-	@Override
-	public void onItemClick(View v, List<String> keys) {
-		weeks = Week.join(keys, ',');
-		txtWeekDays.setText(Week.appendValuesAtKey(keys, ' '));
 	}
 	
 	@Override
@@ -195,11 +200,19 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 		   if (uri != null) {
 			   ringtoneUri = uri;
 			   Ringtone ringTone = RingtoneManager.getRingtone(this, uri);
-			   txtRingTone.setText(ringTone.getTitle(this));
-			   ringTone.stop();
+			   if (ringTone != null) {
+				   txtRingTone.setText(ringTone.getTitle(this));
+				   ringTone.stop();
+			   }
 		   }
 		}
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	@Override
+	public void onItemClick(DaysOfWeek mDayOfWeek) {
+		this.daysOfWeek = mDayOfWeek;
+		txtWeekDays.setText(mDayOfWeek.toString(this, true));
 	}
 
 }

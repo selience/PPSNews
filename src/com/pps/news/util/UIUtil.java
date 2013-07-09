@@ -116,19 +116,6 @@ public final class UIUtil {
 		}
 	}
 	
-	public static String parseTimeString(int hour, int minute) {
-		String hourStr = hour+"";
-		String minuteStr = minute+"";
-		
-		if (hour / 10 == 0) {
-			hourStr = "0" + hour;
-		}
-		if (minute / 10 == 0) {
-			minuteStr = "0" + minute;
-		}
-		return hourStr+":"+minuteStr;
-	}
-	
 	/** 格式化日期字符串  单位：秒  */
 	public static String getTimeState(long timestamp) {
 

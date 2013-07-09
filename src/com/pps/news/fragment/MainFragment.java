@@ -10,6 +10,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import com.pps.news.NewsDetailActivity;
 import com.pps.news.NewsActivity.OnRefreshItemListener;
+import com.pps.news.R;
 import com.pps.news.app.BaseFragment;
 import com.pps.news.bean.News;
 import com.pps.news.util.CacheUtil;
@@ -31,9 +32,13 @@ public class MainFragment extends BaseFragment implements OnClickListener, OnRef
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		mPanel = new ExtendedSubLayout(getActivity());
+		View view = inflater.inflate(R.layout.news_sub_layout, null);
+		mPanel = (ExtendedSubLayout)view.findViewById(R.id.container);
 		mPanel.setOnItemsClickListener(this);
-		return mPanel;
+		return view;
+		/*mPanel = new ExtendedSubLayout(getActivity());
+		mPanel.setOnItemsClickListener(this);
+		return mPanel;*/
 	}
 
 	@Override

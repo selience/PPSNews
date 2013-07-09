@@ -1,14 +1,13 @@
 package com.pps.news.adapter;
 
+import java.util.Calendar;
 import java.util.List;
 import com.pps.news.R;
-import com.pps.news.bean.AlarmModel;
-import com.pps.news.bean.Week;
-import com.pps.news.database.AlarmHelper;
+import com.pps.news.bean.Alarm;
+import com.pps.news.util.DateUtils;
 import com.pps.news.util.UIUtil;
 import android.content.Context;
 import android.media.Ringtone;
-import android.net.Uri;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -23,18 +22,15 @@ import android.widget.TextView;
  * @description TODO
  */
 public class AlarmAdapter extends BaseAdapter implements CompoundButton.OnCheckedChangeListener {
-
 	private Context context;
-	private AlarmHelper helper = null;
-	private List<AlarmModel> list = null;
+	private List<Alarm> list = null;
 	
-	public AlarmAdapter(Context context, List<AlarmModel> data) {
+	public AlarmAdapter(Context context, List<Alarm> data) {
 		this.list = data;
 		this.context = context;
-		this.helper = new AlarmHelper(context);
 	}
 
-	public void addAll(List<AlarmModel> data) {
+	public void addAll(List<Alarm> data) {
 		this.list = data;
 	}
 
@@ -76,22 +72,34 @@ public class AlarmAdapter extends BaseAdapter implements CompoundButton.OnChecke
 			mHolder = (StateHolder)convertView.getTag();
 		}
 		
-		final AlarmModel model = list.get(position);
-		if (model != null) {
-			mHolder.ckEnable.setOnCheckedChangeListener(null);
-			mHolder.ckEnable.setTag(model.getId());
-			mHolder.ckEnable.setChecked(model.isEnable());
+		final Alarm alarm = list.get(position);
+		if (alarm != null) {
+			mHolder.ckEnable.setTag(alarm);
+			mHolder.ckEnable.setChecked(alarm.enabled);
 			mHolder.ckEnable.setOnCheckedChangeListener(this);
+	
+			final Calendar c = Calendar.getInstance();
+	        c.set(Calendar.HOUR_OF_DAY, alarm.hour);
+	        c.set(Calendar.MINUTE, alarm.minutes); 
+			mHolder.txtTime.setText(DateUtils.formatTime(context, c));
 			
-			mHolder.txtTime.setText(UIUtil.parseTimeString(model.getHour(), model.getMinute()));
-			mHolder.txtRepeat.setText(Week.appendValuesAtKey(model.getWeek().split(","), ' '));
-			Ringtone ringtone = UIUtil.getRingtoneWithUri(context, Uri.parse(model.getRingtone()));
+			final String daysOfWeekStr = alarm.daysOfWeek.toString(context, false);
+			if (daysOfWeekStr != null && daysOfWeekStr.length() != 0) {
+				mHolder.txtRepeat.setText(daysOfWeekStr);
+				mHolder.txtRepeat.setVisibility(View.VISIBLE);
+			} else {
+				mHolder.txtRepeat.setVisibility(View.GONE);
+			}
+			
+		 	Ringtone ringtone = UIUtil.getRingtoneWithUri(context, alarm.alert);
 			if (ringtone != null) {
 				mHolder.txtRingtone.setText(ringtone.getTitle(context));
+				mHolder.txtRingtone.setVisibility(View.VISIBLE);
 				ringtone.stop();
+			} else {
+				mHolder.txtRingtone.setVisibility(View.GONE);
 			}
 		}
-		
 		return convertView;
 	}
 
@@ -105,7 +113,9 @@ public class AlarmAdapter extends BaseAdapter implements CompoundButton.OnChecke
 	@Override
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		// TODO Auto-generated method stub
-		int id = Integer.valueOf(buttonView.getTag().toString());
-		System.out.println("update :: "+helper.update(isChecked, id));
+		Alarm alarm = (Alarm)buttonView.getTag();
+		if (alarm != null) {
+			DateUtils.enableAlarm(context, alarm, isChecked);
+		}
 	}
 }

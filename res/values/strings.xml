@@ -36,6 +36,7 @@
     <string name="alarm_vibrate">震动</string>
     <string name="alarm_delete">删除闹铃</string>
     <string name="alarm_select_ringtone">选择铃声</string>
+    <string name="alarm_month_and_day">M月d日  E</string>
     <string name="alarm_close_clock">取消闹钟</string>
     <string name="alarm_close_and_update_news">取消闹钟并更新新闻</string>
     <string name="delete_tips">确认删除?</string>
@@ -63,4 +64,10 @@
     <string name="send">发送</string>
     <string name="setting">设置</string>
     
+    <string name="add_success_tips">添加成功</string>
+    <string name="update_success_tips">编辑成功</string>
+    
+    <string name="never">永不</string>
+    <string name="every_day">每天</string>
+    <string name="day_concat">" "</string>
 </resources>

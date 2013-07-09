@@ -73,7 +73,9 @@ public class ExtendedMainLayout extends LinearLayout {
 	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 		super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 		
-		int height = mHeight - UIUtil.dip2px(getContext(), 20);
+		System.out.println("############"+getMeasuredWidth()+"--"+getMeasuredHeight());
+		
+		int height = mHeight - UIUtil.dip2px(getContext(), 25);
 		height = height / 3;
 		ViewGroup.LayoutParams lp = news_top.getLayoutParams();
 		lp.height = height;

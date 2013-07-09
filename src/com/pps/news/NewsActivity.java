@@ -119,7 +119,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 			startActivity(new Intent(this, AlarmActivity.class));
 			break;
 		case R.id.rl_weather:
-			startActivity(new Intent(this, NoticeActivity.class));
+			startActivity(new Intent(this, AlarmAlertFullScreen.class));
 			break;
 		}
 	}

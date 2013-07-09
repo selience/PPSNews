@@ -21,6 +21,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     
     <application
@@ -64,17 +65,25 @@
             android:name=".DownloadActivity"
             android:screenOrientation="portrait" />
          <activity
-            android:name=".NoticeActivity"
+            android:name=".AlarmAlertFullScreen"
             android:screenOrientation="portrait" />
          
-         <receiver android:name="com.pps.news.receiver.BootBroadcastReceiver">
+        <receiver android:name="com.pps.news.receiver.AlarmInitReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.TIME_SET" />
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+        </receiver>
+         <receiver android:name="com.pps.news.receiver.AlarmReceiver" android:exported="false">
              <intent-filter >
-                 <action android:name="android.intent.action.BOOT_COMPLETED" />  
+                 <action android:name="com.android.alarmclock.ALARM_ALERT" />
              </intent-filter>
          </receiver>
          <service android:name="com.pps.news.service.AlarmService" android:exported="false">
              <intent-filter >
-                 <action android:name="com.pps.news.intent.AlarmService" />
+                 <action android:name="com.android.alarmclock.ALARM_ALERT" />
              </intent-filter>
          </service>
     </application>

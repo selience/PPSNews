@@ -1,7 +1,6 @@
 package com.pps.news;
 
 import java.util.List;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,11 +10,11 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.pps.news.adapter.AlarmAdapter;
 import com.pps.news.app.BaseActivity;
-import com.pps.news.bean.AlarmModel;
-import com.pps.news.database.AlarmHelper;
+import com.pps.news.bean.Alarm;
+import com.pps.news.constant.Constants;
+import com.pps.news.database.DatabaseHelper;
 
 /**
  * @file AlarmActivity.java
@@ -27,7 +26,7 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 
 	private ListView listView;
 	private AlarmAdapter mAdapter;
-	private AlarmHelper alarmHelper;
+	private DatabaseHelper helper;
 	private TextView txtSummary;
 	private ProgressBar mProgressBar;
 	
@@ -39,7 +38,7 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 		listView = (ListView) findViewById(android.R.id.list);
 		txtSummary = (TextView) findViewById(R.id.subTitle);
 		mProgressBar = (ProgressBar)findViewById(R.id.progress);
-		alarmHelper = new AlarmHelper(this);
+		helper = new DatabaseHelper(this);
 		listView.setOnItemClickListener(this);
 	}
 
@@ -49,7 +48,7 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 		new GetAlarmListTask().execute();
 	}
 	
-	private void onRefresh(List<AlarmModel> data) {
+	private void onRefresh(List<Alarm> data) {
 		if (data == null || data.isEmpty()) 
 			return;
 
@@ -74,15 +73,15 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 		}
 	}
 
-	class GetAlarmListTask extends AsyncTask<String, Integer, List<AlarmModel>> {
+	class GetAlarmListTask extends AsyncTask<String, Integer, List<Alarm>> {
 
 		@Override
-		protected List<AlarmModel> doInBackground(String... params) {
-			return alarmHelper.list();
+		protected List<Alarm> doInBackground(String... params) {
+			return helper.query();
 		}
 
 		@Override
-		protected void onPostExecute(List<AlarmModel> data) {
+		protected void onPostExecute(List<Alarm> data) {
 			txtSummary.setText(data.size()+"");
 			onRefresh(data);
 			mProgressBar.setVisibility(View.GONE);
@@ -92,9 +91,9 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		AlarmModel model = (AlarmModel)parent.getItemAtPosition(position);
+		Alarm model = (Alarm)parent.getItemAtPosition(position);
 		Intent intent = new Intent(this, AlarmSettingActivity.class);
-		intent.putExtra("alarm", model);
+		intent.putExtra(Constants.ALARM_EXTRAS, model);
 		startActivity(intent);
 	}
 }
