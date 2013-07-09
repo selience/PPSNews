@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import com.pps.news.NewsDetailActivity;
 import com.pps.news.NewsActivity.OnRefreshItemListener;
 import com.pps.news.R;
@@ -19,6 +21,7 @@ import com.pps.news.widget.ExtendedSubLayout;
 public class MainFragment extends BaseFragment implements OnClickListener, OnRefreshItemListener {
 	private int pageNo = 1;
 
+	private ImageView imageView;
 	private ExtendedSubLayout mPanel;
 	
 	public static MainFragment newInstance(int pageNum) {
@@ -33,12 +36,10 @@ public class MainFragment extends BaseFragment implements OnClickListener, OnRef
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View view = inflater.inflate(R.layout.news_sub_layout, null);
+		imageView = (ImageView)view.findViewById(R.id.imageView);
 		mPanel = (ExtendedSubLayout)view.findViewById(R.id.container);
 		mPanel.setOnItemsClickListener(this);
 		return view;
-		/*mPanel = new ExtendedSubLayout(getActivity());
-		mPanel.setOnItemsClickListener(this);
-		return mPanel;*/
 	}
 
 	@Override
@@ -52,6 +53,11 @@ public class MainFragment extends BaseFragment implements OnClickListener, OnRef
 		onRefresh(CacheUtil.getNewsCache());
 	}
 
+	@Override
+	public void hideView(boolean isShown) {
+		imageView.setVisibility(isShown?View.VISIBLE:View.GONE);
+	}
+	
 	@Override
 	public void onRefresh(List<News> result) {
 		if (result == null || result.size() == 0)

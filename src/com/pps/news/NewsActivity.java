@@ -230,23 +230,27 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 
 	
 	@Override
-	public void onPageScrolled(int position, float positionOffset,
-			int positionOffsetPixels) {
-		// TODO Auto-generated method stub
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 	}
 
 	@Override
 	public void onPageSelected(int position) {
-		// TODO Auto-generated method stub
+		for (int i=0;i<registeredFragments.size();i++) {
+			Fragment fragment = registeredFragments.get(i);
+			if (fragment instanceof OnRefreshItemListener) {
+				((OnRefreshItemListener)fragment).hideView(i==position);
+			}
+		}
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
-		// TODO Auto-generated method stub
 	}
-
+	
 	
 	public static interface OnRefreshItemListener {
+		
+		void hideView(boolean isShown);
 		
 		void onRefresh(List<News> result);
 	}

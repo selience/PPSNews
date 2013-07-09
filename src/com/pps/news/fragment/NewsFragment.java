@@ -53,7 +53,8 @@ public class NewsFragment extends BaseFragment implements OnClickListener, OnRef
 		onRefresh(CacheUtil.getNewsCache());
 	}
 
-	public void showImageView(boolean isShown) {
+	@Override
+	public void hideView(boolean isShown) {
 		imageView.setVisibility(isShown?View.VISIBLE:View.GONE);
 	}
 	
