@@ -19,6 +19,7 @@
 
     <string name="comment_title_self_label">我的评论</string>
     <string name="comment_title_friend_label">网友评论</string>
+    <string name="comment_edit_bar_label">删除选中的%1$d项</string>
     <string name="schedule_add_task">添加任务 +</string>
     
     <string name="offline_title_label">我的下载</string>
@@ -49,6 +50,11 @@
     <string name="remember_password">记住密码</string>
     <string name="forget_password">找回密码?</string>
     <string name="login_tips">正在登录，请稍后...</string>
+    
+    <string name="register_title_label">注册账号</string>
+    <string name="email">邮箱</string>
+    <string name="confirm_password">确认密码</string>
+    
     
     <string name="setting_auto_clear">自动清除过期新闻</string>
     <string name="setting_clear_cache">清除缓存</string>

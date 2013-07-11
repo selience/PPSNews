@@ -7,7 +7,7 @@
         android:id="@id/titlebar"
         layout="@layout/news_title_view" />
     <LinearLayout
-        android:id="@+id/username"
+        android:id="@+id/post"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/titlebar"
@@ -21,23 +21,24 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dip"
             android:contentDescription="@string/empty"
-            android:src="@drawable/login_user" />
+            android:src="@drawable/login_email" />
         <EditText
-            android:id="@+id/account"
+            android:id="@+id/postView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="18dip"
             android:background="@android:color/transparent"
-            android:hint="@string/account"
+            android:hint="@string/email"
             android:singleLine="true"
+            android:inputType="textEmailAddress"
             android:textColor="@color/news_font_color"
             android:textSize="16sp" />
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/userpass"
+        android:id="@+id/pass"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/username"
+        android:layout_below="@+id/post"
         android:layout_marginLeft="30dip"
         android:layout_marginRight="30dip"
         android:layout_marginTop="10dip"
@@ -50,7 +51,7 @@
             android:contentDescription="@string/empty"
             android:src="@drawable/login_key" />
         <EditText
-            android:id="@+id/pass"
+            android:id="@+id/passView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="18dip"
@@ -61,34 +62,33 @@
             android:textColor="@color/news_font_color"
             android:textSize="16sp" />
     </LinearLayout>
-    <FrameLayout
+    <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/userpass"
+        android:layout_below="@+id/pass"
         android:layout_marginLeft="30dip"
         android:layout_marginRight="30dip"
-        android:layout_marginTop="15dip" >
-        <CheckBox
-            android:id="@+id/rememberUserPass"
+        android:layout_marginTop="10dip"
+        android:background="@drawable/login_bg"
+        android:gravity="center_vertical" >
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:button="@drawable/btn_checkbox_small_selector"
-            android:checked="true"
-            android:paddingLeft="25dip"
-            android:text="@string/remember_password"
-            android:textColor="@color/news_font_color"
-            android:textSize="14sp" />
-        <TextView
-            android:id="@+id/findUserPass"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
+            android:layout_marginLeft="10dip"
+            android:contentDescription="@string/empty"
+            android:src="@drawable/login_key" />
+        <EditText
+            android:id="@+id/rePassView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dip"
+            android:background="@android:color/transparent"
+            android:hint="@string/confirm_password"
+            android:inputType="textPassword"
             android:singleLine="true"
-            android:text="@string/forget_password"
             android:textColor="@color/news_font_color"
-            android:textSize="14sp" />
-    </FrameLayout>
+            android:textSize="16sp" />
+    </LinearLayout>
     <LinearLayout
         android:id="@id/toolbar"
         android:layout_width="match_parent"
@@ -96,6 +96,21 @@
         android:layout_alignParentBottom="true"
         android:background="@color/news_color"
         android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/cancel"
+            android:layout_width="0dip"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:background="@drawable/list_item_selector"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/cancel"
+            android:textColor="@color/news_font_color"
+            android:textSize="16sp" />
+        <View
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:background="#d1d1d1" />
         <TextView
             android:id="@+id/register"
             android:layout_width="0dip"
@@ -105,21 +120,6 @@
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/register"
-            android:textColor="@color/news_font_color"
-            android:textSize="16sp" />
-        <View
-            android:layout_width="1dip"
-            android:layout_height="fill_parent"
-            android:background="#d1d1d1" />
-        <TextView
-            android:id="@+id/login"
-            android:layout_width="0dip"
-            android:layout_height="fill_parent"
-            android:layout_weight="1"
-            android:background="@drawable/list_item_selector"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/login"
             android:textColor="@color/news_font_color"
             android:textSize="16sp" />
     </LinearLayout>

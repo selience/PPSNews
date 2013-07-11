@@ -33,10 +33,10 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.alarm_layout);
-		findViewById(R.id.ic_back).setOnClickListener(this);
-		findViewById(R.id.add).setOnClickListener(this);
+		findViewById(R.id.icon).setOnClickListener(this);
+		findViewById(R.id.imageView).setOnClickListener(this);
 		listView = (ListView) findViewById(android.R.id.list);
-		txtSummary = (TextView) findViewById(R.id.subTitle);
+		txtSummary = (TextView) findViewById(R.id.summary);
 		mProgressBar = (ProgressBar)findViewById(R.id.progress);
 		helper = new DatabaseHelper(this);
 		listView.setOnItemClickListener(this);
@@ -64,10 +64,10 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.ic_back:
+		case R.id.icon:
 			finish();
 			break;
-		case R.id.add:
+		case R.id.imageView:
 			startActivity(new Intent(this, AlarmSettingActivity.class));
 			break;
 		}

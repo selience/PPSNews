@@ -11,12 +11,14 @@
             android:layout_width="match_parent"
             android:layout_height="60dip"
             android:background="#E7E7E7"
-            android:padding="10dip" >
+            android:paddingLeft="10dip"
+            android:paddingRight="10dip" >
             <ImageView
                 android:id="@+id/icon_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:clickable="true"
                 android:contentDescription="@string/empty"
                 android:src="@drawable/ic_avatar" />
             <TextView
@@ -32,16 +34,15 @@
                 android:textSize="18sp" />
             <TextView
                 android:id="@+id/nav_sub_desc"
-                android:layout_width="fill_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/icon_avatar"
                 android:layout_marginLeft="10dip"
-                android:layout_toLeftOf="@+id/nav_divide"
                 android:layout_toRightOf="@+id/icon_avatar"
                 android:singleLine="true"
                 android:text="@string/nav_sub_desc"
                 android:textColor="#939393"
-                android:textSize="12sp" />
+                android:textSize="13sp" />
             <ImageView
                 android:id="@+id/setting"
                 android:layout_width="wrap_content"
@@ -49,12 +50,15 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dip"
+                android:clickable="true"
                 android:contentDescription="@string/empty"
                 android:src="@drawable/btn_setting_selector" />
             <View
                 android:id="@+id/nav_divide"
                 android:layout_width="1dip"
                 android:layout_height="fill_parent"
+                android:layout_marginBottom="10dip"
+                android:layout_marginTop="10dip"
                 android:layout_toLeftOf="@+id/setting"
                 android:background="@color/news_divide" />
         </RelativeLayout>

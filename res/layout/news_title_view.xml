@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/title_bar"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/nav_bg_title"
     android:paddingLeft="15dip"
     android:paddingRight="20dip" >
     <ImageView
-        android:id="@+id/ic_back"
+        android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -23,13 +22,13 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dip"
         android:layout_marginRight="10dip"
-        android:layout_toRightOf="@+id/ic_back"
+        android:layout_toRightOf="@+id/icon"
         android:singleLine="true"
         android:text="@string/alarm_setting"
         android:textColor="#474747"
         android:textSize="18sp" />
     <TextView
-        android:id="@+id/subTitle"
+        android:id="@+id/summary"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
@@ -43,7 +42,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/subTitle"
+        android:layout_toLeftOf="@+id/summary"
         android:layout_toRightOf="@+id/title"
         android:contentDescription="@string/empty"
         android:src="@drawable/nav_title_line" />

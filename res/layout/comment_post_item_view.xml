@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:descendantFocusability="blocksDescendants"
+    android:paddingBottom="8dip"
+    android:paddingLeft="8dip"
+    android:paddingTop="8dip" >
+    <ImageView
+        android:id="@+id/iconView"
+        android:layout_width="45dip"
+        android:layout_height="45dip"
+        android:contentDescription="@string/empty"
+        android:src="@drawable/ic_avatar" />
+    <CheckBox
+        android:id="@+id/ckSelect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:button="@drawable/btn_checkbox_selector"
+        android:checked="false"
+        android:clickable="false" />
+    <TextView
+        android:id="@+id/titleView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="5dip"
+        android:layout_toLeftOf="@+id/ckSelect"
+        android:layout_toRightOf="@+id/iconView"
+        android:singleLine="true"
+        android:text="TextView"
+        android:textColor="#3d7aad"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+    <TextView
+        android:id="@+id/descView"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/titleView"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="5dip"
+        android:layout_marginTop="5.0dip"
+        android:layout_toLeftOf="@+id/ckSelect"
+        android:layout_toRightOf="@+id/iconView"
+        android:text="TextView"
+        android:textColor="#3d3d3d"
+        android:textSize="14sp" />
+</RelativeLayout>

@@ -57,7 +57,7 @@ public class CommentPanel extends LinearLayout implements Observer {
 		View view = null;
 		int index = 0;
 		for (Comment comment : comments) {
-			view = View.inflate(getContext(), R.layout.comment_list_item, null);
+			view = View.inflate(getContext(), R.layout.comment_list_item_view, null);
 			View line = view.findViewById(R.id.line);
 			ImageView commentIcon = (ImageView) view.findViewById(R.id.comment_icon);
 			TextView commentTime = (TextView) view.findViewById(R.id.comment_time);
@@ -70,12 +70,7 @@ public class CommentPanel extends LinearLayout implements Observer {
 			}
 			
 			setPhotos(comment.getUser_face(), commentIcon);
-			String title = comment.getNick_name();
-			if (comment.getChannel_id()!=0) {
-				title = "[" + comment.getChannel_id() +"]";
-			}
-			commentTitle.setText(title);
-			
+			commentTitle.setText(comment.getNick_name());
 			Date d = UIUtil.formatDate(comment.getAddtime());
 			commentTime.setText(UIUtil.formatDate(d.getTime()));
 			commentDesc.setText(comment.getCmt_text());

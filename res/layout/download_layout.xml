@@ -4,20 +4,20 @@
     android:layout_height="match_parent"
     android:background="@color/news_color" >
     <include
-        android:id="@+id/title_bar"
-        layout="@layout/news_common_title" />
+        android:id="@id/toolbar"
+        layout="@layout/news_title_view" />
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_below="@+id/title_bar"
+        android:layout_below="@id/toolbar"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@null"
         android:fadingEdgeLength="0dip"
         android:listSelector="@drawable/list_item_selector" >
     </ListView>
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

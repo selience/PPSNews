@@ -2,7 +2,6 @@ package com.pps.news;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 import com.pps.news.adapter.CommentsAdapter;
 import com.pps.news.app.BaseActivity;
 import com.pps.news.bean.Comment;
-import com.pps.news.bean.Group;
 import com.pps.news.bean.Result;
 import com.pps.news.constant.Constants;
 import com.pps.news.parser.CommentParser;
@@ -38,19 +36,20 @@ public class CommentActivity extends BaseActivity implements OnClickListener {
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.comment_layout);
 		txtTitle = (TextView) findViewById(R.id.title);
-		imageView = (ImageView) findViewById(R.id.ic_back);
-		txtSummuy = (TextView) findViewById(R.id.subTitle);
+		imageView = (ImageView) findViewById(R.id.icon);
+		txtSummuy = (TextView) findViewById(R.id.summary);
 		txtTips = (TextView) findViewById(android.R.id.empty);
 		listView = (ListView) findViewById(android.R.id.list);
-		imageTrash = (ImageView) findViewById(R.id.icon_trash);
 		imageView.setImageResource(R.drawable.ic_comment);
 		imageView.setOnClickListener(this);
+		imageTrash = (ImageView) findViewById(R.id.imageView);
+		imageTrash.setOnClickListener(this);
 		
 		status = getIntent().getIntExtra(Constants.NEWS_DETAIL_EXTRAS, Constants.NEWS_DETAIL_SELF_COMMENT);
 		if (status == Constants.NEWS_DETAIL_SELF_COMMENT) { //自己评论
 			txtTitle.setText(R.string.comment_title_self_label);
 		} else if (status == Constants.NEWS_DETAIL_FRIEND_COMMENT) { //网友评论
-			imageTrash.setVisibility(View.GONE);
+			findViewById(R.id.toolbar).setVisibility(View.GONE);
 			txtTitle.setText(R.string.comment_title_friend_label);
 		}
 		comments = new CommentParser().parse(Utility.readComment(this));
@@ -60,11 +59,11 @@ public class CommentActivity extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.ic_back:
+		case R.id.icon:
 			finish();
 			break;
-		case R.id.icon_trash:
-			Intent intent = new Intent(this, CommentProfileActivity.class);
+		case R.id.imageView:
+			Intent intent = new Intent(this, CommentEditActivity.class);
 			intent.putParcelableArrayListExtra(Constants.NEWS_DETAIL_EXTRAS, comments);
 			startActivity(intent);
 			break;
@@ -84,8 +83,8 @@ public class CommentActivity extends BaseActivity implements OnClickListener {
 				commentAdapter.notifyDataSetChanged();
 			}
 		} else {
-			txtTips.setVisibility(View.VISIBLE);
 			imageTrash.setEnabled(false);
+			txtTips.setVisibility(View.VISIBLE);
 		}
 	}
 	

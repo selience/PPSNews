@@ -84,7 +84,7 @@
                 android:contentDescription="@string/empty"
                 android:scaleType="center"
                 android:src="@drawable/ic_expand" />
-            <include layout="@layout/news_common_title" />
+            <include layout="@layout/news_title_view" />
             <com.pps.news.widget.CommentPanel
                 android:id="@+id/news_detail_comment"
                 android:layout_width="fill_parent"
@@ -93,7 +93,7 @@
         </LinearLayout>
     </ScrollView>
     <LinearLayout
-        android:id="@+id/bottomBar"
+        android:id="@id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="45dip"
         android:layout_alignParentBottom="true"
@@ -127,6 +127,6 @@
         android:id="@+id/divide"
         android:layout_width="match_parent"
         android:layout_height="1dip"
-        android:layout_above="@+id/bottomBar"
+        android:layout_above="@id/toolbar"
         android:background="@color/news_divide" />
 </RelativeLayout>

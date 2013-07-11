@@ -47,10 +47,10 @@ public class Comment implements Parcelable {
 	private Comment(Parcel in) {
 		rn = ParcelUtil.readIntFromParcel(in);
 		addtime = ParcelUtil.readStringFromParcel(in);
-		cmt_id = ParcelUtil.readIntFromParcel(in);
-		upload_id = ParcelUtil.readIntFromParcel(in);
+		cmt_id = ParcelUtil.readLongFromParcel(in);
+		upload_id = ParcelUtil.readLongFromParcel(in);
 		p_id = ParcelUtil.readIntFromParcel(in);
-		user_id = ParcelUtil.readIntFromParcel(in);
+		user_id = ParcelUtil.readLongFromParcel(in);
 		nick_name = ParcelUtil.readStringFromParcel(in);
 		cmt_text = ParcelUtil.readStringFromParcel(in);
 		user_face = ParcelUtil.readStringFromParcel(in);

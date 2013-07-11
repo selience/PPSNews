@@ -14,7 +14,6 @@ import com.pps.news.bean.News;
 import com.pps.news.bean.Result;
 import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
-import com.pps.news.fragment.MainFragment;
 import com.pps.news.fragment.NewsFragment;
 import com.pps.news.network.BetterHttp;
 import com.pps.news.parser.NewsParser;
@@ -200,10 +199,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 
 		@Override
 		public Fragment getItem(int position) {
-			if (position == 0)
-				return NewsFragment.newInstance(position+1);
-			else 
-				return MainFragment.newInstance(position+1);
+			return NewsFragment.newInstance(position);
 		}
 
 		@Override

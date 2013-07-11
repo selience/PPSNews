@@ -5,23 +5,23 @@
     android:layout_height="match_parent"
     android:background="@color/news_color" >
     <include
-        android:id="@+id/title_bar"
-        layout="@layout/news_common_title" />
+        android:id="@id/titlebar"
+        layout="@layout/news_title_view" />
     <include
-        android:id="@+id/button_bar"
-        layout="@layout/dialog_button_view" />
+        android:id="@id/toolbar"
+        layout="@layout/dialog_toolbar_view" />
     <View
-        android:id="@+id/footer_divider"
+        android:id="@+id/divider"
         android:layout_width="fill_parent"
         android:layout_height="1dip"
-        android:layout_above="@+id/button_bar"
+        android:layout_above="@id/toolbar"
         android:background="@color/news_divide" />
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/footer_divider"
-        android:layout_below="@+id/title_bar"
+        android:layout_above="@+id/divider"
+        android:layout_below="@id/titlebar"
         android:cacheColorHint="@android:color/transparent"
         android:divider="@color/news_divide"
         android:dividerHeight="0.5dip"

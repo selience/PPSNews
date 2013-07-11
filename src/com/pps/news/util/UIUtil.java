@@ -98,7 +98,7 @@ public final class UIUtil {
 	}
 
 	public static String formatDate(long milliseconds) {
-		return formatDate(milliseconds, "yyyy-MM-dd");
+		return formatDate(milliseconds, "MM月dd日");
 	}
 
 	public static String formatDate(long milliseconds, String pattern) {

@@ -54,8 +54,8 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.week_dialog_layout);
-		findViewById(R.id.ic_back).setVisibility(View.GONE);
-		((TextView)findViewById(R.id.subTitle)).setText("Week");
+		findViewById(R.id.icon).setVisibility(View.GONE);
+		((TextView)findViewById(R.id.summary)).setText("Week");
 		((TextView)findViewById(R.id.title)).setText("重复设置");
 		findViewById(R.id.confirm).setOnClickListener(this);
 		findViewById(R.id.cancel).setOnClickListener(this);

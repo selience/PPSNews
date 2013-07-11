@@ -63,13 +63,12 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.alarm_setting);
 		alarm = getIntent().getParcelableExtra(Constants.ALARM_EXTRAS);
-		
 		findViewById(R.id.setting_time).setOnClickListener(this);
 		findViewById(R.id.setting_repeat).setOnClickListener(this);
 		findViewById(R.id.setting_ringtone).setOnClickListener(this);
 		findViewById(R.id.cancel).setOnClickListener(this);
 		findViewById(R.id.confirm).setOnClickListener(this);
-		ImageView btnDelte = (ImageView)findViewById(R.id.delete);
+		ImageView btnDelte = (ImageView)findViewById(R.id.imageView);
 		btnDelte.setOnClickListener(this);
 		
 		txtTime = (TextView) findViewById(R.id.sub_time);
@@ -162,7 +161,7 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 		case R.id.setting_ringtone:
 			startActivityForResult(UIUtil.newRingtoneIntent(ringtoneUri.toString()), 0x100);
 			break;
-		case R.id.delete:
+		case R.id.imageView:
 			showDialog(SETTING_DIALOG_ID_DELETE);
 			break;
 		case R.id.confirm:

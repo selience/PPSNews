@@ -4,11 +4,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.view.View;
+import android.view.View.MeasureSpec;
 
-public class ImageLoader {
+public class ImageUtils {
 
 	/** decodes image and scales it to reduce memory consumption */
 	public Bitmap decodeFile(File f) {
@@ -16,7 +17,7 @@ public class ImageLoader {
 			// decode image size
 			BitmapFactory.Options o = new BitmapFactory.Options();
 			o.inJustDecodeBounds = true;
-			FileInputStream stream1=new FileInputStream(f);
+			FileInputStream stream1 = new FileInputStream(f);
 			BitmapFactory.decodeStream(stream1, null, o);
 			stream1.close();
 
@@ -37,8 +38,8 @@ public class ImageLoader {
 			BitmapFactory.Options o2 = new BitmapFactory.Options();
 			o2.inSampleSize = scale;
 			o2.inPurgeable = true;
-			FileInputStream stream2=new FileInputStream(f);
-			Bitmap bitmap=BitmapFactory.decodeStream(stream2, null, o2);
+			FileInputStream stream2 = new FileInputStream(f);
+			Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
 			stream2.close();
 			return bitmap;
 		} catch (FileNotFoundException e) {
@@ -50,5 +51,13 @@ public class ImageLoader {
 		}
 		return null;
 	}
-	
+
+	public static Bitmap convertViewToBitmap(View view) {
+		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+				MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
+		view.layout(0, 0, view.getMeasuredWidth(), view.getMeasuredHeight());
+		view.setDrawingCacheEnabled(true);
+		view.buildDrawingCache();
+		return view.getDrawingCache();
+	}
 }

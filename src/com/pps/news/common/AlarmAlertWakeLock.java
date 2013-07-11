@@ -14,7 +14,7 @@ public class AlarmAlertWakeLock {
     private static PowerManager.WakeLock sCpuWakeLock;
 
     public static void acquireCpuWakeLock(Context context) {
-    	Log.v("AlarmAlertWakeLock", "Acquiring cpu wake lock");
+    	//Log.v("AlarmAlertWakeLock", "Acquiring cpu wake lock");
         if (sCpuWakeLock != null) {
             return;
         }
@@ -30,7 +30,7 @@ public class AlarmAlertWakeLock {
     }
 
     public static void releaseCpuLock() {
-        Log.v("AlarmAlertWakeLock", "Releasing cpu wake lock");
+        //Log.v("AlarmAlertWakeLock", "Releasing cpu wake lock");
         if (sCpuWakeLock != null) {
             sCpuWakeLock.release();
             sCpuWakeLock = null;

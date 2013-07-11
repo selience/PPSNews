@@ -10,7 +10,7 @@ import com.pps.news.app.BaseActivity;
 
 public class DownloadActivity extends BaseActivity implements OnClickListener {
 
-	private TextView txtSummury;
+	private TextView txtSummary;
 	private ListView listView;
 	private TextView txtTips;
 	
@@ -20,10 +20,10 @@ public class DownloadActivity extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.download_layout);
 		TextView txtTitle = (TextView)findViewById(R.id.title);
 		txtTitle.setText(R.string.offline_title_label);
-		ImageView iconBack = (ImageView)findViewById(R.id.ic_back);
+		ImageView iconBack = (ImageView)findViewById(R.id.icon);
 		iconBack.setImageResource(R.drawable.ic_download);
 		iconBack.setOnClickListener(this);
-		txtSummury = (TextView)findViewById(R.id.subTitle);
+		txtSummary = (TextView)findViewById(R.id.summary);
 		listView = (ListView)findViewById(android.R.id.list);
 		txtTips = (TextView) findViewById(android.R.id.empty);
 	}
@@ -32,7 +32,7 @@ public class DownloadActivity extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.ic_back:
+		case R.id.icon:
 			finish();
 			break;
 		}

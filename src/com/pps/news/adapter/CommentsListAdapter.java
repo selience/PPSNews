@@ -1,6 +1,5 @@
 package com.pps.news.adapter;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Observable;
@@ -9,26 +8,28 @@ import java.util.WeakHashMap;
 import com.pps.news.R;
 import com.pps.news.bean.Comment;
 import com.pps.news.util.ImageCache;
-import com.pps.news.util.UIUtil;
-
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class CommentsAdapter extends BaseAdapter implements Observer {
+public class CommentsListAdapter extends BaseAdapter implements Observer {
 
 	private Context context = null;;
 	private List<Comment> comments = null;
 	private ImageCache imageFetcher = null;
 	private Handler mHandler = new Handler();
+	private SparseBooleanArray dataSet = new SparseBooleanArray();
 	private Map<String, ImageView> mPhotosMap = new WeakHashMap<String, ImageView>();
 	
-	public CommentsAdapter(Context context, List<Comment> datas) {
+	public CommentsListAdapter(Context context, List<Comment> datas) {
 		this.context = context;
 		this.comments = datas;
 		this.imageFetcher = ImageCache.getInstance();
@@ -68,17 +69,15 @@ public class CommentsAdapter extends BaseAdapter implements Observer {
 	}
 	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		StateHolder mHolder = null;
 		if (convertView == null) {
-			convertView = View.inflate(context, R.layout.comment_list_item_view, null);
+			convertView = View.inflate(context, R.layout.comment_post_item_view, null);
 			mHolder = new StateHolder();
-			mHolder.commentLine = (View) convertView.findViewById(R.id.line);
-			mHolder.commentIcon = (ImageView) convertView.findViewById(R.id.comment_icon);
-			mHolder.commentTime = (TextView) convertView.findViewById(R.id.comment_time);
-			mHolder.commentTitle = (TextView) convertView.findViewById(R.id.comment_title);
-			mHolder.commentDesc = (TextView) convertView.findViewById(R.id.comment_desc);
-			mHolder.commentSrc = (TextView) convertView.findViewById(R.id.comment_src);
+			mHolder.iconView = (ImageView) convertView.findViewById(R.id.iconView);
+			mHolder.titleView = (TextView) convertView.findViewById(R.id.titleView);
+			mHolder.descView = (TextView) convertView.findViewById(R.id.descView);
+			mHolder.selectView = (CheckBox) convertView.findViewById(R.id.ckSelect);
 			convertView.setTag(mHolder);
 		} else {
 			mHolder = (StateHolder)convertView.getTag();
@@ -86,22 +85,18 @@ public class CommentsAdapter extends BaseAdapter implements Observer {
 
 		Comment comment = comments.get(position);
 		if (comment != null) {
-			mHolder.commentTitle.setText(comment.getNick_name());
-			setPhotos(comment.getUser_face(), mHolder.commentIcon);
-			Date d = UIUtil.formatDate(comment.getAddtime());
-			mHolder.commentTime.setText(UIUtil.formatDate(d.getTime()));
-			mHolder.commentDesc.setText(comment.getCmt_text());
-			mHolder.commentSrc.setVisibility(View.VISIBLE);
-			String source = context.getResources().getString(
-					R.string.news_detail_source, 
-					String.valueOf(comment.getUpload_id()));
-			mHolder.commentSrc.setText(source);
+			mHolder.titleView.setText(comment.getNick_name());
+			setPhotos(comment.getUser_face(), mHolder.iconView);
+			mHolder.descView.setText(comment.getCmt_text());
 		}
-		
-		if (position == comments.size()-1) 
-			mHolder.commentLine.setVisibility(View.GONE);
-		else 
-			mHolder.commentLine.setVisibility(View.VISIBLE);
+		mHolder.selectView.setOnCheckedChangeListener(null);
+		mHolder.selectView.setChecked(dataSet.get(position));
+		mHolder.selectView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				dataSet.put(position, isChecked);
+			}
+		});
 		
 		return convertView;
 	}
@@ -120,12 +115,10 @@ public class CommentsAdapter extends BaseAdapter implements Observer {
 	}
 	
 	class StateHolder {
-		View commentLine;
-		ImageView commentIcon;
-		TextView commentTime;
-		TextView commentTitle;
-		TextView commentDesc;
-		TextView commentSrc;
+		ImageView iconView;
+		TextView titleView;
+		TextView descView;
+		CheckBox selectView;
 	}
 
 	@Override
@@ -144,4 +137,5 @@ public class CommentsAdapter extends BaseAdapter implements Observer {
 			}
 		});
 	}
+
 }

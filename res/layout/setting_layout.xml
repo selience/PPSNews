@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/news_color"
     android:orientation="vertical" >
-    <include layout="@layout/news_common_title" />
+    <include layout="@layout/news_title_view" />
     <FrameLayout
         android:layout_width="fill_parent"
         android:layout_height="@dimen/alarm_item_height"

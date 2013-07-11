@@ -2,20 +2,12 @@ package com.pps.news;
 
 import java.util.List;
 import org.apache.http.message.BasicNameValuePair;
-
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.View.MeasureSpec;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pps.news.app.BaseActivity;
@@ -38,7 +30,6 @@ import com.pps.news.widget.SharePopupWindow;
 public class NewsDetailActivity extends BaseActivity implements TaskListener, OnClickListener {
 
 	private static final String GET_COMMENT_LIST_TASK = "GET_COMMENT_LIST_TASK";
-	private static final String GET_ADD_COMMENT_TASK = "GET_ADD_COMMENT_TASK";
 	
 	private TextView txtTitle;
 	private TextView txtDate;
@@ -61,14 +52,14 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.news_detail);
-		News news = getIntent().getParcelableExtra("news");
+		News news = getIntent().getParcelableExtra(Constants.NEWS_DETAIL_EXTRAS);
 		newsId = news.getInfo_id();
 		txtTitle = (TextView)findViewById(R.id.news_detail_title);
 		txtDate = (TextView)findViewById(R.id.news_detail_date);
 		txtCommentNum = (TextView)findViewById(R.id.news_detail_video_num);
 		txtSource = (TextView)findViewById(R.id.news_detail_src);
 		txtDesc = (TextView)findViewById(R.id.news_detail_desc);
-		txtSummuy = (TextView)findViewById(R.id.subTitle);
+		txtSummuy = (TextView)findViewById(R.id.summary);
 		iconDown = (ImageView)findViewById(R.id.ic_down);
 		iconBack = (ImageView)findViewById(R.id.icon_back);
 		iconBack.setOnClickListener(this);
@@ -78,7 +69,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 		iconPost.setOnClickListener(this);
 		commentPanel = (CommentPanel) findViewById(R.id.news_detail_comment);
 		((TextView)findViewById(R.id.title)).setText(R.string.news_detail_comment_title);
-		((ImageView)findViewById(R.id.ic_back)).setImageResource(R.drawable.ic_post);
+		((ImageView)findViewById(R.id.icon)).setImageResource(R.drawable.ic_post);
 		
 		ensureUi(news);
 		new GetNewsCommentsTask(this, GET_COMMENT_LIST_TASK).execute();

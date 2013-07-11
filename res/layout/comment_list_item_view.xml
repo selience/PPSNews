@@ -2,13 +2,16 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
+    android:background="@drawable/list_item_selector"
     android:descendantFocusability="blocksDescendants"
-    android:orientation="vertical"
-    android:padding="8dip" >
+    android:orientation="vertical" >
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dip"
+        android:layout_marginLeft="8dip"
+        android:layout_marginRight="10dip"
+        android:layout_marginTop="8dip" >
         <ImageView
             android:id="@+id/comment_icon"
             android:layout_width="45dip"
@@ -21,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:singleLine="true"
+            android:text="TextView"
             android:textColor="#6d6d6d"
             android:textSize="14sp" />
         <TextView
@@ -33,6 +37,7 @@
             android:layout_toRightOf="@+id/comment_icon"
             android:ellipsize="end"
             android:singleLine="true"
+            android:text="TextView"
             android:textColor="#3d7aad"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -44,6 +49,7 @@
             android:layout_marginLeft="10.0dip"
             android:layout_marginTop="5.0dip"
             android:layout_toRightOf="@+id/comment_icon"
+            android:text="TextView"
             android:textColor="#3d3d3d"
             android:textSize="14sp" />
     </RelativeLayout>
@@ -52,6 +58,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
+        android:layout_marginRight="10dip"
+        android:text="TextView"
         android:textColor="#787878"
         android:textSize="14sp"
         android:visibility="gone" />
@@ -60,5 +68,5 @@
         android:layout_width="fill_parent"
         android:layout_height="0.5dip"
         android:layout_marginTop="8dip"
-        android:background="@android:color/darker_gray" />
+        android:background="@color/news_divide" />
 </LinearLayout>

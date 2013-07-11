@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.pps.news.widget.SlideRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_notice"
@@ -32,11 +33,11 @@
         android:textColor="@android:color/white"
         android:textSize="16sp" />
     <RelativeLayout
+        android:id="@+id/touchView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:background="@drawable/notice_bg_time_normal"
-        android:clickable="true"
         android:descendantFocusability="blocksDescendants" >
         <LinearLayout
             android:id="@+id/date"
@@ -97,4 +98,4 @@
         android:layout_marginBottom="20dip"
         android:contentDescription="@string/empty"
         android:src="@drawable/notice_down" />
-</RelativeLayout>
+</com.pps.news.widget.SlideRelativeLayout>

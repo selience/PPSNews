@@ -4,31 +4,17 @@
     android:layout_height="match_parent"
     android:background="@color/news_color" >
     <include
-        android:id="@+id/title_bar"
-        layout="@layout/news_common_title" />
-    <ImageView
-        android:id="@+id/add"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="10dip"
-        android:layout_marginTop="10dip"
-        android:clickable="true"
-        android:contentDescription="@string/empty"
-        android:src="@drawable/btn_clock_selector" />
-    <View
-        android:id="@+id/divide"
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_above="@+id/add"
-        android:background="@color/news_divide" />
+        android:id="@id/titlebar"
+        layout="@layout/news_title_view" />
+    <include
+        android:id="@id/toolbar"
+        layout="@layout/news_bottom_view" />
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_above="@+id/divide"
-        android:layout_below="@+id/title_bar"
+        android:layout_above="@id/toolbar"
+        android:layout_below="@id/titlebar"
         android:cacheColorHint="@android:color/transparent"
         android:divider="#D1D1D1"
         android:dividerHeight="0.5dip"
@@ -37,7 +23,7 @@
         android:listSelector="@drawable/list_item_selector" >
     </ListView>
     <ProgressBar
-        android:id="@+id/progress"
+        android:id="@id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

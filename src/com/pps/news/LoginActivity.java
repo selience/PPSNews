@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import tv.pps.vipmodule.vip.protol.ProtocolLogin;
 import tv.pps.vipmodule.vip.protol.BaseProtocol.RequestCallBack;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -41,10 +42,10 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 		setContentView(R.layout.login_layout);
 		TextView txtTitle = (TextView)findViewById(R.id.title);
 		txtTitle.setText(R.string.login_title_label);
-		ImageView iconBack = (ImageView)findViewById(R.id.ic_back);
+		ImageView iconBack = (ImageView)findViewById(R.id.icon);
 		iconBack.setImageResource(R.drawable.ic_login);
 		iconBack.setOnClickListener(this);
-		TextView txtSummury = (TextView)findViewById(R.id.subTitle);
+		TextView txtSummury = (TextView)findViewById(R.id.summary);
 		txtSummury.setText("Login");
 		edtAccount = (EditText)findViewById(R.id.account);
 		edtPassword = (EditText)findViewById(R.id.pass);
@@ -72,7 +73,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.ic_back:
+		case R.id.icon:
 			finish();
 			break;
 		case R.id.login:
@@ -81,6 +82,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 			}
 			break;
 		case R.id.register:
+			startActivity(new Intent(this, RegisterActivity.class));
 			break;
 		}
 	}

@@ -46,6 +46,10 @@
             android:name=".LoginActivity"
             android:windowSoftInputMode="stateVisible|adjustResize"
             android:screenOrientation="portrait" />
+         <activity
+            android:name=".RegisterActivity"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".NewsDetailActivity"
             android:screenOrientation="portrait" />
@@ -56,7 +60,7 @@
             android:name=".CommentActivity"
             android:screenOrientation="portrait" />
          <activity
-            android:name=".CommentProfileActivity"
+            android:name="com.pps.news.CommentEditActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".AlarmActivity"

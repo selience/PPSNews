@@ -25,10 +25,10 @@ public class SettingActivity extends BaseActivity implements OnClickListener, On
 		setContentView(R.layout.setting_layout);
 		TextView txtTitle = (TextView)findViewById(R.id.title);
 		txtTitle.setText(R.string.setting_title_label);
-		ImageView iconBack = (ImageView)findViewById(R.id.ic_back);
+		ImageView iconBack = (ImageView)findViewById(R.id.icon);
 		iconBack.setImageResource(R.drawable.ic_setting);
 		iconBack.setOnClickListener(this);
-		TextView txtSummury = (TextView)findViewById(R.id.subTitle);
+		TextView txtSummury = (TextView)findViewById(R.id.summary);
 		txtSummury.setText("Setting");
 		findViewById(R.id.setting_clear_cache).setOnClickListener(this);
 		ckIsAuto = (CheckBox)findViewById(R.id.setting_auto_clear);
@@ -40,7 +40,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener, On
 	public void onClick(View v) {
 		// TODO Auto-generated method stub
 		switch (v.getId()) {
-		case R.id.ic_back:
+		case R.id.icon:
 			finish();
 			break;
 		case R.id.setting_clear_cache:

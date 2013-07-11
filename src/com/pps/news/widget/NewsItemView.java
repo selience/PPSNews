@@ -9,21 +9,20 @@ import com.pps.news.bean.News;
 import com.pps.news.util.ImageCache;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.AnimationDrawable;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class NewsItemView extends RelativeLayout implements Observer {
 
-	private ProgressBar progress;
 	private ImageView imageView;
 	private TextView txtTitle;
 	private ImageCache imageFetcher;
+	private AnimationDrawable mAnimation;
 	private Handler mHandler = new Handler();
 	private Map<String, ImageView> mPhotosMap = null;
 	
@@ -47,7 +46,10 @@ public class NewsItemView extends RelativeLayout implements Observer {
 		LayoutInflater.from(getContext()).inflate(R.layout.news_item_view, this, true);
 		imageView = (ImageView) findViewById(R.id.news_image);
 		txtTitle = (TextView) findViewById(R.id.news_title);
-		progress = (ProgressBar) findViewById(R.id.progress);
+		ImageView progress = (ImageView) findViewById(R.id.progress);
+		
+		mAnimation = (AnimationDrawable) progress.getDrawable();
+		mAnimation.start();
 	}
 
 	@Override
@@ -76,11 +78,11 @@ public class NewsItemView extends RelativeLayout implements Observer {
 
 	private void setPhotos(String photoUrl, ImageView imageView) {
 		if (imageFetcher.exists(photoUrl)) {
-			progress.setVisibility(View.GONE);
+			mAnimation.stop();
 			Bitmap bitmap = imageFetcher.displayBitmap(photoUrl);
 			imageView.setImageBitmap(bitmap);
 		} else {
-			progress.setVisibility(View.VISIBLE);
+			mAnimation.start();
 			if (!mPhotosMap.containsKey(photoUrl)) {
 				mPhotosMap.put(photoUrl, imageView);
 			}

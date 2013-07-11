@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/news_color"
+    android:orientation="vertical" >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dialog_button_height"
+        android:background="#29a6ef" >
+        <FrameLayout
+            android:id="@+id/cancel"
+            android:layout_width="120dip"
+            android:layout_height="match_parent" >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/ic_cancel_normal"
+                android:drawablePadding="5dip"
+                android:singleLine="true"
+                android:text="@string/cancel"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </FrameLayout>
+        <View
+            android:layout_width="1dip"
+            android:layout_height="fill_parent"
+            android:background="#0e9bed" />
+        <FrameLayout
+            android:id="@+id/edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+            <TextView
+                android:id="@+id/txtSelect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawableLeft="@drawable/comment_delete"
+                android:drawablePadding="5dip"
+                android:singleLine="true"
+                android:text="@string/comment_edit_bar_label"
+                android:textColor="@android:color/white"
+                android:textSize="16sp" />
+        </FrameLayout>
+    </LinearLayout>
+    <ListView
+        android:id="@android:id/list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:cacheColorHint="@android:color/transparent"
+        android:divider="@color/news_divide"
+        android:dividerHeight="0.5dip"
+        android:drawSelectorOnTop="false"
+        android:listSelector="@drawable/list_item_selector" >
+    </ListView>
+</LinearLayout>
