@@ -58,9 +58,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".CommentActivity"
+            android:windowSoftInputMode="stateHidden"
             android:screenOrientation="portrait" />
          <activity
-            android:name="com.pps.news.CommentEditActivity"
+            android:name=".CommentEditActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".AlarmActivity"

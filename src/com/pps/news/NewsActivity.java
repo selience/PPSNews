@@ -16,12 +16,9 @@ import com.pps.news.app.BaseActivity;
 import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
 import com.pps.news.bean.Result;
-import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
 import com.pps.news.fragment.NewsFragment;
-import com.pps.news.network.BetterHttp;
-import com.pps.news.parser.NewsParser;
-import com.pps.news.task.GenericTask;
+import com.pps.news.task.GetNewsListTask;
 import com.pps.news.task.TaskListener;
 import com.pps.news.util.CacheUtil;
 import com.pps.news.util.ImageCache;
@@ -244,23 +241,6 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 				}
 			}, 200L);
 		} else if (state == State.RELEASE_TO_REFRESH) {
-		}
-	}
-	
-	
-	class GetNewsListTask extends GenericTask {
-
-		public GetNewsListTask(TaskListener taskListener, String taskName) {
-			super(taskListener, taskName);
-		}
-
-		@Override
-		protected Result doInBackground(String... params) {
-			BetterHttp httpClient = BetterHttp.getInstance();
-			Result result = httpClient.doHttpGet(Constants.getNewsList());
-			Group<News> listNews = new NewsParser().parse(result.getMessage());
-			result.addResult(listNews);
-			return result;
 		}
 	}
 	

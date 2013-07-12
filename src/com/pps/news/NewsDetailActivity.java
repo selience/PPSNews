@@ -1,7 +1,6 @@
 package com.pps.news;
 
 import java.util.List;
-import org.apache.http.message.BasicNameValuePair;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -16,21 +15,15 @@ import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
 import com.pps.news.bean.Result;
 import com.pps.news.constant.Constants;
-import com.pps.news.network.BetterHttp;
-import com.pps.news.parser.CommentParser;
-import com.pps.news.task.GenericTask;
+import com.pps.news.task.GetCommentsTask;
 import com.pps.news.task.TaskListener;
 import com.pps.news.util.CacheUtil;
 import com.pps.news.util.ToastUtils;
-import com.pps.news.util.UIUtil;
-import com.pps.news.util.Utility;
 import com.pps.news.widget.CommentPanel;
 import com.pps.news.widget.SharePopupWindow;
 
 public class NewsDetailActivity extends BaseActivity implements TaskListener, OnClickListener {
 
-	private static final String GET_COMMENT_LIST_TASK = "GET_COMMENT_LIST_TASK";
-	
 	private TextView txtTitle;
 	private TextView txtDate;
 	private TextView txtCommentNum;
@@ -72,7 +65,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 		((ImageView)findViewById(R.id.icon)).setImageResource(R.drawable.ic_post);
 		
 		ensureUi(news);
-		new GetNewsCommentsTask(this, GET_COMMENT_LIST_TASK).execute();
+		new GetCommentsTask(this, null).execute(String.valueOf(newsId));
 		txtDesc.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
 			@Override
 			public void onGlobalLayout() {
@@ -132,6 +125,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 			break;
 		case R.id.icon_comment:
 			Intent intent = new Intent(this, CommentActivity.class);
+			intent.putExtra(Constants.NEWS_ID_EXTRAS, newsId);
 			intent.putExtra(Constants.NEWS_DETAIL_EXTRAS, Constants.NEWS_DETAIL_FRIEND_COMMENT);
 			startActivity(intent);
 			break;
@@ -150,12 +144,11 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 	@Override
 	@SuppressWarnings("unchecked")
 	public void onTaskFinished(String taskName, Result result) {
-		if (taskName.equals(GET_COMMENT_LIST_TASK)) {
-			if (result.getValue() != null) {
-				Group<Comment> comments = (Group<Comment>) result.getValue();
-				onRefresh(comments);
-				CacheUtil.saveCommentCache(newsId, comments);
-			}
+		notifyErrorMessage(result.getException());
+		if (result.getValue() != null) {
+			Group<Comment> comments = (Group<Comment>) result.getValue();
+			onRefresh(comments);
+			CacheUtil.saveCommentCache(newsId, comments);
 		}
 	}
 	
@@ -163,35 +156,5 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 	public void onDestroy() {
 		commentPanel.deleteObservers();
 		super.onDestroy();
-	}
-	
-	
-	class GetNewsCommentsTask extends GenericTask {
-
-		public GetNewsCommentsTask(TaskListener taskListener, String taskName) {
-			super(taskListener, taskName);
-			// TODO Auto-generated constructor stub
-		}
-
-		@Override
-		protected Result doInBackground(String... params) {
-			// TODO Auto-generated method stub
-			BetterHttp httpClient = BetterHttp.getInstance();
-			String domain = "ppsios";
-			Result result = httpClient.doHttpPost(Constants.getCommentByVideoId(), 
-					new BasicNameValuePair("returntype", "json"),
-					new BasicNameValuePair("encode", "utf8"),
-					new BasicNameValuePair("pageID", "1"),					
-					new BasicNameValuePair("domain", domain),
-					new BasicNameValuePair("sign", UIUtil.md5ForString(domain+"vcommet")),
-					new BasicNameValuePair("upload_id", String.valueOf(newsId)),
-					new BasicNameValuePair("source", "mobile"),
-					new BasicNameValuePair("user_agent", "PPSNews1.0"),
-					new BasicNameValuePair("platform", "android"));
-			// 测试数据
-			Group<Comment> comments = new CommentParser().parse(Utility.readComment(NewsDetailActivity.this));
-			result.addResult(comments);
-			return result;
-		}
 	}
 }

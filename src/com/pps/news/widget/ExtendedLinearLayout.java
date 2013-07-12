@@ -1,14 +1,21 @@
 package com.pps.news.widget;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.WeakHashMap;
 import com.pps.news.R;
 import com.pps.news.bean.News;
+import com.pps.news.util.ImageCache;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-public abstract class ExtendedLinearLayout extends LinearLayout {
+public abstract class ExtendedLinearLayout extends LinearLayout implements Observer {
 
 	protected NewsItemView news_top;
 	protected LinearLayout news_middle;
@@ -18,6 +25,10 @@ public abstract class ExtendedLinearLayout extends LinearLayout {
 	protected NewsItemView news_left_bottom;
 	protected NewsItemView news_right_bottom;
 
+	private ImageCache imageFetcher;
+	private Handler mHandler = new Handler();
+	private Map<String, NewsItemView> mPhotosMap;
+	
 	ExtendedLinearLayout(Context context) {
 		super(context);
 		initialize();
@@ -30,6 +41,7 @@ public abstract class ExtendedLinearLayout extends LinearLayout {
 
 	protected abstract int getLayoutResId();
 
+	
 	protected void initialize() {
 		setOrientation(LinearLayout.VERTICAL);
 		LayoutInflater.from(getContext()).inflate(getLayoutResId(), this, true);
@@ -40,6 +52,10 @@ public abstract class ExtendedLinearLayout extends LinearLayout {
 		news_right_top = (NewsItemView) findViewById(R.id.news_right_top);
 		news_left_bottom = (NewsItemView) findViewById(R.id.news_left_bottom);
 		news_right_bottom = (NewsItemView) findViewById(R.id.news_right_bottom);
+		
+		imageFetcher = ImageCache.getInstance();
+		imageFetcher.addObserver(this);
+		mPhotosMap = new WeakHashMap<String, NewsItemView>();
 	}
 
 	public void setItems(List<News> items) {
@@ -49,24 +65,63 @@ public abstract class ExtendedLinearLayout extends LinearLayout {
 		for (News news : items) {
 			switch (news.getPosition_flag()) {
 			case News.NEWS_POSITION_FLAG_TOP:
-				news_top.setDataSource(news);
+				setDataSource(news_top, news);
 				break;
 			case News.NEWS_POSITION_FLAG_LEFT_TOP:
-				news_left_top.setDataSource(news);
+				setDataSource(news_left_top, news);
 				break;
 			case News.NEWS_POSITION_FLAG_RIGHT_TOP:
-				news_right_top.setDataSource(news);
+				setDataSource(news_right_top, news);
 				break;
 			case News.NEWS_POSITION_FLAG_LEFT_BOTTOM:
-				news_left_bottom.setDataSource(news);
+				setDataSource(news_left_bottom, news);
 				break;
 			case News.NEWS_POSITION_FLAG_RIGHT_BOTTOM:
-				news_right_bottom.setDataSource(news);
+				setDataSource(news_right_bottom, news);
 				break;
 			}
 		}
 	}
 
+	private void setDataSource(NewsItemView view, News news) {
+		if (news != null) {
+			view.setTag(news);
+			view.setTitle(news.getMain_title());
+			setPhotos(news.getThumb_url(), view);
+		}
+	}
+	
+	private void setPhotos(String photoUrl, NewsItemView imageView) {
+		if (imageFetcher.exists(photoUrl)) {
+			imageView.startAnimation();
+			Bitmap bitmap = imageFetcher.displayBitmap(photoUrl);
+			imageView.setImageBitmap(bitmap);
+		} else {
+			imageView.stopAnimation();
+			if (!mPhotosMap.containsKey(photoUrl)) {
+				mPhotosMap.put(photoUrl, imageView);
+			}
+			imageFetcher.request(photoUrl);
+		}
+	}
+	
+	@Override
+	public void update(Observable observable, Object data) {
+		final String url = data.toString();
+		mHandler.post(new Runnable() {
+			
+			@Override
+			public void run() {
+				for (String item : mPhotosMap.keySet()) {
+					if (item.equals(url)) {
+						setPhotos(item, mPhotosMap.get(item));
+					}
+				}
+			}
+		});
+	}
+	
+	/** 设置监听事件  */
 	public void setOnItemsClickListener(OnClickListener mOnClickListener) {
 		news_top.setOnClickListener(mOnClickListener);
 		news_left_top.setOnClickListener(mOnClickListener);
@@ -75,11 +130,10 @@ public abstract class ExtendedLinearLayout extends LinearLayout {
 		news_right_bottom.setOnClickListener(mOnClickListener);
 	}
 
+	/** 移除图片监听  */
 	public void removeObservers() {
-		news_top.deleteObserver();
-		news_left_top.deleteObserver();
-		news_right_bottom.deleteObserver();
-		news_left_bottom.deleteObserver();
-		news_right_bottom.deleteObserver();
+		mPhotosMap.clear();
+		mPhotosMap = null;
+		imageFetcher.deleteObserver(this);
 	}
 }

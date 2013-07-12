@@ -56,9 +56,7 @@ public class CommentsAdapter extends BaseAdapter implements Observer {
 	}
 
 	public void addAll(List<Comment> data) {
-		if (data != null) {
-			comments.addAll(data);
-		}
+		this.comments = data;
 	}
 	
 	public void deleteObservers() {
