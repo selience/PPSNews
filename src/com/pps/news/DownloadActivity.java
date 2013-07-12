@@ -10,10 +10,6 @@ import com.pps.news.app.BaseActivity;
 
 public class DownloadActivity extends BaseActivity implements OnClickListener {
 
-	private TextView txtSummary;
-	private ListView listView;
-	private TextView txtTips;
-	
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -23,9 +19,9 @@ public class DownloadActivity extends BaseActivity implements OnClickListener {
 		ImageView iconBack = (ImageView)findViewById(R.id.icon);
 		iconBack.setImageResource(R.drawable.ic_download);
 		iconBack.setOnClickListener(this);
-		txtSummary = (TextView)findViewById(R.id.summary);
-		listView = (ListView)findViewById(android.R.id.list);
-		txtTips = (TextView) findViewById(android.R.id.empty);
+		TextView txtSummary = (TextView)findViewById(R.id.summary);
+		ListView listView = (ListView)findViewById(android.R.id.list);
+		TextView txtTips = (TextView) findViewById(android.R.id.empty);
 	}
 
 	@Override

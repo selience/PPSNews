@@ -4,18 +4,12 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.pps.news.app.BaseActivity;
-import com.pps.news.app.NewsApplication;
-import com.pps.news.constant.Config;
-import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
 
-public class SettingActivity extends BaseActivity implements OnClickListener, OnCheckedChangeListener {
+public class SettingActivity extends BaseActivity implements OnClickListener {
 
 	private CheckBox ckIsAuto;
 	
@@ -32,8 +26,7 @@ public class SettingActivity extends BaseActivity implements OnClickListener, On
 		txtSummury.setText("Setting");
 		findViewById(R.id.setting_clear_cache).setOnClickListener(this);
 		ckIsAuto = (CheckBox)findViewById(R.id.setting_auto_clear);
-		ckIsAuto.setChecked(Config.needAutoClearCache);
-		ckIsAuto.setOnCheckedChangeListener(this);
+		ckIsAuto.setChecked(PreferenceUtils.getIsAutoClearCache(this));
 	}
 
 	@Override
@@ -49,10 +42,9 @@ public class SettingActivity extends BaseActivity implements OnClickListener, On
 	}
 
 	@Override
-	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		// TODO Auto-generated method stub
-		Config.needAutoClearCache = isChecked;
-		PreferenceUtils.storeIsAutoClearCache(NewsApplication.mPrefs, isChecked);
+	protected void onPause() {
+		super.onPause();
+		PreferenceUtils.storeIsAutoClearCache(this, ckIsAuto.isChecked());
 	}
-
+	
 }

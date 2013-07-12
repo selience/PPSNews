@@ -1,12 +1,10 @@
 package com.pps.news;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import tv.pps.vipmodule.vip.AccountVerify;
 import tv.pps.vipmodule.vip.protol.ProtocolLogin;
 import tv.pps.vipmodule.vip.protol.BaseProtocol.RequestCallBack;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -18,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pps.news.app.BaseActivity;
-import com.pps.news.app.NewsApplication;
-import com.pps.news.constant.Config;
 import com.pps.news.constant.PreferenceUtils;
 import com.pps.news.util.ToastUtils;
 import com.pps.news.util.UIUtil;
@@ -29,12 +25,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 	private EditText edtAccount;
 	private EditText edtPassword;
 	private CheckBox ckRememberPwd;
-	
-	private boolean isAutoLogin;
-	private String account, passwd;
-
 	private ProgressDialog dialog;
-	private SharedPreferences mPrefs;
+	
+	private String userName;
+	private String userPass;
+	private boolean isAutoLogin;
 	
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
@@ -53,17 +48,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 		findViewById(R.id.login).setOnClickListener(this);
 		findViewById(R.id.register).setOnClickListener(this);
 		
-		mPrefs = NewsApplication.mPrefs;
-		account = PreferenceUtils.getUserName(mPrefs);
-		passwd = PreferenceUtils.getUserPass(mPrefs);
-		isAutoLogin = PreferenceUtils.getIsAutoLogin(mPrefs);
-		if (!TextUtils.isEmpty(account)) {
-			edtAccount.setText(account);
+		userPass = PreferenceUtils.getUserPassword();
+		userName = AccountVerify.getInstance().getmUserName();
+		ckRememberPwd.setChecked(PreferenceUtils.getIsAutoLogin());
+
+		if (!TextUtils.isEmpty(userName)) {
+			edtAccount.setText(userName);
 		}
-		if (!TextUtils.isEmpty(passwd)) {
-			edtPassword.setText(passwd);
+		if (!TextUtils.isEmpty(userPass)) {
+			edtPassword.setText(userPass);
 		}
-		ckRememberPwd.setChecked(isAutoLogin);
 		
 		dialog = new ProgressDialog(this);
 		dialog.setMessage(getString(R.string.login_tips));
@@ -77,9 +71,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 			finish();
 			break;
 		case R.id.login:
-			if (validate()) {
-				startLogin();
-			}
+			startUserLogin();
 			break;
 		case R.id.register:
 			startActivity(new Intent(this, RegisterActivity.class));
@@ -87,12 +79,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 		}
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		PreferenceUtils.storeIsAutoLogin(mPrefs, ckRememberPwd.isChecked());
-	}
-	
+	// 验证用户信息不为空
 	private boolean validate() {
 		if (TextUtils.isEmpty(edtAccount.getText()) ||
 				TextUtils.isEmpty(edtPassword.getText())) {
@@ -102,11 +89,15 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 		return true;
 	}
 	
-	private void startLogin() {
-		account = edtAccount.getText().toString().trim();
-		passwd = edtPassword.getText().toString().trim();
-		ProtocolLogin protocolLogin = new ProtocolLogin(this);
-		protocolLogin.fetch(account, passwd, isAutoLogin, this);
+	// 开始登陆
+	private void startUserLogin() {
+		if (validate()) {
+			isAutoLogin = ckRememberPwd.isChecked();
+			userName = edtAccount.getText().toString().trim();
+			userPass = edtPassword.getText().toString().trim();
+			ProtocolLogin protocolLogin = new ProtocolLogin(this);
+			protocolLogin.fetch(userName, userPass, isAutoLogin, this);
+		}
 	}
 
 	@Override
@@ -119,6 +110,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 	@Override
 	public void onRequestError(String errorCode, String errorMessage) {
 		// TODO Auto-generated method stub
+		dialog.dismiss();
 		ToastUtils.showMessage(this, errorMessage, Toast.LENGTH_SHORT);
 	}
 
@@ -126,11 +118,17 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 	public void onRequestSuccess(Boolean formData, String successMessage) {
 		// TODO Auto-generated method stub
 		Log.i("onRequestSuccess", successMessage);
-		String userId = parseUserId(successMessage);
-		Config.userId = userId;
-		PreferenceUtils.storeUserId(mPrefs, userId);
-		PreferenceUtils.storeUserName(mPrefs, account);
-		PreferenceUtils.storeUserPass(mPrefs, passwd);
+		AccountVerify accountVerify = AccountVerify.getInstance();
+		PreferenceUtils.storeUser(accountVerify); //存储用户信息
+		if (ckRememberPwd.isChecked()) { //存储用户密码
+			PreferenceUtils.storeUserPass(userPass);
+		} else {
+			PreferenceUtils.removeUserPass();
+		}
+		// 是否记住密码
+		PreferenceUtils.storeIsAutoLogin(ckRememberPwd.isChecked());
+		
+		ToastUtils.showMessage(this, R.string.login_success, Toast.LENGTH_SHORT);
 		dialog.dismiss();
 		finish();
 	}
@@ -141,18 +139,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 
 	@Override
 	public void onCancel() {
-	}
-	
-	// 获取UserId的Value
-	private String parseUserId(String content) {
-		try {
-			JSONObject json = new JSONObject(content);
-			json = json.getJSONObject("data");
-			json = json.getJSONObject("userinfo");
-			return json.getString("uid");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return null;
+		dialog.dismiss();
 	}
 }

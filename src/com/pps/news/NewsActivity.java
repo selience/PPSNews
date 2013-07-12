@@ -1,6 +1,11 @@
 package com.pps.news;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import tv.pps.vipmodule.vip.AccountVerify;
+import tv.pps.vipmodule.vip.protol.ProtocolLogout;
+import tv.pps.vipmodule.vip.protol.BaseProtocol.RequestCallBack;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.Mode;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnPullEventListener;
@@ -8,7 +13,6 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshVerticalViewPager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.pps.news.app.BaseActivity;
-import com.pps.news.app.NewsApplication;
 import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
 import com.pps.news.bean.Result;
@@ -20,8 +24,12 @@ import com.pps.news.parser.NewsParser;
 import com.pps.news.task.GenericTask;
 import com.pps.news.task.TaskListener;
 import com.pps.news.util.CacheUtil;
+import com.pps.news.util.ImageCache;
+import com.pps.news.widget.LogoutPopupWindow;
 import com.pps.news.widget.SlideNavigationView;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -35,6 +43,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 /**
  * @file MainActivity.java
@@ -43,13 +52,20 @@ import android.widget.ImageView;
  * @description TODO 新闻主界面
  */
 public class NewsActivity extends BaseActivity implements OnClickListener, TaskListener, OnPageChangeListener,
-	OnRefreshListener<VerticalViewPager>, OnPullEventListener<VerticalViewPager> {
-	
+	OnRefreshListener<VerticalViewPager>, OnPullEventListener<VerticalViewPager>, RequestCallBack<Boolean> {
+
+	private View container;
+	private ImageView iconAvatar;
+	private TextView userView;
+	private TextView summaryView;
 	private ImageView slideMenu;
 	private SlideNavigationView navigationView;
 	private VerticalViewPager viewPager;
 	private PullToRefreshVerticalViewPager mPullToRefreshViewPager;
 	
+	private String avatarUrl;
+	private ImageCache imageFetcher;
+	private SparseArray<String> userVipType;
 	private SparseArray<Fragment> registeredFragments;
 
 	@Override
@@ -69,7 +85,10 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		findViewById(R.id.offline).setOnClickListener(this);
 		findViewById(R.id.rl_alarm).setOnClickListener(this);
 		findViewById(R.id.rl_weather).setOnClickListener(this);
-		findViewById(R.id.icon_avatar).setOnClickListener(this);
+		container = findViewById(R.id.container);
+		iconAvatar = (ImageView)findViewById(R.id.icon_avatar);
+		userView = (TextView)findViewById(R.id.nav_login_label);
+		summaryView = (TextView)findViewById(R.id.nav_sub_desc);
 		slideMenu = (ImageView) findViewById(R.id.slide_menu);
 		slideMenu.setOnClickListener(this);
 		
@@ -84,14 +103,69 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		viewPager = mPullToRefreshViewPager.getRefreshableView();
 		viewPager.setAdapter(new NewsFragmentAdapter(getSupportFragmentManager()));
 		viewPager.setOnPageChangeListener(this);
+		
+		imageFetcher = ImageCache.getInstance();
+		imageFetcher.addObserver(mObserver);
+		
+		userVipType = new SparseArray<String>(3);
+		userVipType.put(Integer.parseInt(AccountVerify.OPT_NORMAL), "普通会员");
+		userVipType.put(Integer.parseInt(AccountVerify.OPT_SILVER), "白银会员");
+		userVipType.put(Integer.parseInt(AccountVerify.OPT_GOLD), "黄金会员");
 	}
 
+	// 更新上次刷新时间戳
 	private void setLastUpdateTimeStamp() {
-		long lastUpdateTimestamp = PreferenceUtils.getLastUpdateTimeStamp(NewsApplication.mPrefs);
+		long lastUpdateTimestamp = PreferenceUtils.getLastUpdateTimeStamp(this);
 		if (lastUpdateTimestamp > 0) {
 			CharSequence dateString = DateFormat.format("kk:mm", lastUpdateTimestamp);
 			mPullToRefreshViewPager.getLoadingLayoutProxy().setLastUpdatedLabel("更新时间:"+dateString);
 		}
+	}
+	
+	// 检查用户是否登录
+	private void checkIfUserLogin() {
+		AccountVerify accountVerify = AccountVerify.getInstance();
+		if (accountVerify.isLogin()) {
+			userView.setText(accountVerify.getmDisplayName());
+			setPhotos(accountVerify.getmIconUrl(), iconAvatar);
+			String userStatus = userVipType.get(Integer.parseInt(accountVerify.getVipType()));
+			String summary = getString(R.string.nav_sub_summary, userStatus, accountVerify.getmLevel());
+			summaryView.setText(summary);
+			container.setOnClickListener(new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					LogoutPopupWindow popupWindow = new LogoutPopupWindow(NewsActivity.this);
+					popupWindow.showPopupWindow(container);
+					popupWindow.setPositiveClickListener(new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							ProtocolLogout protocolLogout = new ProtocolLogout(NewsActivity.this);
+							protocolLogout.fetch(NewsActivity.this);
+						}
+					});
+				}
+			});
+		} else {
+			userView.setText(R.string.nav_login_lable);
+			iconAvatar.setImageResource(R.drawable.ic_avatar);
+			summaryView.setText(R.string.nav_sub_desc);
+			container.setOnClickListener(this);
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		checkIfUserLogin();
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		registeredFragments.clear();
+		registeredFragments=null;
+		imageFetcher.deleteObservers();
 	}
 	
 	@Override
@@ -100,7 +174,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		case R.id.slide_menu:
 			navigationView.toggle(true);
 			break;
-		case R.id.icon_avatar:
+		case R.id.container:
 			startActivity(new Intent(this, LoginActivity.class));
 			break;
 		case R.id.comment:
@@ -139,7 +213,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	public void onTaskFinished(String taskName, Result result) {
 		notifyErrorMessage(result.getException());
 		mPullToRefreshViewPager.onRefreshComplete();
-		PreferenceUtils.saveLastUpdateTimeStamp(NewsApplication.mPrefs, System.currentTimeMillis());
+		PreferenceUtils.saveLastUpdateTimeStamp(this, System.currentTimeMillis());
 		if (result.getValue() != null) {
 			Group<News> listNews = (Group<News>)result.getValue();
 			for (int i=0;i<registeredFragments.size();i++) {
@@ -152,8 +226,6 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		}
 	}
 
-	
-	
 	@Override
 	public void onRefresh(PullToRefreshBase<VerticalViewPager> refreshView) {
 		setLastUpdateTimeStamp();
@@ -246,5 +318,57 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		void hideView(boolean isShown);
 		
 		void onRefresh(List<News> result);
+	}
+	
+	// 设置用户图片
+	private void setPhotos(String photoUrl, ImageView imageView) {
+		this.avatarUrl = photoUrl;
+		if (imageFetcher.exists(photoUrl)) {
+			Bitmap bitmap = imageFetcher.displayBitmap(photoUrl);
+			imageView.setImageBitmap(bitmap);
+		} else {
+			imageView.setImageResource(R.drawable.ic_avatar);
+			imageFetcher.request(photoUrl);
+		}
+	}
+	
+	private Observer mObserver = new Observer() {
+		
+		@Override
+		public void update(Observable observable, Object data) {
+			final String imageUrl = data.toString();
+			if (avatarUrl.equals(imageUrl)) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						setPhotos(imageUrl, iconAvatar);
+					}
+				});
+			}
+		}
+	};
+
+	
+	@Override
+	public void onRequestStart() {
+	}
+
+	@Override
+	public void onRequestError(String errorCode, String errorMessage) {
+	}
+
+	// 注销用户成功
+	@Override
+	public void onRequestSuccess(Boolean formData, String successMessage) {
+		PreferenceUtils.clearUser(); // 清空登陆状态
+		AccountVerify.getInstance().setmLogin(false);
+		checkIfUserLogin();
+	}
+
+	@Override
+	public void onRequestLoading(long current, long total) {
+	}
+
+	@Override
+	public void onCancel() {
 	}
 }

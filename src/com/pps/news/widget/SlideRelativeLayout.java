@@ -2,7 +2,6 @@ package com.pps.news.widget;
 
 import com.pps.news.R;
 import com.pps.news.util.ImageUtils;
-import com.pps.news.util.UIUtil;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -17,7 +16,6 @@ public class SlideRelativeLayout extends RelativeLayout {
 
 	private static final String TAG = "SlideRelativeLayout";
 
-	private int height = 0;
 	private int offsetY = 0;
 	private View view = null;
 	private Handler handler = null;
@@ -25,13 +23,11 @@ public class SlideRelativeLayout extends RelativeLayout {
 	
 	public SlideRelativeLayout(Context context) {
 		super(context);
-		height = UIUtil.getScreenHeight(context);
 		// TODO Auto-generated constructor stub
 	}
 
 	public SlideRelativeLayout(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		height = UIUtil.getScreenHeight(context);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -73,21 +69,21 @@ public class SlideRelativeLayout extends RelativeLayout {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		/*int drawY = offsetY - view.getHeight();
+		int drawY = offsetY - view.getHeight();
 		if (drawY < 0) {
 			view.setVisibility(View.VISIBLE);
 		} else {
 			view.setVisibility(View.GONE);
 			dragBitmap = ImageUtils.convertViewToBitmap(view);
 			canvas.drawBitmap(dragBitmap, view.getLeft(), drawY, null);
-		}*/
+		}
 		
-		if (offsetY > 0 && offsetY < view.getHeight() || offsetY > view.getBottom()) {
+		/*if (offsetY > 0 && offsetY < view.getHeight() || offsetY > view.getBottom()) {
 			dragBitmap = ImageUtils.convertViewToBitmap(view);
 			int drawY = offsetY < view.getHeight() ? offsetY : offsetY - view.getHeight();
 			canvas.drawBitmap(dragBitmap, view.getLeft(), drawY, null);
 			view.setVisibility(View.GONE);
-		} 
+		} */
 	}
 
 	public void release() {
@@ -97,5 +93,9 @@ public class SlideRelativeLayout extends RelativeLayout {
 			dragBitmap.recycle();
 			dragBitmap = null;
 		}
+	}
+	
+	public void setHandler(Handler handler) {
+		this.handler = handler;
 	}
 }
