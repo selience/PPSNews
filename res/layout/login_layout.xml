@@ -87,7 +87,8 @@
             android:singleLine="true"
             android:text="@string/forget_password"
             android:textColor="@color/news_font_color"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
     </FrameLayout>
     <LinearLayout
         android:id="@id/toolbar"

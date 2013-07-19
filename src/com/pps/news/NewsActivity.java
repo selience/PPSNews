@@ -1,8 +1,10 @@
 package com.pps.news;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.WeakHashMap;
 import tv.pps.vipmodule.vip.AccountVerify;
 import tv.pps.vipmodule.vip.protol.ProtocolLogout;
 import tv.pps.vipmodule.vip.protol.BaseProtocol.RequestCallBack;
@@ -13,12 +15,18 @@ import com.handmark.pulltorefresh.library.PullToRefreshBase.State;
 import com.handmark.pulltorefresh.library.PullToRefreshVerticalViewPager;
 import com.handmark.pulltorefresh.library.PullToRefreshBase.OnRefreshListener;
 import com.pps.news.app.BaseActivity;
+import com.pps.news.bean.Comment;
 import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
 import com.pps.news.bean.Result;
+import com.pps.news.bean.Weather;
+import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
 import com.pps.news.fragment.NewsFragment;
+import com.pps.news.location.PPSNewsLocation;
 import com.pps.news.task.GetNewsListTask;
+import com.pps.news.task.GetUserCommentTask;
+import com.pps.news.task.GetWeatherTask;
 import com.pps.news.task.TaskListener;
 import com.pps.news.util.CacheUtil;
 import com.pps.news.util.ImageCache;
@@ -33,6 +41,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.VerticalViewPager;
 import android.support.v4.view.VerticalViewPager.OnPageChangeListener;
+import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.SparseArray;
 import android.view.KeyEvent;
@@ -50,18 +59,26 @@ import android.widget.TextView;
  */
 public class NewsActivity extends BaseActivity implements OnClickListener, TaskListener, OnPageChangeListener,
 	OnRefreshListener<VerticalViewPager>, OnPullEventListener<VerticalViewPager>, RequestCallBack<Boolean> {
-
+	private static final String GET_NEWS_LIST_TASK = "GET_NEWS_LIST_TASK";
+	private static final String GET_SELF_COMMENT_TASK = "GET_SELF_COMMENT_TASK";
+	private static final String GET_WEATHER_TASK = "GET_WEATHER_TASK";
+	
 	private View container;
 	private ImageView iconAvatar;
 	private TextView userView;
 	private TextView summaryView;
 	private ImageView slideMenu;
+	private ImageView weatherImage;
+	private TextView weatherCity;
+	private TextView weatherTemperature;
+	private TextView commentNumView;
 	private SlideNavigationView navigationView;
 	private VerticalViewPager viewPager;
 	private PullToRefreshVerticalViewPager mPullToRefreshViewPager;
 	
-	private String avatarUrl;
+	private String city;
 	private ImageCache imageFetcher;
+	private Map<String, ImageView> mPhotoMaps;
 	private SparseArray<String> userVipType;
 	private SparseArray<Fragment> registeredFragments;
 
@@ -77,17 +94,21 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		navigationView.setTouchModeAbove(SlideNavigationView.TOUCHMODE_FULLSCREEN);
 		setContentView(navigationView);
 
-		findViewById(R.id.setting).setOnClickListener(this);
-		findViewById(R.id.comment).setOnClickListener(this);
-		findViewById(R.id.offline).setOnClickListener(this);
-		findViewById(R.id.rl_alarm).setOnClickListener(this);
-		findViewById(R.id.rl_weather).setOnClickListener(this);
 		container = findViewById(R.id.container);
 		iconAvatar = (ImageView)findViewById(R.id.icon_avatar);
 		userView = (TextView)findViewById(R.id.nav_login_label);
 		summaryView = (TextView)findViewById(R.id.nav_sub_desc);
+		commentNumView = (TextView)findViewById(R.id.commentNum);
+		weatherImage = (ImageView)findViewById(R.id.weatherImage);
+		weatherCity = (TextView)findViewById(R.id.weatherCity);
+		weatherTemperature=(TextView)findViewById(R.id.weatherTemperature);
 		slideMenu = (ImageView) findViewById(R.id.slide_menu);
 		slideMenu.setOnClickListener(this);
+		findViewById(R.id.setting).setOnClickListener(this);
+		findViewById(R.id.comment).setOnClickListener(this);
+		findViewById(R.id.offline).setOnClickListener(this);
+		findViewById(R.id.rl_alarm).setOnClickListener(this);
+		findViewById(R.id.weather).setOnClickListener(this);
 		
 		mPullToRefreshViewPager = (PullToRefreshVerticalViewPager) findViewById(R.id.pull_refresh_vertical_viewpager);
 		mPullToRefreshViewPager.setOnRefreshListener(this);
@@ -101,13 +122,17 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		viewPager.setAdapter(new NewsFragmentAdapter(getSupportFragmentManager()));
 		viewPager.setOnPageChangeListener(this);
 		
-		imageFetcher = ImageCache.getInstance();
-		imageFetcher.addObserver(mObserver);
-		
 		userVipType = new SparseArray<String>(3);
 		userVipType.put(Integer.parseInt(AccountVerify.OPT_NORMAL), "普通会员");
 		userVipType.put(Integer.parseInt(AccountVerify.OPT_SILVER), "白银会员");
 		userVipType.put(Integer.parseInt(AccountVerify.OPT_GOLD), "黄金会员");
+		
+		mPhotoMaps=new WeakHashMap<String, ImageView>(2);
+		imageFetcher = ImageCache.getInstance();
+		imageFetcher.addObserver(mObserver);
+		// 启动定位
+		PPSNewsLocation.getInstance().getLocation();
+		showWeather();
 	}
 
 	// 更新上次刷新时间戳
@@ -128,27 +153,53 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 			String userStatus = userVipType.get(Integer.parseInt(accountVerify.getVipType()));
 			String summary = getString(R.string.nav_sub_summary, userStatus, accountVerify.getmLevel());
 			summaryView.setText(summary);
-			container.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					LogoutPopupWindow popupWindow = new LogoutPopupWindow(NewsActivity.this);
-					popupWindow.showPopupWindow(container);
-					popupWindow.setPositiveClickListener(new DialogInterface.OnClickListener() {
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
-							ProtocolLogout protocolLogout = new ProtocolLogout(NewsActivity.this);
-							protocolLogout.fetch(NewsActivity.this);
-						}
-					});
-				}
-			});
+			container.setOnClickListener(mUserLogoutListener); // 获取评论总数目
+			new GetUserCommentTask(this, GET_SELF_COMMENT_TASK).execute("1", Constants.COMMENTS_LIST_PAGESIZE);
 		} else {
+			setCommentSize(0); // 未登录状态，评论数目为0
 			userView.setText(R.string.nav_login_lable);
 			iconAvatar.setImageResource(R.drawable.ic_avatar);
 			summaryView.setText(R.string.nav_sub_desc);
 			container.setOnClickListener(this);
 		}
+	}
+	
+	// 获取天气信息
+	// 获取当前位置信息，如果为null，则采用上次的位置;
+	private void showWeather() {
+		city = PPSNewsLocation.myLocation.getCity();
+		if (TextUtils.isEmpty(city)) {
+			city = PreferenceUtils.getWeatherCity(this);
+			if (TextUtils.isEmpty(city)) {
+				city = "上海";
+			}
+		} else {
+			StringBuilder sb = new StringBuilder(city);
+			if (city.contains("市")) {
+				int position = sb.indexOf("市");
+				sb.deleteCharAt(position);
+			}
+			city = sb.toString();
+		}
+		setWeatherInfo();
+		new GetWeatherTask(this, GET_WEATHER_TASK).execute(city);
+	}
+
+	private void setWeatherInfo() { // 设置默认天气
+		String icon = PreferenceUtils.getWeatherIcon(this);
+		String temper = PreferenceUtils.getWeatherTemper(this);
+		weatherCity.setText(city);
+		weatherTemperature.setText(temper==null?"上海":temper);
+		if (icon != null) {
+			setPhotos(icon, weatherImage);
+		} else {
+			weatherImage.setImageResource(R.drawable.weather_big_error);
+		}
+	}
+	
+	// 设置评论数目
+	private void setCommentSize(int totalSize) {
+		commentNumView.setText(String.valueOf(totalSize));
 	}
 	
 	@Override
@@ -160,8 +211,9 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		mPhotoMaps.clear();
+		userVipType.clear();
 		registeredFragments.clear();
-		registeredFragments=null;
 		imageFetcher.deleteObservers();
 	}
 	
@@ -175,7 +227,11 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 			startActivity(new Intent(this, LoginActivity.class));
 			break;
 		case R.id.comment:
-			startActivity(new Intent(this, CommentActivity.class));
+			if (AccountVerify.getInstance().isLogin()) {
+				startActivity(new Intent(this, CommentActivity.class));
+			} else {
+				startActivity(new Intent(this, LoginActivity.class));
+			}
 			break;
 		case R.id.offline:
 			startActivity(new Intent(this, DownloadActivity.class));
@@ -186,8 +242,8 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		case R.id.rl_alarm:
 			startActivity(new Intent(this, AlarmActivity.class));
 			break;
-		case R.id.rl_weather:
-			startActivity(new Intent(this, AlarmAlertFullScreen.class));
+		case R.id.weather:
+			startActivity(new Intent(this, AlarmAlertActivity.class));
 			break;
 		}
 	}
@@ -208,25 +264,40 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	@Override
 	@SuppressWarnings("unchecked")
 	public void onTaskFinished(String taskName, Result result) {
-		notifyErrorMessage(result.getException());
-		mPullToRefreshViewPager.onRefreshComplete();
-		PreferenceUtils.saveLastUpdateTimeStamp(this, System.currentTimeMillis());
-		if (result.getValue() != null) {
-			Group<News> listNews = (Group<News>)result.getValue();
-			for (int i=0;i<registeredFragments.size();i++) {
-				Fragment fragment = registeredFragments.get(i);
-				if (fragment instanceof OnRefreshItemListener) {
-					((OnRefreshItemListener)fragment).onRefresh(listNews);
+		if (taskName.equals(GET_NEWS_LIST_TASK)) {
+			handlerException(result.getException());
+			mPullToRefreshViewPager.onRefreshComplete();
+			PreferenceUtils.saveLastUpdateTimeStamp(this, System.currentTimeMillis());
+			if (result.getValue() != null) {
+				Group<News> listNews = (Group<News>)result.getValue();
+				for (int i=0;i<registeredFragments.size();i++) {
+					Fragment fragment = registeredFragments.get(i);
+					if (fragment instanceof OnRefreshItemListener) {
+						((OnRefreshItemListener)fragment).onRefresh(listNews);
+					}
 				}
+				CacheUtil.saveNewsCache(listNews);
 			}
-			CacheUtil.saveNewsCache(listNews);
+		} else if (taskName.equals(GET_SELF_COMMENT_TASK)) {
+			if (result.getValue()!=null) {
+				Group<Comment> comments = (Group<Comment>)result.getValue();
+				setCommentSize(comments.getTotal()); // 评论总数目
+			}
+		} else if (taskName.equals(GET_WEATHER_TASK)) {
+			weatherCity.setText(city);
+			if (result.getValue()!=null) {
+				Weather weather = (Weather) result.getValue();
+				weatherTemperature.setText(weather.getTempInfo());
+				setPhotos(getWeatherIconUrl(weather.getImg()), weatherImage);
+				PreferenceUtils.storeWeather(this, city, weather);
+			}
 		}
 	}
 
 	@Override
 	public void onRefresh(PullToRefreshBase<VerticalViewPager> refreshView) {
 		setLastUpdateTimeStamp();
-		new GetNewsListTask(this, null).execute();
+		new GetNewsListTask(this, GET_NEWS_LIST_TASK).execute();
 	}
 	
 	@Override
@@ -293,21 +364,16 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	}
 	
 	
-	public static interface OnRefreshItemListener {
-		
-		void hideView(boolean isShown);
-		
-		void onRefresh(List<News> result);
-	}
-	
 	// 设置用户图片
 	private void setPhotos(String photoUrl, ImageView imageView) {
-		this.avatarUrl = photoUrl;
 		if (imageFetcher.exists(photoUrl)) {
 			Bitmap bitmap = imageFetcher.displayBitmap(photoUrl);
 			imageView.setImageBitmap(bitmap);
+			if (mPhotoMaps.containsKey(photoUrl)) {
+				mPhotoMaps.remove(photoUrl);
+			}
 		} else {
-			imageView.setImageResource(R.drawable.ic_avatar);
+			mPhotoMaps.put(photoUrl, imageView);
 			imageFetcher.request(photoUrl);
 		}
 	}
@@ -317,16 +383,31 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		@Override
 		public void update(Observable observable, Object data) {
 			final String imageUrl = data.toString();
-			if (avatarUrl.equals(imageUrl)) {
-				runOnUiThread(new Runnable() {
-					public void run() {
-						setPhotos(imageUrl, iconAvatar);
-					}
-				});
+			for (String key : mPhotoMaps.keySet()) {
+				if (key.equals(imageUrl)) {
+					setPhotos(key, mPhotoMaps.get(key));
+				}
 			}
 		}
 	};
 
+	// 注销用户
+	private OnClickListener mUserLogoutListener = new OnClickListener() {
+		
+		@Override
+		public void onClick(View v) {
+			LogoutPopupWindow popupWindow = new LogoutPopupWindow(NewsActivity.this);
+			popupWindow.showPopupWindow(container);
+			popupWindow.setPositiveClickListener(new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					ProtocolLogout protocolLogout = new ProtocolLogout(NewsActivity.this);
+					protocolLogout.fetch(NewsActivity.this);
+				}
+			});
+		}
+	};
 	
 	@Override
 	public void onRequestStart() {
@@ -339,8 +420,9 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	// 注销用户成功
 	@Override
 	public void onRequestSuccess(Boolean formData, String successMessage) {
-		PreferenceUtils.clearUser(); // 清空登陆状态
+		PreferenceUtils.clearUser(); // 清空本地存储状态
 		AccountVerify.getInstance().setmLogin(false);
+		AccountVerify.getInstance().setmUID(null);
 		checkIfUserLogin();
 	}
 
@@ -350,5 +432,17 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 
 	@Override
 	public void onCancel() {
+	}
+	
+	// 获取天气的图标
+	private String getWeatherIconUrl(String imgId) {
+		return "http://image1.webscache.com/vodguide/style/img/mobile/android/w"+ imgId + ".png";
+	}
+	
+	public static interface OnRefreshItemListener {
+		
+		void hideView(boolean isShown);
+		
+		void onRefresh(List<News> result);
 	}
 }

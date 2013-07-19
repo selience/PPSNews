@@ -1,5 +1,7 @@
 package com.pps.news.bean;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import com.pps.news.parser.ResultType;
 
 public class Result {
@@ -51,4 +53,21 @@ public class Result {
 		this.error = error;
 	}
 
+	// 解析出状态码
+	public void setErrorCode() {
+		if (message!=null && message.length()>0) {
+			try {
+				JSONObject json = new JSONObject(message);
+				if (json.has("retcode")) {
+					setCode(json.getInt("retcode"));
+				}
+				if (json.has("message")) {
+					setError(json.getString("message"));
+				}
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	}
 }

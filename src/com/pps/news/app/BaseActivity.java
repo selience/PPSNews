@@ -1,15 +1,16 @@
 package com.pps.news.app;
 
+import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-
 import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import com.pps.news.util.Log;
 import android.widget.Toast;
+import com.pps.news.util.Log;
+import com.pps.news.util.ToastUtils;
 
 /**
  * @file BaseActivity.java
@@ -83,15 +84,18 @@ public abstract class BaseActivity extends FragmentActivity {
 		ft.commit();
 	}
 	
-	public void notifyErrorMessage(Exception ex) {
+	/** 处理回调异常信息  */
+	public void handlerException(Exception ex) {
 		if (ex != null) {
 			if (ex instanceof ConnectTimeoutException) {
-				Toast.makeText(this, "网络连接超时", Toast.LENGTH_SHORT).show();
+				ToastUtils.showMessage(this, "网络连接超时", Toast.LENGTH_SHORT);
 			} else if (ex instanceof UnknownHostException ||
 					ex instanceof HttpHostConnectException) {
-				Toast.makeText(this, "网络连接异常", Toast.LENGTH_SHORT).show();
+				ToastUtils.showMessage(this, "网络连接异常", Toast.LENGTH_SHORT);
+			} else if (ex instanceof SocketTimeoutException) {
+				ToastUtils.showMessage(this, "读取数据失败", Toast.LENGTH_SHORT);
 			} else {
-				Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT).show();
+				ToastUtils.showMessage(this, ex.getLocalizedMessage(), Toast.LENGTH_SHORT);
 			}
 		}
 	}

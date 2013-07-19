@@ -61,7 +61,6 @@ public class CommentsAdapter extends BaseAdapter implements Observer {
 	
 	public void deleteObservers() {
 		mPhotosMap.clear();
-		mPhotosMap = null;
 		imageFetcher.deleteObserver(this);
 	}
 	
@@ -89,17 +88,17 @@ public class CommentsAdapter extends BaseAdapter implements Observer {
 			Date d = UIUtil.formatDate(comment.getAddtime());
 			mHolder.commentTime.setText(UIUtil.formatDate(d.getTime()));
 			mHolder.commentDesc.setText(comment.getCmt_text());
-			mHolder.commentSrc.setVisibility(View.VISIBLE);
+			/*mHolder.commentSrc.setVisibility(View.VISIBLE);
 			String source = context.getResources().getString(
 					R.string.news_detail_source, 
 					String.valueOf(comment.getUpload_id()));
-			mHolder.commentSrc.setText(source);
+			mHolder.commentSrc.setText(source);*/
 		}
 		
-		if (position == comments.size()-1) 
-			mHolder.commentLine.setVisibility(View.GONE);
-		else 
-			mHolder.commentLine.setVisibility(View.VISIBLE);
+//		if (position == comments.size()-1) 
+//			mHolder.commentLine.setVisibility(View.GONE);
+//		else 
+//			mHolder.commentLine.setVisibility(View.VISIBLE);
 		
 		return convertView;
 	}

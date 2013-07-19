@@ -8,27 +8,30 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Vibrator;
 import android.text.format.DateFormat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.pps.news.app.BaseActivity;
 import com.pps.news.bean.Alarm;
 import com.pps.news.common.AlarmAlertWakeLock;
 import com.pps.news.constant.Constants;
-import com.pps.news.widget.SlideRelativeLayout;
 
-public class AlarmAlertFullScreen extends BaseActivity implements OnClickListener {
+public class AlarmAlertActivity extends BaseActivity implements OnClickListener, OnTouchListener {
 
+	private View touchView;
 	private TextView txtHour;
 	private TextView txtMinute;
 	private TextView txtDate;
-	private SlideRelativeLayout mPanel;
+	private TextView txtTurn;
+	private TextView txtUpdate;
 	
+	private int startY;
 	private Alarm alarm;
-	private Handler handler;
 	private boolean mPlaying;
 	private Vibrator vibrator;
 	private MediaPlayer mMediaPlayer;
@@ -37,28 +40,27 @@ public class AlarmAlertFullScreen extends BaseActivity implements OnClickListene
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.news_notice_layout);
 		alarm = getIntent().getParcelableExtra(Constants.ALARM_EXTRAS);
-		findViewById(R.id.turn).setOnClickListener(this);
-		findViewById(R.id.turn_and_update).setOnClickListener(this);
+		txtTurn = (TextView) findViewById(R.id.turn);
+		txtUpdate = (TextView) findViewById(R.id.turn_and_update);
+		txtTurn.setOnClickListener(this);
+		txtUpdate.setOnClickListener(this);
 		txtHour = (TextView) findViewById(R.id.hour);
 		txtMinute = (TextView) findViewById(R.id.minute);
 		txtDate = (TextView) findViewById(R.id.dateString);
-		mPanel = (SlideRelativeLayout) findViewById(R.id.container);
-
+		touchView = findViewById(R.id.touchView);
+		touchView.setOnTouchListener(this);
+		
 		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
 		AlarmAlertWakeLock.acquireCpuWakeLock(this);
 		if (alarm != null) {
 			txtHour.setText(String.valueOf(alarm.hour));
 			txtMinute.setText(String.valueOf(alarm.minutes));
 			play(alarm);
-		} else {
-			handler = new Handler();
-			handler.post(mRunnable);
 		}
-
-		CharSequence newTime = DateFormat.format(
-				getText(R.string.alarm_month_and_day),
-				System.currentTimeMillis());
-		txtDate.setText(newTime);
+		
+		txtHour.setText(DateFormat.format("kk", System.currentTimeMillis()));
+		txtMinute.setText(DateFormat.format("mm", System.currentTimeMillis()));
+		txtDate.setText(DateFormat.format(getText(R.string.alarm_month_and_day), System.currentTimeMillis()));
 	} 
 
 	@Override
@@ -135,24 +137,49 @@ public class AlarmAlertFullScreen extends BaseActivity implements OnClickListene
 	}
 
 	@Override
+	public boolean onTouch(View v, MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			startY = (int) event.getRawY();
+			break;
+		case MotionEvent.ACTION_MOVE:
+			int distanceY = (int)event.getRawY() - startY;
+			int top = v.getTop() + distanceY;
+			int bottom = v.getBottom() + distanceY;
+
+			if (top < txtTurn.getBottom()) {
+				top = txtTurn.getBottom();
+				bottom = top + v.getHeight();
+			}
+			if (bottom > txtUpdate.getBottom()) {
+				bottom = txtUpdate.getBottom();
+				top = bottom - v.getHeight();
+			}
+			v.layout(v.getLeft(), top, v.getRight(), bottom);
+			startY = (int)event.getRawY();
+			v.postInvalidate();
+			break;
+		case MotionEvent.ACTION_UP:
+			if (v.getTop()<=txtTurn.getBottom()) {
+				finish();
+			} else if (v.getBottom()>=txtUpdate.getTop()) {
+				startActivity(new Intent(this, NewsActivity.class));
+				finish();
+			} else {
+				RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams)v.getLayoutParams();
+				lp.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+				v.setLayoutParams(lp);
+			}
+			break;
+		}
+		return true;
+	}
+	
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		stop();
-		mPanel.release();
 		AlarmAlertWakeLock.releaseCpuLock();
-		if (handler != null) {
-			handler.removeCallbacks(mRunnable);
-		}
 	}
 
-	private Runnable mRunnable = new Runnable() {
-
-		@Override
-		public void run() {
-			txtHour.setText(DateFormat.format("kk", System.currentTimeMillis()));
-			txtMinute.setText(DateFormat.format("mm",
-					System.currentTimeMillis()));
-			handler.postDelayed(mRunnable, 1000L);
-		}
-	};
 }

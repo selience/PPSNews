@@ -27,7 +27,7 @@ public class LogoutPopupWindow extends PopupWindow implements android.view.View.
 		setContentView(contentView);
 		setFocusable(true);
 		setWidth(width-UIUtil.dip2px(context, 100));
-		setHeight(UIUtil.dip2px(context, 60));
+		setHeight(UIUtil.dip2px(context, 50));
 		setAnimationStyle(R.style.PopupWindowAnimation);
 		setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 	}

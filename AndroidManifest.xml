@@ -16,6 +16,8 @@
 	    android:smallScreens="true" />
     
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+ 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -25,7 +27,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     
     <application
-        android:name="com.pps.news.app.NewsApplication"
+        android:name=".app.NewsApplication"
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
@@ -73,7 +75,7 @@
             android:name=".DownloadActivity"
             android:screenOrientation="portrait" />
          <activity
-            android:name=".AlarmAlertFullScreen"
+            android:name=".AlarmAlertActivity"
             android:screenOrientation="portrait" />
          
         <receiver android:name="com.pps.news.receiver.AlarmInitReceiver">
@@ -94,5 +96,8 @@
                  <action android:name="com.android.alarmclock.ALARM_ALERT" />
              </intent-filter>
          </service>
+        
+         <!-- 百度定位服务 -->
+        <service android:name="com.baidu.location.f"></service>
     </application>
 </manifest>

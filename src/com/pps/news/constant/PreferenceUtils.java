@@ -1,5 +1,7 @@
 package com.pps.news.constant;
 
+import com.pps.news.bean.Weather;
+
 import tv.pps.vipmodule.vip.AccountVerify;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -30,8 +32,13 @@ public final class PreferenceUtils {
 	
 	private static final String PREFERENCE_IS_AUTO_LOGIN = "isAutoLogin";
 	private static final String PREFERENCE_IS_AUTO_CLEAR_CACHE = "isAutoClearCache";
+	private static final String PREFERENCE_LAST_AUTO_CLEAR_TIMESTAMP = "lastClearTimeStamp";
 	private static final String PREFERENCE_LAST_UPDATE_TIMESTAMP = "lastUpdateTimeStamp";
-
+	
+	private static final String PREFERENCE_WEATHER_CITY = "weatherCity";
+	private static final String PREFERENCE_WEATHER_ICON = "weatherIcon";
+	private static final String PREFERENCE_WEATHER_TEMPERATURE = "weatherTemperature";
+	
 	private static SharedPreferences mPrefs;
 	
 	public static void setDefaultPreferences(Context context) {
@@ -108,10 +115,33 @@ public final class PreferenceUtils {
 	
 	/*************************************************************************************/
 	
+	/** 存储天气相关信息  */
+	public static void storeWeather(Context context, String city, Weather weather) {
+		Editor editor = getEditor(context);
+		editor.putString(PREFERENCE_WEATHER_CITY, city);
+		editor.putString(PREFERENCE_WEATHER_ICON, weather.getImg());
+		editor.putString(PREFERENCE_WEATHER_TEMPERATURE, weather.getTempInfo());
+		editor.commit();
+	}
+	
+	/** 获取当前所在的城市  */
+	public static String getWeatherCity(Context context) {
+		return getSharedPreferences(context).getString(PREFERENCE_WEATHER_CITY, null);
+	}
+
+	/** 获取天气图标URL */
+	public static String getWeatherIcon(Context context) {
+		return getSharedPreferences(context).getString(PREFERENCE_WEATHER_ICON, null);
+	}
+	
+	/** 获取温度信息 */
+	public static String getWeatherTemper(Context context) {
+		return getSharedPreferences(context).getString(PREFERENCE_WEATHER_TEMPERATURE, null);
+	}
 	
 	/** 存储是否自动清除缓存状态  */
 	public static void storeIsAutoClearCache(Context context, boolean isAutoClear) {
-		Editor editor = getSharedPreferences(context).edit();
+		Editor editor = getEditor(context);
 		editor.putBoolean(PREFERENCE_IS_AUTO_CLEAR_CACHE, isAutoClear);
 		editor.commit();
 	}
@@ -121,9 +151,21 @@ public final class PreferenceUtils {
 		return getSharedPreferences(context).getBoolean(PREFERENCE_IS_AUTO_CLEAR_CACHE, true);
 	}
 	
+	/** 保存上次清除缓存的时间戳 */
+	public static void storeLastClearCacheTimeStamp(Context context, long timestamp) {
+		Editor editor = getEditor(context);
+		editor.putLong(PREFERENCE_LAST_AUTO_CLEAR_TIMESTAMP, timestamp);
+		editor.commit();
+	}
+	
+	/** 获取上次清除缓存的时间戳  */
+	public static long getLastClearTimeStamp(Context context) {
+		return getSharedPreferences(context).getLong(PREFERENCE_LAST_AUTO_CLEAR_TIMESTAMP, 0L);
+	}
+	
 	/** 保存上次更新新闻列表时间戳   */
 	public static void saveLastUpdateTimeStamp(Context context, long timestamp) {
-		Editor editor = getSharedPreferences(context).edit();
+		Editor editor = getEditor(context);
 		editor.putLong(PREFERENCE_LAST_UPDATE_TIMESTAMP, timestamp);
 		editor.commit();
 	}
@@ -135,12 +177,16 @@ public final class PreferenceUtils {
 	
 	/** 清空存储的所有values */
 	public static void clearAll(Context context) {
-		Editor editor = getSharedPreferences(context).edit();
+		Editor editor = getEditor(context);
 		editor.clear();
 		editor.commit();
 	}
 	
 	private static SharedPreferences getSharedPreferences(Context context) {
 		return context.getSharedPreferences(PREFERENCE_FILE_NAME, Context.MODE_PRIVATE);
+	}
+	
+	private static Editor getEditor(Context context) {
+		return getSharedPreferences(context).edit();
 	}
 }

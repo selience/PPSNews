@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="45dip" >
+            android:paddingBottom="50dip" >
             <TextView
                 android:id="@+id/news_detail_desc"
                 android:layout_width="fill_parent"
@@ -85,6 +85,15 @@
                 android:scaleType="center"
                 android:src="@drawable/ic_expand" />
             <include layout="@layout/news_title_view" />
+            <TextView
+                android:id="@android:id/empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="45dip"
+                android:text="@string/comment_no_data"
+                android:textColor="#d9d9d9"
+                android:textSize="16sp" />
             <com.pps.news.widget.CommentPanel
                 android:id="@+id/news_detail_comment"
                 android:layout_width="fill_parent"

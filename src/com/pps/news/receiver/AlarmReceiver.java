@@ -1,6 +1,6 @@
 package com.pps.news.receiver;
 
-import com.pps.news.AlarmAlertFullScreen;
+import com.pps.news.AlarmAlertActivity;
 import com.pps.news.bean.Alarm;
 import com.pps.news.constant.Constants;
 import com.pps.news.util.DateUtils;
@@ -25,7 +25,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 		if (alarm == null)
 			return;
 
-		Intent alarmAlert = new Intent(context, AlarmAlertFullScreen.class);
+		Intent alarmAlert = new Intent(context, AlarmAlertActivity.class);
 		alarmAlert.putExtra(Constants.ALARM_EXTRAS, alarm);
 		alarmAlert.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 				| Intent.FLAG_ACTIVITY_NO_USER_ACTION);

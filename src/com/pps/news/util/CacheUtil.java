@@ -11,6 +11,7 @@ import java.util.List;
 import android.os.Environment;
 
 import com.pps.news.bean.Comment;
+import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
 
 /**
@@ -22,9 +23,9 @@ import com.pps.news.bean.News;
 public class CacheUtil {
 	
 	private static final String CACHE_FILE_APPENDIX_NEWS_LIST = "_news_list.data";
-	private static final String CACHE_FILE_APPENDIX_COMMENT = "_comment.data";
-	
-	private static final String CACHE_DIRECTORY = "PPSNews/cache/data";
+	private static final String CACHE_FILE_APPENDIX_COMMENT = "_news_comment.data";
+	/** 缓存新闻目录 */
+	public static final String CACHE_DIRECTORY = "PPSNews/cache/data";
 	
 	
 	public static void writeString(DataOutputStream out, String str)
@@ -191,7 +192,7 @@ public class CacheUtil {
 		return news;
 	}
 	
-	public static void saveCommentCache(long newsId, List<Comment> data) {
+	public static void saveCommentCache(long newsId, Group<Comment> data) {
 		if (data == null) return;
 		if (UIUtil.isSDCardAvailable()) {
 			File baseDir = new File(Environment.getExternalStorageDirectory(),CACHE_DIRECTORY);
@@ -209,7 +210,9 @@ public class CacheUtil {
 				int size=data.size();
 				fos=new FileOutputStream(cacheFile);
 				out=new DataOutputStream(fos);
-				out.writeInt(size);
+				out.writeInt(size); // 集合中对象数目
+				out.writeInt(data.getTotal()); // 总数目
+				out.writeInt(data.getTotal_page()); // 总页数
 				for(int i=0;i<size;i++){
 					writeComment(out, data.get(i));
 				}
@@ -234,8 +237,8 @@ public class CacheUtil {
 		}
 	}
 
-	public static List<Comment> getCommentCache(long newsId){
-		List<Comment> data =new ArrayList<Comment>();
+	public static Group<Comment> getCommentCache(long newsId){
+		Group<Comment> data =new Group<Comment>();
 		if(UIUtil.isSDCardAvailable()){
 			File baseDir = new File(Environment.getExternalStorageDirectory(),CACHE_DIRECTORY);
 			File cacheFile=null;
@@ -246,7 +249,9 @@ public class CacheUtil {
 				if(cacheFile.exists()){
 					fis=new FileInputStream(cacheFile);
 					in=new DataInputStream(fis);
-					int size=readInt(in);
+					int size=readInt(in); // 对象个数
+					data.setTotal(in.readInt()); // 总数目
+					data.setTotal_page(in.readInt()); // 总页数
 					for(int i=0;i<size;i++){
 						data.add(readComment(in));
 					}			

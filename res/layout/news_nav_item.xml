@@ -45,13 +45,14 @@
                 android:textSize="12sp" />
             <ImageView
                 android:id="@+id/setting"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dip"
+                android:layout_height="48dip"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="12dip"
+                android:layout_marginLeft="10dip"
                 android:clickable="true"
                 android:contentDescription="@string/empty"
+                android:scaleType="center"
                 android:src="@drawable/btn_setting_selector" />
             <View
                 android:id="@+id/nav_divide"
@@ -65,7 +66,7 @@
         <RelativeLayout
             android:id="@+id/comment"
             android:layout_width="fill_parent"
-            android:layout_height="45dip"
+            android:layout_height="48dip"
             android:background="@drawable/list_item_selector"
             android:paddingLeft="20dip"
             android:paddingRight="20dip" >
@@ -87,13 +88,14 @@
                 android:textColor="#6D6D6D"
                 android:textSize="16sp" />
             <TextView
+                android:id="@+id/commentNum"
                 android:layout_width="45dip"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="#EAEAEA"
                 android:gravity="center"
-                android:text="5"
+                android:text="0"
                 android:textColor="@color/news_font_color"
                 android:textSize="16sp" />
         </RelativeLayout>
@@ -104,7 +106,7 @@
         <RelativeLayout
             android:id="@+id/offline"
             android:layout_width="fill_parent"
-            android:layout_height="45dip"
+            android:layout_height="48dip"
             android:background="@drawable/list_item_selector"
             android:paddingLeft="20dip"
             android:paddingRight="20dip" >
@@ -126,13 +128,14 @@
                 android:textColor="#6D6D6D"
                 android:textSize="16sp" />
             <TextView
+                android:id="@+id/offlineNum"
                 android:layout_width="45dip"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:background="#EAEAEA"
                 android:gravity="center"
-                android:text="25"
+                android:text="0"
                 android:textColor="@color/news_font_color"
                 android:textSize="16sp" />
         </RelativeLayout>
@@ -143,43 +146,44 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="55dip"
+        android:layout_height="50dip"
         android:layout_gravity="bottom"
         android:background="#E7E7E7"
         android:orientation="horizontal" >
         <RelativeLayout
-            android:id="@+id/rl_weather"
+            android:id="@+id/weather"
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingLeft="25dip" >
+            android:gravity="center" >
             <ImageView
-                android:id="@+id/ic_clock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/weatherImage"
+                android:layout_width="40dip"
+                android:layout_height="40dip"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/empty"
-                android:src="@drawable/btn_weather_selector" />
+                android:scaleType="centerInside"
+                android:src="@drawable/weather_big_error" />
             <TextView
-                android:id="@+id/weather"
+                android:id="@+id/weatherCity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dip"
-                android:layout_marginTop="10dip"
-                android:layout_toRightOf="@+id/ic_clock"
+                android:layout_marginTop="5dip"
+                android:layout_toRightOf="@+id/weatherImage"
                 android:singleLine="true"
                 android:text="上海"
                 android:textColor="@color/news_font_color"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
             <TextView
+                android:id="@+id/weatherTemperature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/weather"
-                android:layout_marginLeft="10dip"
-                android:layout_toRightOf="@+id/ic_clock"
-                android:text="33/25C"
+                android:layout_alignBottom="@+id/weatherImage"
+                android:layout_marginBottom="5dip"
+                android:layout_toRightOf="@+id/weatherImage"
+                android:text="未知"
                 android:textColor="@color/news_font_color"
-                android:textSize="14sp" />
+                android:textSize="13sp" />
         </RelativeLayout>
         <View
             android:layout_width="0.5dip"
@@ -190,19 +194,19 @@
             android:layout_width="0dip"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:paddingLeft="30dip" >
+            android:gravity="center" >
             <ImageView
                 android:id="@+id/ic_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="48dip"
+                android:layout_height="48dip"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/empty"
+                android:scaleType="centerInside"
                 android:src="@drawable/btn_alarm_selector" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dip"
                 android:layout_toRightOf="@+id/ic_alarm"
                 android:text="@string/alarm_title"
                 android:textSize="14sp" />

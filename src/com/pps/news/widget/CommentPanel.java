@@ -47,12 +47,12 @@ public class CommentPanel extends LinearLayout implements Observer {
 
 	public void deleteObservers() {
 		mPhotosMap.clear();
-		mPhotosMap = null;
 		imageFetcher.deleteObserver(this);
 	}
 	
 	public void setItems(List<Comment> comments) {
 		if (comments == null) return;
+		removeAllViews();
 		
 		View view = null;
 		int index = 0;

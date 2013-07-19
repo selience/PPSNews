@@ -44,10 +44,12 @@ public class CommentParser extends Parser<Comment> {
 		Group<Comment> comments = new Group<Comment>();
 		try {
 			JSONObject json = new JSONObject(content);
-			if (json.has("data")) {
-				json = json.getJSONObject("data");
+			Object itemObject = json.opt("data");
+			// 获取用户所有评论：有评论消息返回对象，反之返回空字符串；
+			if (itemObject instanceof JSONObject) {
+				json = (JSONObject) itemObject;
 				Object object = json.get("datas");
-				// 有评论信息时返回对象，反之返回数组；
+				// 获取视频评论：有评论信息时返回对象，反之返回数组；
 				if (object != null && object instanceof JSONObject) {
 					JSONObject datas = (JSONObject) object;
 					Iterator<?> iterator = datas.keys();
@@ -59,6 +61,9 @@ public class CommentParser extends Parser<Comment> {
 						}
 					}
 				}
+				comments.setTotal(json.optInt("total"));
+				comments.setTotal_page(json.optInt("total_page"));
+				comments.setCur_page(json.optInt("cur_page"));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

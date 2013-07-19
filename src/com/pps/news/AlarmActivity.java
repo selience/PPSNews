@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -25,6 +26,7 @@ import com.pps.news.database.DatabaseHelper;
 public class AlarmActivity extends BaseActivity implements OnClickListener,AdapterView.OnItemClickListener {
 
 	private ListView listView;
+	private ImageView imageView;
 	private AlarmAdapter mAdapter;
 	private DatabaseHelper helper;
 	private TextView txtSummary;
@@ -34,7 +36,9 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.alarm_layout);
 		findViewById(R.id.icon).setOnClickListener(this);
-		findViewById(R.id.imageView).setOnClickListener(this);
+		imageView = (ImageView) findViewById(R.id.imageView);
+		imageView.setImageResource(R.drawable.btn_clock_selector);
+		imageView.setOnClickListener(this);
 		listView = (ListView) findViewById(android.R.id.list);
 		txtSummary = (TextView) findViewById(R.id.summary);
 		mProgressBar = (ProgressBar)findViewById(R.id.progress);

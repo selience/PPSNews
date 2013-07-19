@@ -7,6 +7,7 @@ import java.io.IOException;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.pps.news.parser.ResultType;
 import com.pps.news.util.CacheUtil;
 import com.pps.news.util.ParcelUtil;
 
@@ -16,7 +17,7 @@ import com.pps.news.util.ParcelUtil;
  * @author lilong (dreamxsky@gmail.com)
  * @description TODO 新闻评论实体对象
  */
-public class Comment implements Parcelable {
+public class Comment implements Parcelable, ResultType, Comparable<Comment> {
 
 	private int rn;
 	private String addtime;
@@ -338,5 +339,11 @@ public class Comment implements Parcelable {
 			return new Comment[size];
 		}
 	};
+
+	@Override
+	public int compareTo(Comment another) {
+		// TODO Auto-generated method stub
+		return getAddtime().compareToIgnoreCase(another.getAddtime());
+	}
 
 }

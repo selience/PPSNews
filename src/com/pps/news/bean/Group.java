@@ -10,14 +10,15 @@ import com.pps.news.parser.ResultType;
  * @author lilong dreamxsky@gmail.com
  * @description TODO
  */
+@SuppressWarnings("serial")
 public class Group<T> extends ArrayList<T> implements ResultType {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8991180342373777435L;
+	private int total;
 
-	
+	private int total_page;
+
+	private int cur_page;
+
 	public Group() {
 		super();
 	}
@@ -26,4 +27,27 @@ public class Group<T> extends ArrayList<T> implements ResultType {
 		super(collection);
 	}
 
+	public int getTotal() {
+		return total;
+	}
+
+	public void setTotal(int total) {
+		this.total = total;
+	}
+
+	public int getTotal_page() {
+		return total_page;
+	}
+
+	public void setTotal_page(int total_page) {
+		this.total_page = total_page;
+	}
+
+	public int getCur_page() {
+		return cur_page;
+	}
+
+	public void setCur_page(int cur_page) {
+		this.cur_page = cur_page;
+	}
 }

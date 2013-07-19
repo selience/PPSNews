@@ -1,23 +1,24 @@
 package com.pps.news.util;
 
+import java.io.UnsupportedEncodingException;
+import java.net.Inet4Address;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
@@ -42,6 +43,18 @@ public final class UIUtil {
 				.equals("NULL"));
 	}
 
+	// 把字符串转换成UTF-8的格式
+	public static String stringToUTF(String str) {
+		if (str != null && !str.equals("")) {
+			try {
+				return URLEncoder.encode(str, "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
 	public static boolean isSDCardAvailable() {
 		return Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED);
@@ -116,60 +129,6 @@ public final class UIUtil {
 		}
 	}
 	
-	/** 格式化日期字符串  单位：秒  */
-	public static String getTimeState(long timestamp) {
-
-		try {
-			long _timestamp = timestamp * 1000;
-			if (System.currentTimeMillis() - _timestamp < 1 * 60 * 1000) {
-				return "刚刚";
-			} else if (System.currentTimeMillis() - _timestamp < 30 * 60 * 1000) {
-				return ((System.currentTimeMillis() - _timestamp) / 1000 / 60)
-						+ "分钟前";
-			} else {
-				Calendar now = Calendar.getInstance();
-				Calendar c = Calendar.getInstance();
-				c.setTimeInMillis(_timestamp);
-				if (c.get(Calendar.YEAR) == now.get(Calendar.YEAR)
-						&& c.get(Calendar.MONTH) == now.get(Calendar.MONTH)
-						&& c.get(Calendar.DATE) == now.get(Calendar.DATE)) {
-					SimpleDateFormat sdf = new SimpleDateFormat("今天 HH:mm");
-					return sdf.format(c.getTime());
-				}
-				if (c.get(Calendar.YEAR) == now.get(Calendar.YEAR)
-						&& c.get(Calendar.MONTH) == now.get(Calendar.MONTH)
-						&& c.get(Calendar.DATE) == now.get(Calendar.DATE) - 1) {
-					SimpleDateFormat sdf = new SimpleDateFormat("昨天 HH:mm");
-					return sdf.format(c.getTime());
-				} else if (c.get(Calendar.YEAR) == now.get(Calendar.YEAR)) {
-					SimpleDateFormat sdf = new SimpleDateFormat("M月d日 HH:mm:ss");
-					return sdf.format(c.getTime());
-				} else {
-					SimpleDateFormat sdf = new SimpleDateFormat(
-							"yyyy年M月d日 HH:mm:ss");
-					return sdf.format(c.getTime());
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "";
-		}
-	}
-	
-	// And to convert the image URI to the direct file system path of the image file 
-	public static String getRealPathFromURI(Activity activity, Uri contentUri) {   
-		// can post image         
-		String [] proj={MediaStore.Audio.Media.DATA};         
-		Cursor cursor = activity.managedQuery(contentUri,                  
-						proj, 	// Which columns to return                      
-						null,   // WHERE clause; which rows to return (all rows)            
-						null,   // WHERE clause selection arguments (none)           
-						null);  // Order-by clause (ascending by name)      
-		int column_index = cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA);        
-		cursor.moveToFirst();          
-		return cursor.getString(column_index); 
-	}
-	
 	/** 选择系统铃声   */
 	public static Intent newRingtoneIntent(String uriString) {
 		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
@@ -191,4 +150,34 @@ public final class UIUtil {
 		return RingtoneManager.getRingtone(context, ringtoneUri);
 	}
 	
+	/** 获取设备IP地址 */
+	public static String getIPAddress(Context context) {
+		WifiManager wifiManager = (WifiManager) context
+				.getSystemService(Context.WIFI_SERVICE);
+		WifiInfo wifiInfo = wifiManager.getConnectionInfo();
+		return ipIntToString(wifiInfo.getIpAddress());
+	}
+
+	// see http://androidsnippets.com/obtain-ip-address-of-current-device
+	public static String ipIntToString(int ip) {
+		try {
+			byte[] bytes = new byte[4];
+			bytes[0] = (byte) (0xff & ip);
+			bytes[1] = (byte) ((0xff00 & ip) >> 8);
+			bytes[2] = (byte) ((0xff0000 & ip) >> 16);
+			bytes[3] = (byte) ((0xff000000 & ip) >> 24);
+			return Inet4Address.getByAddress(bytes).getHostAddress();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Intent newShareIntent(Context context, String subject, String message, String dialogTitle) {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND); //启动分享发送的属性  
+        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject); //分享的主题
+        shareIntent.putExtra(Intent.EXTRA_TEXT, message); //分享的内容  
+        shareIntent.setType("text/plain"); //分享发送的数据类型  
+        return Intent.createChooser(shareIntent, dialogTitle); 
+    }
 }

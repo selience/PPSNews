@@ -50,10 +50,10 @@ public class BetterHttp {
     private static final String TAG = "BetterHttp";
     
     // 默认参数设置 
-    public static final int CONNECTION_TIMEOUT = 5 * 1000;
-    public static final int CON_TIME_OUT_MS= 5 * 1000;
-    public static final int SO_TIME_OUT_MS= 5 * 1000;
-    public static final int MAX_CONNECTIONS_PER_HOST = 2;
+    public static final int CONNECTION_TIMEOUT = 10 * 1000;
+    public static final int CON_TIME_OUT_MS= 10 * 1000;
+    public static final int SO_TIME_OUT_MS= 10 * 1000;
+    public static final int MAX_CONNECTIONS_PER_HOST = 5;
     public static final int MAX_TOTAL_CONNECTIONS = 5;
     
     private HttpClient httpClient;
@@ -149,7 +149,9 @@ public class BetterHttp {
 	        	  return result;
 	        }
         } catch (IOException ex) {
-        	ex.printStackTrace();
+        	if (DEBUG) {
+        		ex.printStackTrace();
+        	}
         	Result result=new Result();
 			result.setException(ex);
 			return result;
@@ -179,9 +181,13 @@ public class BetterHttp {
      * @return  响应字符串
      */
     public Result doHttpPost(String url, NameValuePair... nameValuePairs) {
+    	return doHttpPost(url, "GBK", nameValuePairs);
+    }
+    
+    public Result doHttpPost(String url, String encoding, NameValuePair... nameValuePairs) {
     	 HttpPost httpPost = new HttpPost(url);
          try {
-             httpPost.setEntity(new UrlEncodedFormEntity(Arrays.asList(nameValuePairs), HTTP.UTF_8));
+             httpPost.setEntity(new UrlEncodedFormEntity(Arrays.asList(nameValuePairs), encoding));
          } catch (UnsupportedEncodingException ex) {
              throw new IllegalArgumentException("Unable to encode http parameters.");
          }

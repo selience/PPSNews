@@ -1,6 +1,8 @@
 package com.pps.news;
 
-import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+import org.apache.http.HttpStatus;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -10,45 +12,54 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.pps.news.app.BaseActivity;
+import com.pps.news.app.NewsApplication;
 import com.pps.news.bean.Comment;
 import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
 import com.pps.news.bean.Result;
 import com.pps.news.constant.Constants;
-import com.pps.news.task.GetCommentsTask;
+import com.pps.news.task.GetVideoCommentTask;
+import com.pps.news.task.NotificationTask;
+import com.pps.news.task.NotificationTask.TaskData;
 import com.pps.news.task.TaskListener;
 import com.pps.news.util.CacheUtil;
 import com.pps.news.util.ToastUtils;
 import com.pps.news.widget.CommentPanel;
-import com.pps.news.widget.SharePopupWindow;
+import com.pps.news.widget.ShareDialog;
 
-public class NewsDetailActivity extends BaseActivity implements TaskListener, OnClickListener {
+public class NewsDetailActivity extends BaseActivity implements TaskListener, 
+	OnClickListener, OnGlobalLayoutListener, Observer {
 
 	private TextView txtTitle;
 	private TextView txtDate;
+	private TextView emptyView;
 	private TextView txtCommentNum;
 	private TextView txtSource;
 	private TextView txtDesc;
 	private TextView txtSummuy;
 	private ImageView iconDown;
-	private CommentPanel commentPanel;
 	private ImageView iconBack;
 	private ImageView iconShare;
 	private ImageView iconPost;
+	private CommentPanel commentPanel;
 	
 	private long newsId;
+	private int pageNo = 1;
 	private int lineCount;
 	private int maxLine = 5;
 	private boolean isReady;
 	private boolean isExpand;
+	private News itemNews;
 	
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
 		setContentView(R.layout.news_detail);
-		News news = getIntent().getParcelableExtra(Constants.NEWS_DETAIL_EXTRAS);
-		newsId = news.getInfo_id();
+		NewsApplication.getInstance().addObserver(this);
+		itemNews = getIntent().getParcelableExtra(Constants.NEWS_DETAIL_EXTRAS);
+		newsId = itemNews.getInfo_id();
 		txtTitle = (TextView)findViewById(R.id.news_detail_title);
 		txtDate = (TextView)findViewById(R.id.news_detail_date);
+		emptyView = (TextView)findViewById(android.R.id.empty);
 		txtCommentNum = (TextView)findViewById(R.id.news_detail_video_num);
 		txtSource = (TextView)findViewById(R.id.news_detail_src);
 		txtDesc = (TextView)findViewById(R.id.news_detail_desc);
@@ -63,24 +74,18 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 		commentPanel = (CommentPanel) findViewById(R.id.news_detail_comment);
 		((TextView)findViewById(R.id.title)).setText(R.string.news_detail_comment_title);
 		((ImageView)findViewById(R.id.icon)).setImageResource(R.drawable.ic_post);
-		
-		ensureUi(news);
-		new GetCommentsTask(this, null).execute(String.valueOf(newsId));
-		txtDesc.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			@Override
-			public void onGlobalLayout() {
-				if (!isReady) {
-					isReady = true;
-					lineCount = txtDesc.getLineCount();
-					txtDesc.setMaxLines(maxLine);
-					if (lineCount <= maxLine) {
-						iconDown.setVisibility(View.GONE);
-					}
-				}
-			}
-		});
+
+		ensureUi(itemNews);
+		sendRequest();
+		txtDesc.getViewTreeObserver().addOnGlobalLayoutListener(this);
 	}
 
+	private void sendRequest() {
+		new GetVideoCommentTask(this, null).execute(String.valueOf(newsId), 
+				String.valueOf(pageNo), 
+				Constants.NEWS_DETAIL_PAGESIZE);
+	}
+	
 	private void ensureUi(News news) {
 		if (news != null) {
 			txtTitle.setText(news.getMain_title());
@@ -88,13 +93,21 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 			txtCommentNum.setText(String.valueOf(news.getStart_count()));
 			txtSource.setText(getString(R.string.news_detail_source,news.getNews_from()));
 			txtDesc.setText("\u3000\u3000"+news.getDesc_title());
+//			Group<Comment> data = CacheUtil.getCommentCache(newsId);
+//			txtSummuy.setText(data.size()+"");
+//			commentPanel.setItems(CacheUtil.getCommentCache(newsId));
 			onRefresh(CacheUtil.getCommentCache(newsId));
 		}
 	}
 
-	private void onRefresh(List<Comment> comments) {
-		txtSummuy.setText(comments.size()+"");
-		commentPanel.setItems(comments);
+	private void onRefresh(Group<Comment> data) {
+		if (data!=null && data.size() > 0) {
+			emptyView.setVisibility(View.GONE);
+			txtSummuy.setText(data.getTotal()+"");
+			commentPanel.setItems(data);
+		} else {
+			emptyView.setVisibility(View.VISIBLE);
+		}
 	}
 	
 	private void showAllText() {
@@ -119,9 +132,11 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 			finish();
 			break;
 		case R.id.icon_share:
-			SharePopupWindow popup = new SharePopupWindow(this);
+			/*SharePopupWindow popup = new SharePopupWindow(this);
 			popup.showPopupWindow(findViewById(R.id.divide));
-			popup.setOnClickListener(this);
+			popup.setOnClickListener(this);*/
+			ShareDialog dialog = new ShareDialog(this, itemNews.getDesc_title());
+			dialog.show();
 			break;
 		case R.id.icon_comment:
 			Intent intent = new Intent(this, CommentActivity.class);
@@ -138,14 +153,26 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 	}
 	
 	@Override
+	public void onGlobalLayout() {
+		if (!isReady) {
+			isReady = true;
+			lineCount = txtDesc.getLineCount();
+			txtDesc.setMaxLines(maxLine);
+			if (lineCount <= maxLine) {
+				iconDown.setVisibility(View.GONE);
+			}
+		}
+	}
+	
+	@Override
 	public void onTaskStart(String taskName) {
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public void onTaskFinished(String taskName, Result result) {
-		notifyErrorMessage(result.getException());
-		if (result.getValue() != null) {
+		handlerException(result.getException());
+		if (result.getCode()==HttpStatus.SC_OK && result.getValue()!=null) {
 			Group<Comment> comments = (Group<Comment>) result.getValue();
 			onRefresh(comments);
 			CacheUtil.saveCommentCache(newsId, comments);
@@ -154,7 +181,19 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener, On
 	
 	@Override
 	public void onDestroy() {
-		commentPanel.deleteObservers();
 		super.onDestroy();
+		commentPanel.deleteObservers();
+		NewsApplication.getInstance().removeObserver(this);
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		// TODO Auto-generated method stub
+		if (data != null) {
+			TaskData taskData = (TaskData) data; // 重新加载数据
+			if (taskData.getKey().equals(NotificationTask.NOTIFICATION_ADD_COMMENT_TASK)) {
+				sendRequest();
+			}
+		}
 	}
 }

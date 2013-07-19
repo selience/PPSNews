@@ -57,14 +57,15 @@ public class CommentsListAdapter extends BaseAdapter implements Observer {
 	}
 
 	public void addAll(List<Comment> data) {
-		if (data != null) {
-			comments.addAll(data);
-		}
+		this.comments = data;
+	}
+	
+	public void clearAll() {
+		dataSet.clear();
 	}
 	
 	public void deleteObservers() {
 		mPhotosMap.clear();
-		mPhotosMap = null;
 		imageFetcher.deleteObserver(this);
 	}
 	

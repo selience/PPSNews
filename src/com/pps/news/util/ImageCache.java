@@ -4,12 +4,12 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Observable;
@@ -30,7 +30,6 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
@@ -46,7 +45,7 @@ import android.util.Log;
 public final class ImageCache extends Observable {
 	private static final String TAG = "ImageCache";
 	private static final String NOMEDIA = ".nomedia";
-	private static final String CACHE_DIRECTORY = "cache/images";
+	public static final String CACHE_DIRECTORY = "cache/images";
 	
 	private File baseDirectory;
 	private ExecutorService mExecutor;
@@ -108,8 +107,15 @@ public final class ImageCache extends Observable {
 		
 		if (!isExternalStorageMounted())
 			return;
+
+		try {
+			URL uri = new URL(url);
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return;
+		}
 		
-        synchronized (mActiveRequestsMap) {
+		synchronized (mActiveRequestsMap) {
         	if (!mActiveRequestsMap.containsKey(url)) {
         		Log.i(TAG, "issuing new request for: " + url);
         		Runnable fetcher = newRequestCall(url);
@@ -139,10 +145,11 @@ public final class ImageCache extends Observable {
 		return (file!=null && file.delete());
 	}
 	
-	public void clearCache() {
+	public void evictAll() {
 		lruCache.evictAll();
 	}
 	
+	/** 清除所有缓存的图片  */
 	public void clear() {
         // Clear the whole cache. Coolness.
 		if (isExternalStorageMounted()) {
@@ -160,11 +167,6 @@ public final class ImageCache extends Observable {
 	        mStorageDirectory.delete();
 		}
     }
-	
-	public void clearAll() {
-		clear();
-		clearCache();
-	}
 	
 	private boolean isExternalStorageMounted() {
 		return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
@@ -192,7 +194,7 @@ public final class ImageCache extends Observable {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} catch (OutOfMemoryError error) {
-			clearCache();
+			evictAll();
 			System.gc();
 		}
 		return null;
@@ -241,14 +243,12 @@ public final class ImageCache extends Observable {
 	                    entity.consumeContent();
 	                    Log.v(TAG, "Request successful: " + url);
                     }
-                } catch (MalformedURLException e) {
-    				Log.w(TAG, "Malformed image url.", e);
-    			} catch (FileNotFoundException e) {
-    				Log.w(TAG, "Ignoring url because it could not be found: " + url);
-    			} catch (IOException e) {
+                } catch (IOException e) {
     				Log.w(TAG, "Could not fetch image, could not load.", e);
     			} catch (OutOfMemoryError e) {
     				Log.e("", "Could not fetch image, ran out of memory.", e);
+    			} catch (Exception e) {
+    				Log.e(TAG, "Counld not fetch image" + e);
     			} finally {
                     Log.v(TAG, "Request finished: " + url);
                     if (httpGet!=null) httpGet.abort();

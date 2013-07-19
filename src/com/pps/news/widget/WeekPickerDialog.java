@@ -10,6 +10,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
@@ -57,10 +58,24 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 		findViewById(R.id.icon).setVisibility(View.GONE);
 		((TextView)findViewById(R.id.summary)).setText("Week");
 		((TextView)findViewById(R.id.title)).setText("重复设置");
+		((ViewStub)findViewById(R.id.viewStub)).inflate();
 		findViewById(R.id.confirm).setOnClickListener(this);
 		findViewById(R.id.cancel).setOnClickListener(this);
 		ListView listView = (ListView) findViewById(android.R.id.list);
-		
+		listView.setAdapter(new WeekAdapter());
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				CheckBox ckSelect = (CheckBox) view.findViewById(R.id.ckSelect);
+				ckSelect.setChecked(!ckSelect.isChecked());
+			}
+		});
+		setLayoutParams();
+	}
+
+	// 设置布局大小
+	private void setLayoutParams() {
 		int width = UIUtil.getScreenWidth(context) - UIUtil.dip2px(context, 40);
 		int height = UIUtil.getScreenHeight(context) - UIUtil.dip2px(context, 115);
 		
@@ -73,18 +88,8 @@ public class WeekPickerDialog extends Dialog implements OnClickListener {
 			lp.height = height;
 		}
 		rl.setLayoutParams(lp);
-		
-		listView.setAdapter(new WeekAdapter());
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				CheckBox ckSelect = (CheckBox) view.findViewById(R.id.ckSelect);
-				ckSelect.setChecked(!ckSelect.isChecked());
-			}
-		});
 	}
-
+	
 	@Override
 	public void onClick(View v) { 
 		switch (v.getId()) {

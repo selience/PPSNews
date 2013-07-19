@@ -93,14 +93,16 @@ public abstract class ExtendedLinearLayout extends LinearLayout implements Obser
 	
 	private void setPhotos(String photoUrl, NewsItemView imageView) {
 		if (imageFetcher.exists(photoUrl)) {
-			imageView.startAnimation();
+			imageView.stopAnimation();
 			Bitmap bitmap = imageFetcher.displayBitmap(photoUrl);
 			imageView.setImageBitmap(bitmap);
-		} else {
-			imageView.stopAnimation();
-			if (!mPhotosMap.containsKey(photoUrl)) {
-				mPhotosMap.put(photoUrl, imageView);
+			if (mPhotosMap.containsKey(photoUrl)) {
+				mPhotosMap.remove(photoUrl);
 			}
+		} else {
+			imageView.setImageBitmap(null);
+			imageView.startAnimation();
+			mPhotosMap.put(photoUrl, imageView);
 			imageFetcher.request(photoUrl);
 		}
 	}
@@ -133,7 +135,6 @@ public abstract class ExtendedLinearLayout extends LinearLayout implements Obser
 	/** 移除图片监听  */
 	public void removeObservers() {
 		mPhotosMap.clear();
-		mPhotosMap = null;
 		imageFetcher.deleteObserver(this);
 	}
 }
