@@ -61,6 +61,13 @@ public class NewsApplication extends Application {
 			thread.setPriority(Thread.MIN_PRIORITY);
 			thread.start();
 		}
+		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			
+			@Override
+			public void uncaughtException(Thread thread, Throwable ex) {
+				ex.printStackTrace();
+			}
+		});
 	}
 	
 	@Override

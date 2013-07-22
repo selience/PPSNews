@@ -25,7 +25,8 @@ public class Constants {
 	public static final String COMMENTS_LIST_PAGESIZE = "8";
 	
 	/** 闹钟设置传递参数  */
-	public static final String ALARM_EXTRAS = "alarms";
+	public static final String ALARM_EXTRAS = "intent.extra";
+	public static final String ALARM_INTENT_EXTRA = "intent.extra.alarm";
 
 	/** 闹钟通知Intent Action */
 	public static final String ALARM_ALERT_ACTION = "com.android.alarmclock.ALARM_ALERT";

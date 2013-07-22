@@ -59,16 +59,16 @@ public class CommentEditActivity extends BaseActivity implements OnClickListener
 		editView.setOnClickListener(this);
 		txtTips=(TextView)findViewById(android.R.id.empty);
 		listView=(ListView)findViewById(android.R.id.list);
-		listView.setOnScrollListener(this);
 		txtSelect =(TextView)findViewById(R.id.txtSelect);
-		listView.setOnItemClickListener(this);
 
 		setSummary(0);
+		this.comments = new Group<Comment>();
 		ipString = UIUtil.getIPAddress(this);
 		moreView = new FrameLayout(this);
-		listView.addFooterView(moreView);
-		this.comments = new Group<Comment>();
 		footerView = View.inflate(this, R.layout.list_footer_view, null);
+		listView.addFooterView(moreView);
+		listView.setOnItemClickListener(this);
+		listView.setOnScrollListener(this);
 		sendRequest();
 	}
 
@@ -126,8 +126,7 @@ public class CommentEditActivity extends BaseActivity implements OnClickListener
 		handlerException(result.getException());
 		if (result.getCode()==HttpStatus.SC_OK) {
 			if (taskName.equals(GET_COMMENT_TASK) && result.getValue()!=null) {
-				Group<Comment> data = (Group<Comment>)result.getValue();
-				addAllData(data);
+				addAllData((Group<Comment>)result.getValue());
 				onRefresh(comments);
 			} else if (taskName.equals(DELETE_COMMENT_TASK)) {
 				if (delComment!=null && comments.contains(delComment)) {
@@ -146,23 +145,25 @@ public class CommentEditActivity extends BaseActivity implements OnClickListener
 			deleteTask = new DeleteCommentTask(this, DELETE_COMMENT_TASK, delComment);
 			deleteTask.execute(ipString);
 		} else {
-			dataList.clear();
-			mAdapter.clearAll(); 
-			setSummary(0);
-			onRefresh(comments);
+			resetData();
+			sendRequest();
+			//onRefresh(comments);
 			// 更新评论列表
 			TaskData taskData = new TaskData(NotificationTask.NOTIFICATION_DELETE_COMMENT_TASK, null);
 			NewsApplication.getInstance().notifyObservers(taskData);
 		}
 	}
 	
+	private void resetData() {
+		pageNo = 1;
+		comments.clear();
+		dataList.clear();
+		mAdapter.clearAll(); 
+		setSummary(0);
+	}
+	
 	// 合并加载的数据
 	private void addAllData(Group<Comment> data) {
-		if (pageNo < data.getTotal_page()) {
-			showMoreFooterView(true);
-		} else {
-			showMoreFooterView(false);
-		}
 		comments.addAll(data);
 		comments.setCur_page(data.getCur_page());
 		comments.setTotal(data.getTotal());
@@ -174,7 +175,9 @@ public class CommentEditActivity extends BaseActivity implements OnClickListener
 	private void showMoreFooterView(boolean shown) {
 		if (shown) {
 			moreView.removeAllViews();
-			moreView.addView(footerView);
+			moreView.addView(footerView, new ViewGroup.LayoutParams(
+					ViewGroup.LayoutParams.MATCH_PARENT, 
+					UIUtil.dip2px(this, 48)));
 		} else {
 			moreView.removeAllViews();
 		}
@@ -197,20 +200,26 @@ public class CommentEditActivity extends BaseActivity implements OnClickListener
 
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		int itemsLastIndex = mAdapter.getCount() - 1; //数据集最后一项的索引 
+		int lastIndex = itemsLastIndex + 1;  //加上底部的loadMoreView项 
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-			lastItem = lastItem - 1; // 除去FootView部分视图
-			// 当前滑动到最后一项且不是最后一页
-			if ((lastItem == mAdapter.getCount()-1) && pageNo < comments.getTotal_page()) {
-				pageNo++; // 页码累加
-				sendRequest();
+			if (lastItem == lastIndex && pageNo < comments.getTotal_page()) {
+				 System.out.println("加载下一页");
+				 pageNo++;
+				 sendRequest();
 			}
 		}
 	}
 
 	@Override
-	public void onScroll(AbsListView view, int firstVisibleItem,
-			int visibleItemCount, int totalItemCount) {
+	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		lastItem = firstVisibleItem + visibleItemCount - 1;
+		// 当前页大于总页数, 移除刷新功能
+		if (pageNo >= comments.getTotal_page()) {
+			showMoreFooterView(false);
+		} else {
+			showMoreFooterView(true);
+		}
 	}
 	
 	@Override

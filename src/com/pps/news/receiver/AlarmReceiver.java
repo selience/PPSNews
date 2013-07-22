@@ -3,6 +3,7 @@ package com.pps.news.receiver;
 import com.pps.news.AlarmAlertActivity;
 import com.pps.news.bean.Alarm;
 import com.pps.news.constant.Constants;
+import com.pps.news.service.AlarmService;
 import com.pps.news.util.DateUtils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,6 +37,11 @@ public class AlarmReceiver extends BroadcastReceiver {
 		} else {
 			DateUtils.setNextAlert(context);
 		}
+		
+		// 震动或播放声音
+		Intent playAlarm = new Intent(context, AlarmService.class);
+        playAlarm.putExtra(Constants.ALARM_INTENT_EXTRA, alarm);
+        context.startService(playAlarm);
 	}
 
 }

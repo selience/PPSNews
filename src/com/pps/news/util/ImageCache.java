@@ -8,8 +8,6 @@ import java.io.FileOutputStream;
 import java.io.FilterInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Observable;
@@ -108,13 +106,6 @@ public final class ImageCache extends Observable {
 		if (!isExternalStorageMounted())
 			return;
 
-		try {
-			URL uri = new URL(url);
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-			return;
-		}
-		
 		synchronized (mActiveRequestsMap) {
         	if (!mActiveRequestsMap.containsKey(url)) {
         		Log.i(TAG, "issuing new request for: " + url);

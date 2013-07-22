@@ -106,6 +106,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 			txtSummuy.setText(data.getTotal()+"");
 			commentPanel.setItems(data);
 		} else {
+			commentPanel.removeAllViews();
 			emptyView.setVisibility(View.VISIBLE);
 		}
 	}

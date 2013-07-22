@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.Observable;
 import java.util.Observer;
 import org.apache.http.HttpStatus;
-import tv.pps.vipmodule.vip.AccountVerify;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -32,7 +31,6 @@ import com.pps.news.task.GetUserCommentTask;
 import com.pps.news.task.NotificationTask;
 import com.pps.news.task.TaskListener;
 import com.pps.news.task.NotificationTask.TaskData;
-import com.pps.news.util.CacheUtil;
 import com.pps.news.util.UIUtil;
 
 public class CommentActivity extends BaseActivity implements OnClickListener, 
@@ -49,10 +47,9 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 	private TextView postView;
 	private EditText messageView;
 	private View footerView;
-	private ViewGroup moreView;
+	private FrameLayout moreView;
 	
 	private int status;
-	private long userId = 0;
 	private long newsId = 0; //新闻id
 	private int lastItem = 0; //最后一项索引
 	private int pageNo = 1; //初始状态页码
@@ -68,32 +65,29 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 		txtSummuy.setText("0");
 		txtTips = (TextView) findViewById(android.R.id.empty);
 		listView = (ListView) findViewById(android.R.id.list);
-		listView.setOnScrollListener(this);
 		imageView.setImageResource(R.drawable.ic_comment);
 		imageView.setOnClickListener(this);
 		
+		this.comments = new Group<Comment>();
 		NewsApplication.getInstance().addObserver(this);
 		moreView = new FrameLayout(this);
-		listView.addFooterView(moreView);
-		this.comments = new Group<Comment>();
 		footerView = View.inflate(this, R.layout.list_footer_view, null);
+		listView.addFooterView(moreView);
+		listView.setOnScrollListener(this);
 		
+		newsId = getIntent().getLongExtra(Constants.NEWS_ID_EXTRAS, 0L);
 		status = getIntent().getIntExtra(Constants.NEWS_DETAIL_EXTRAS, Constants.NEWS_DETAIL_SELF_COMMENT);
 		if (status == Constants.NEWS_DETAIL_SELF_COMMENT) { //自己评论
 			((ViewStub)findViewById(R.id.toolbar)).inflate();
 			txtTitle.setText(R.string.comment_title_self_label);
 			imageTrash = (ImageView) findViewById(R.id.imageView);
 			imageTrash.setOnClickListener(this);
-//			userId = Long.valueOf(AccountVerify.getInstance().getmUID());
-//			onRefresh(CacheUtil.getCommentCache(userId));
 		} else if (status == Constants.NEWS_DETAIL_FRIEND_COMMENT) { //网友评论
 			((ViewStub)findViewById(R.id.viewStub)).inflate();
 			txtTitle.setText(R.string.comment_title_friend_label);
 			messageView=(EditText)findViewById(R.id.message);
 			postView = (TextView)findViewById(R.id.postView);
 			postView.setOnClickListener(this);
-//			newsId = getIntent().getLongExtra(Constants.NEWS_ID_EXTRAS, 0L);
-//			onRefresh(CacheUtil.getCommentCache(newsId));
 		}
 
 		sendRequest();
@@ -154,7 +148,6 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 			txtTips.setVisibility(View.VISIBLE);
 			txtSummuy.setText("0");
 		} else {
-			listView.setSelection(lastItem);
 			setTrashEnabled(true);
 			txtTips.setVisibility(View.GONE);
 			txtSummuy.setText(data.getTotal()+"");
@@ -174,14 +167,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 				Group<Comment> data = (Group<Comment>)result.getValue();
 				addAllData(data);
 				onRefresh(comments);
-				listView.setSelection(lastItem);
-				/*if (status == Constants.NEWS_DETAIL_SELF_COMMENT) {
-					CacheUtil.saveCommentCache(userId, comments);
-				} else {
-					CacheUtil.saveCommentCache(newsId, comments);
-				}*/
 			} else if (taskName.equals(ADD_COMMENT_TASK)) {
-				comments.clear();
 				messageView.setText("");
 				TaskData data = new TaskData(NotificationTask.NOTIFICATION_ADD_COMMENT_TASK, null);
 				NewsApplication.getInstance().notifyObservers(data);
@@ -191,11 +177,6 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 
 	// 合并加载的数据
 	private void addAllData(Group<Comment> data) {
-		if (pageNo < data.getTotal_page()) {
-			showMoreFooterView(true);
-		} else {
-			showMoreFooterView(false);
-		}
 		comments.addAll(data);
 		comments.setCur_page(data.getCur_page());
 		comments.setTotal(data.getTotal());
@@ -207,7 +188,9 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 	private void showMoreFooterView(boolean shown) {
 		if (shown) {
 			moreView.removeAllViews();
-			moreView.addView(footerView);
+			moreView.addView(footerView, new ViewGroup.LayoutParams(
+					ViewGroup.LayoutParams.MATCH_PARENT, 
+					UIUtil.dip2px(this, 48)));
 		} else {
 			moreView.removeAllViews();
 		}
@@ -215,12 +198,12 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 	
 	@Override
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		int itemsLastIndex = mAdapter.getCount() - 1; //数据集最后一项的索引 
+		int lastIndex = itemsLastIndex + 1;  //加上底部的loadMoreView项 
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
-			lastItem = lastItem - 1; // 除去FootView部分视图
-			// 当前滑动到最后一项且不是最后一页
-			if ((lastItem == mAdapter.getCount()-1) && pageNo < comments.getTotal_page()) {
-				pageNo++; // 页码累加
-				sendRequest(); // 重新从网络加载数据
+			if (lastItem == lastIndex && pageNo < comments.getTotal_page()) {
+				 pageNo++;
+				 sendRequest();
 			}
 		}
 	}
@@ -228,6 +211,12 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 	@Override
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 		lastItem = firstVisibleItem + visibleItemCount - 1;
+		// 当前页大于总页数, 移除刷新功能
+		if (pageNo >= comments.getTotal_page()) {
+			showMoreFooterView(false);
+		} else {
+			showMoreFooterView(true);
+		}
 	}
 	
 	@Override
@@ -244,6 +233,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 	public void update(Observable observable, Object data) {
 		// TODO Auto-generated method stub
 		comments.clear();
+		pageNo = 1;
 		sendRequest();
 	}
 }

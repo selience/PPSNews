@@ -1,14 +1,7 @@
 package com.pps.news;
 
-import java.io.IOException;
-import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.text.format.DateFormat;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,8 +11,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.pps.news.app.BaseActivity;
 import com.pps.news.bean.Alarm;
-import com.pps.news.common.AlarmAlertWakeLock;
 import com.pps.news.constant.Constants;
+import com.pps.news.service.AlarmService;
 
 public class AlarmAlertActivity extends BaseActivity implements OnClickListener, OnTouchListener {
 
@@ -32,9 +25,6 @@ public class AlarmAlertActivity extends BaseActivity implements OnClickListener,
 	
 	private int startY;
 	private Alarm alarm;
-	private boolean mPlaying;
-	private Vibrator vibrator;
-	private MediaPlayer mMediaPlayer;
 
 	@Override
 	protected void _onCreate(Bundle savedInstanceState) {
@@ -50,17 +40,14 @@ public class AlarmAlertActivity extends BaseActivity implements OnClickListener,
 		touchView = findViewById(R.id.touchView);
 		touchView.setOnTouchListener(this);
 		
-		vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		AlarmAlertWakeLock.acquireCpuWakeLock(this);
-		if (alarm != null) {
-			txtHour.setText(String.valueOf(alarm.hour));
-			txtMinute.setText(String.valueOf(alarm.minutes));
-			play(alarm);
-		}
-		
 		txtHour.setText(DateFormat.format("kk", System.currentTimeMillis()));
 		txtMinute.setText(DateFormat.format("mm", System.currentTimeMillis()));
 		txtDate.setText(DateFormat.format(getText(R.string.alarm_month_and_day), System.currentTimeMillis()));
+		
+		if (alarm != null) {
+			txtHour.setText(String.valueOf(alarm.hour));
+			txtMinute.setText(String.valueOf(alarm.minutes));
+		}
 	} 
 
 	@Override
@@ -76,66 +63,6 @@ public class AlarmAlertActivity extends BaseActivity implements OnClickListener,
 		}
 	}
 	
-	private void play(Alarm alarm) {
-		stop();
-
-		if (!alarm.silent) {
-			Uri alert = alarm.alert;
-			if (alert == null) {
-				alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-			}
-
-			mMediaPlayer = new MediaPlayer();
-			mMediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-				@Override
-				public boolean onError(MediaPlayer mp, int what, int extra) {
-					mp.stop();
-					mp.release();
-					mMediaPlayer = null;
-					return true;
-				}
-			});
-			try {
-				mMediaPlayer.setDataSource(this, alert);
-				startAlarm(mMediaPlayer);
-			} catch (Exception e) {
-				mMediaPlayer.stop();
-				mMediaPlayer.release();
-				mMediaPlayer = null;
-			}
-		}
-
-		if (alarm.vibrate) {
-			vibrator.vibrate(new long[] { 500, 500 }, 0);
-		} else {
-			vibrator.cancel();
-		}
-		mPlaying = true;
-	}
-
-	private void startAlarm(MediaPlayer player) throws IllegalStateException,
-			IOException {
-		final AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-		if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
-			player.setAudioStreamType(AudioManager.STREAM_ALARM);
-			player.setLooping(true);
-			player.prepare();
-			player.start();
-		}
-	}
-
-	private void stop() {
-		if (mPlaying) {
-			mPlaying = false;
-			if (mMediaPlayer != null) {
-				mMediaPlayer.stop();
-				mMediaPlayer.release();
-				mMediaPlayer = null;
-			}
-			vibrator.cancel();
-		}
-	}
-
 	@Override
 	public boolean onTouch(View v, MotionEvent event) {
 		switch (event.getAction()) {
@@ -175,11 +102,13 @@ public class AlarmAlertActivity extends BaseActivity implements OnClickListener,
 		return true;
 	}
 	
+	private void sendKillService() {
+		stopService(new Intent(this, AlarmService.class));
+	}
+	
 	@Override
 	protected void onDestroy() {
+		sendKillService();
 		super.onDestroy();
-		stop();
-		AlarmAlertWakeLock.releaseCpuLock();
 	}
-
 }

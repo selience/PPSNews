@@ -24,6 +24,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     
     <application
@@ -91,13 +92,9 @@
                  <action android:name="com.android.alarmclock.ALARM_ALERT" />
              </intent-filter>
          </receiver>
-         <service android:name="com.pps.news.service.AlarmService" android:exported="false">
-             <intent-filter >
-                 <action android:name="com.android.alarmclock.ALARM_ALERT" />
-             </intent-filter>
-         </service>
-        
+		 <!-- 闹钟监听服务 -->
+         <service android:name="com.pps.news.service.AlarmService" />
          <!-- 百度定位服务 -->
-        <service android:name="com.baidu.location.f"></service>
+        <service android:name="com.baidu.location.f"/>
     </application>
 </manifest>

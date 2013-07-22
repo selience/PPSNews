@@ -191,7 +191,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		weatherCity.setText(city);
 		weatherTemperature.setText(temper==null?"上海":temper);
 		if (icon != null) {
-			setPhotos(icon, weatherImage);
+			setPhotos(getWeatherIconUrl(icon), weatherImage);
 		} else {
 			weatherImage.setImageResource(R.drawable.weather_big_error);
 		}
