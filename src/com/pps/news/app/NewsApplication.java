@@ -3,8 +3,11 @@ package com.pps.news.app;
 import java.io.File;
 import java.util.Observer;
 
+import tv.pps.module.player.VideoInit;
+
 import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
+import com.pps.news.location.PPSNewsLocation;
 import com.pps.news.task.NotificationTask;
 import com.pps.news.util.CacheUtil;
 import com.pps.news.util.FileUtils;
@@ -36,9 +39,11 @@ public class NewsApplication extends Application {
 
 	private void initialize() {
 		Log.setLevel(Constants.DEVELOP_MODE);
-		ImageCache.initInstance("PPSNews");
+		//VideoInit.getInstance().init(this);
+		ImageCache.initInstance("PPSNews"); 
 		PreferenceUtils.setDefaultPreferences(this);
-		PreferenceUtils.obtainUser();
+		PreferenceUtils.obtainUser(); // 获取用户状态
+		PPSNewsLocation.getInstance().getLocation(); // 启用定位
 		clearNews();
 	}
 
@@ -61,13 +66,6 @@ public class NewsApplication extends Application {
 			thread.setPriority(Thread.MIN_PRIORITY);
 			thread.start();
 		}
-		Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-			
-			@Override
-			public void uncaughtException(Thread thread, Throwable ex) {
-				ex.printStackTrace();
-			}
-		});
 	}
 	
 	@Override

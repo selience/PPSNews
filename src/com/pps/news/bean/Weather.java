@@ -1,6 +1,10 @@
 package com.pps.news.bean;
 
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import com.pps.news.parser.ResultType;
+import com.pps.news.util.CacheUtil;
 
 public class Weather implements ResultType {
 
@@ -140,5 +144,40 @@ public class Weather implements ResultType {
 		this.tempThirdInfo = tempThirdInfo;
 	}
 
+	public void writeToOutputStream(DataOutputStream out) throws IOException {
+		CacheUtil.writeString(out, tempOneTemp);
+		CacheUtil.writeString(out, tempOneImg);
+		CacheUtil.writeString(out, tempOneInfo);
+		CacheUtil.writeString(out, tempTwoTemp);
+		CacheUtil.writeString(out, tempTwoImg);
+		CacheUtil.writeString(out, tempTwoInfo);
+		CacheUtil.writeString(out, tempThirdTemp);
+		CacheUtil.writeString(out, tempThirdImg);
+		CacheUtil.writeString(out, tempThirdInfo);
+		CacheUtil.writeString(out, info);
+		CacheUtil.writeString(out, tempInfo);
+		CacheUtil.writeString(out, time);
+		CacheUtil.writeString(out, img);
+		CacheUtil.writeString(out, pm);
+		CacheUtil.writeString(out, pmInfo);
+	}
 
+	public Weather readFromInputStream(DataInputStream in) throws IOException {
+		tempOneTemp = CacheUtil.readString(in);
+		tempOneImg = CacheUtil.readString(in);
+		tempOneInfo = CacheUtil.readString(in);
+		tempTwoTemp = CacheUtil.readString(in);
+		tempTwoImg = CacheUtil.readString(in);
+		tempTwoInfo = CacheUtil.readString(in);
+		tempThirdTemp = CacheUtil.readString(in);
+		tempThirdImg = CacheUtil.readString(in);
+		tempThirdInfo = CacheUtil.readString(in);
+		info = CacheUtil.readString(in);
+		tempInfo = CacheUtil.readString(in);
+		time = CacheUtil.readString(in);
+		img = CacheUtil.readString(in);
+		pm = CacheUtil.readString(in);
+		pmInfo = CacheUtil.readString(in);
+		return this;
+	}
 }

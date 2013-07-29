@@ -5,7 +5,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/empty"
-        android:src="@drawable/progress_drawable_selector"
+        android:src="@drawable/progress_drawable"
         android:layout_centerInParent="true" />
     <ImageView
         android:id="@+id/news_image"

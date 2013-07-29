@@ -32,8 +32,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener,  Req
 	private boolean isAutoLogin;
 	
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.login_layout);
 		TextView txtTitle = (TextView)findViewById(R.id.title);
 		txtTitle.setText(R.string.login_title_label);

@@ -96,9 +96,6 @@ public abstract class ExtendedLinearLayout extends LinearLayout implements Obser
 			imageView.stopAnimation();
 			Bitmap bitmap = imageFetcher.displayBitmap(photoUrl);
 			imageView.setImageBitmap(bitmap);
-			if (mPhotosMap.containsKey(photoUrl)) {
-				mPhotosMap.remove(photoUrl);
-			}
 		} else {
 			imageView.setImageBitmap(null);
 			imageView.startAnimation();

@@ -1,6 +1,8 @@
 package com.pps.news;
 
 import java.io.File;
+
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -18,6 +20,7 @@ import com.pps.news.util.CacheUtil;
 import com.pps.news.util.FileUtils;
 import com.pps.news.util.ImageCache;
 import com.pps.news.util.UIUtil;
+import com.pps.news.widget.BaseAlertDialog;
 
 public class SettingActivity extends BaseActivity implements OnClickListener {
 	private static final int MESSAGE_COLLECT_CACHE_SIZE = 0x100;
@@ -26,7 +29,8 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 	private CheckBox ckIsAuto;
 	
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.setting_layout);
 		TextView txtTitle = (TextView)findViewById(R.id.title);
 		txtTitle.setText(R.string.setting_title_label);
@@ -82,7 +86,15 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			finish();
 			break;
 		case R.id.setting_clear_cache:
-			clearAll();
+			new BaseAlertDialog(this).
+			setMessage(R.string.setting_clear_cache_tips)
+			.setPositiveClickListener(new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.dismiss();
+					clearAll();
+				}
+			}).show();
 			break;
 		}
 	}

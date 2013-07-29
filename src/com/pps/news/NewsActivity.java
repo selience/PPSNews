@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.WeakHashMap;
+import tv.pps.module.player.VideoInit;
 import tv.pps.vipmodule.vip.AccountVerify;
 import tv.pps.vipmodule.vip.protol.ProtocolLogout;
 import tv.pps.vipmodule.vip.protol.BaseProtocol.RequestCallBack;
@@ -30,6 +31,8 @@ import com.pps.news.task.GetWeatherTask;
 import com.pps.news.task.TaskListener;
 import com.pps.news.util.CacheUtil;
 import com.pps.news.util.ImageCache;
+import com.pps.news.weather.WeatherActivity;
+import com.pps.news.widget.BaseAlertDialog;
 import com.pps.news.widget.LogoutPopupWindow;
 import com.pps.news.widget.SlideNavigationView;
 import android.content.DialogInterface;
@@ -83,7 +86,25 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 	private SparseArray<Fragment> registeredFragments;
 
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		ensureUi();
+		
+		userVipType = new SparseArray<String>(3);
+		userVipType.put(Integer.parseInt(AccountVerify.OPT_NORMAL), "普通会员");
+		userVipType.put(Integer.parseInt(AccountVerify.OPT_SILVER), "白银会员");
+		userVipType.put(Integer.parseInt(AccountVerify.OPT_GOLD), "黄金会员");
+		
+		mPhotoMaps=new WeakHashMap<String, ImageView>(2);
+		imageFetcher = ImageCache.getInstance();
+		imageFetcher.addObserver(mObserver);
+		
+		showWeather();
+		
+		VideoInit.getInstance().init(this);
+	}
+
+	private void ensureUi() {
 		navigationView = new SlideNavigationView(this);
 		navigationView.setContent(R.layout.main);
 		navigationView.setMenu(R.layout.news_nav_item);
@@ -121,20 +142,8 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		viewPager = mPullToRefreshViewPager.getRefreshableView();
 		viewPager.setAdapter(new NewsFragmentAdapter(getSupportFragmentManager()));
 		viewPager.setOnPageChangeListener(this);
-		
-		userVipType = new SparseArray<String>(3);
-		userVipType.put(Integer.parseInt(AccountVerify.OPT_NORMAL), "普通会员");
-		userVipType.put(Integer.parseInt(AccountVerify.OPT_SILVER), "白银会员");
-		userVipType.put(Integer.parseInt(AccountVerify.OPT_GOLD), "黄金会员");
-		
-		mPhotoMaps=new WeakHashMap<String, ImageView>(2);
-		imageFetcher = ImageCache.getInstance();
-		imageFetcher.addObserver(mObserver);
-		// 启动定位
-		PPSNewsLocation.getInstance().getLocation();
-		showWeather();
 	}
-
+	
 	// 更新上次刷新时间戳
 	private void setLastUpdateTimeStamp() {
 		long lastUpdateTimestamp = PreferenceUtils.getLastUpdateTimeStamp(this);
@@ -215,6 +224,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		userVipType.clear();
 		registeredFragments.clear();
 		imageFetcher.deleteObservers();
+		VideoInit.getInstance().destory();
 	}
 	
 	@Override
@@ -230,7 +240,15 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 			if (AccountVerify.getInstance().isLogin()) {
 				startActivity(new Intent(this, CommentActivity.class));
 			} else {
-				startActivity(new Intent(this, LoginActivity.class));
+				new BaseAlertDialog(this)
+				.setMessage(R.string.view_comment_tips)
+				.setPositiveClickListener(new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+						startActivity(new Intent(NewsActivity.this, LoginActivity.class));	
+					}
+				}).show();
 			}
 			break;
 		case R.id.offline:
@@ -243,7 +261,9 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 			startActivity(new Intent(this, AlarmActivity.class));
 			break;
 		case R.id.weather:
-			startActivity(new Intent(this, AlarmAlertActivity.class));
+			Intent intent = new Intent(this, WeatherActivity.class);
+			intent.putExtra("city", city);
+			startActivity(intent);
 			break;
 		}
 	}
@@ -369,9 +389,6 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		if (imageFetcher.exists(photoUrl)) {
 			Bitmap bitmap = imageFetcher.displayBitmap(photoUrl);
 			imageView.setImageBitmap(bitmap);
-			if (mPhotoMaps.containsKey(photoUrl)) {
-				mPhotoMaps.remove(photoUrl);
-			}
 		} else {
 			mPhotoMaps.put(photoUrl, imageView);
 			imageFetcher.request(photoUrl);
@@ -383,11 +400,16 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		@Override
 		public void update(Observable observable, Object data) {
 			final String imageUrl = data.toString();
-			for (String key : mPhotoMaps.keySet()) {
-				if (key.equals(imageUrl)) {
-					setPhotos(key, mPhotoMaps.get(key));
+			runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					for (String key : mPhotoMaps.keySet()) {
+						if (key.equals(imageUrl)) {
+							setPhotos(key, mPhotoMaps.get(key));
+						}
+					}
 				}
-			}
+			});
 		}
 	};
 

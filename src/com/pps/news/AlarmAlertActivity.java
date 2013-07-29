@@ -27,7 +27,8 @@ public class AlarmAlertActivity extends BaseActivity implements OnClickListener,
 	private Alarm alarm;
 
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.news_notice_layout);
 		alarm = getIntent().getParcelableExtra(Constants.ALARM_EXTRAS);
 		txtTurn = (TextView) findViewById(R.id.turn);

@@ -36,7 +36,6 @@ public class NewsFragment extends BaseFragment implements OnClickListener, OnRef
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setRetainInstance(true);
 		Bundle bundle = getArguments();
 		if (bundle != null) {
 			position = bundle.getInt(FRAGMENT_ARGUMENT_EXTRAS);

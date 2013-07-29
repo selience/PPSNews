@@ -8,8 +8,8 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
-import com.pps.news.util.Log;
 import com.pps.news.util.ToastUtils;
 
 /**
@@ -18,20 +18,15 @@ import com.pps.news.util.ToastUtils;
  * @author lilong dramxsky@gmail.com
  * @description TODO 自定义Activity基类
  */
-public abstract class BaseActivity extends FragmentActivity {
+public class BaseActivity extends FragmentActivity {
 
-	private String TAG = BaseActivity.class.getSimpleName();
+	private String TAG = "BaseActivity";
 
 	@Override
-	protected final void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		this.TAG = getClass().getSimpleName();
-		_onCreate(savedInstanceState);
-		addNavagationAndStatus();
-		ViewServer.get(this).addWindow(this);
+		TAG = getClass().getSimpleName();
 	}
-
-	protected abstract void _onCreate(Bundle savedInstanceState);
 
 	@Override
 	protected void onRestart() {
@@ -49,7 +44,6 @@ public abstract class BaseActivity extends FragmentActivity {
 	protected void onResume() {
 		Log.d(TAG, "onResume");
 		super.onResume();
-		ViewServer.get(this).setFocusedWindow(this);
 	}
 
 	@Override
@@ -68,14 +62,8 @@ public abstract class BaseActivity extends FragmentActivity {
 	protected void onDestroy() {
 		Log.d(TAG, "onDestroy");
 		super.onDestroy();
-		ViewServer.get(this).removeWindow(this);
 	}
 
-	// 添加导航组件
-	protected void addNavagationAndStatus() {
-	}
-	
-	
 	public final void showFragment(final int pane, final Fragment fragment, final boolean add_to_backstack) {
 		final FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		ft.replace(pane, fragment);
@@ -93,7 +81,7 @@ public abstract class BaseActivity extends FragmentActivity {
 					ex instanceof HttpHostConnectException) {
 				ToastUtils.showMessage(this, "网络连接异常", Toast.LENGTH_SHORT);
 			} else if (ex instanceof SocketTimeoutException) {
-				ToastUtils.showMessage(this, "读取数据失败", Toast.LENGTH_SHORT);
+				ToastUtils.showMessage(this, "同步数据失败", Toast.LENGTH_SHORT);
 			} else {
 				ToastUtils.showMessage(this, ex.getLocalizedMessage(), Toast.LENGTH_SHORT);
 			}

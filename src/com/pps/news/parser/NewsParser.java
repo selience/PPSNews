@@ -41,7 +41,9 @@ public class NewsParser extends Parser<News> {
 		try {
 			if (json != null) {
 				JSONArray array = new JSONArray(json);
-				return parse(array);
+				if (array.length() > 0) {
+					return parse(array);
+				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

@@ -52,7 +52,8 @@ public class CommentEditActivity extends BaseActivity implements OnClickListener
 	private List<Comment> dataList = new ArrayList<Comment>();
 	
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.comment_edit_layout);
 		findViewById(R.id.cancel).setOnClickListener(this);
 		editView = findViewById(R.id.edit);

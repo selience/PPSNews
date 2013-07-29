@@ -35,13 +35,18 @@ public class NewsItemView extends RelativeLayout {
 		txtTitle = (TextView) findViewById(R.id.news_title);
 		loadingView = (ImageView) findViewById(R.id.progress);
 		mAnimation = (AnimationDrawable) loadingView.getDrawable();
-		mAnimation.start();
+		startAnimation();
 	}
 
 	/** 启动动画   */
 	public void startAnimation() {
 		if (!mAnimation.isRunning()) {
-			mAnimation.start();
+			loadingView.post(new Runnable() {
+				@Override
+				public void run() {
+					mAnimation.start();
+				}
+			});
 		}
 	}
 

@@ -27,8 +27,8 @@ public class RegisterActivity extends BaseActivity implements OnClickListener,Re
 	private String passwd;
 	
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.register_layout);
 		TextView txtTitle = (TextView) findViewById(R.id.title);
 		txtTitle.setText(R.string.register_title_label);

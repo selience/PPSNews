@@ -13,6 +13,7 @@ import android.os.Environment;
 import com.pps.news.bean.Comment;
 import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
+import com.pps.news.bean.Weather;
 
 /**
  * @file CacheUtil.java
@@ -24,6 +25,8 @@ public class CacheUtil {
 	
 	private static final String CACHE_FILE_APPENDIX_NEWS_LIST = "_news_list.data";
 	private static final String CACHE_FILE_APPENDIX_COMMENT = "_news_comment.data";
+	private static final String CACHE_FILE_APPENDIX_WEATHER = "_weather.data";
+	
 	/** 缓存新闻目录 */
 	public static final String CACHE_DIRECTORY = "PPSNews/cache/data";
 	
@@ -274,5 +277,79 @@ public class CacheUtil {
 			}
 		}
 		return data;
+	}
+
+	public static void saveWeatherCache(Weather weather) {
+		if (weather == null) return;
+		if (UIUtil.isSDCardAvailable()) {
+			File baseDir = new File(Environment.getExternalStorageDirectory(),CACHE_DIRECTORY);
+			if(!baseDir.exists()){
+				baseDir.mkdirs();
+			}
+			File cacheFile = null;
+			FileOutputStream fos=null;
+			DataOutputStream out=null;
+			try {
+				cacheFile = new File(baseDir, CACHE_FILE_APPENDIX_WEATHER);
+				if(cacheFile.exists()){
+					cacheFile.delete();
+				}
+				fos=new FileOutputStream(cacheFile);
+				out=new DataOutputStream(fos);
+				weather.writeToOutputStream(out);
+				out.flush();
+				fos.flush();
+			} catch (Throwable e) {
+				e.printStackTrace();
+				if(cacheFile!=null){
+					cacheFile.delete();
+				}
+			}finally{
+				try {
+					if(out!=null){
+						out.close();
+					}
+					if(fos!=null){
+						fos.close();
+					}
+				} catch (Exception e2) {
+				}
+			}
+		}
+	}
+	
+	public static Weather getWeatherCache() {
+		Weather weather = null;
+		if(UIUtil.isSDCardAvailable()){
+			File baseDir = new File(Environment.getExternalStorageDirectory(),CACHE_DIRECTORY);
+			File cacheFile=null;
+			FileInputStream fis=null;
+			DataInputStream in=null;
+			try {
+				cacheFile = new File(baseDir, CACHE_FILE_APPENDIX_WEATHER);
+				if(cacheFile.exists()){
+					fis=new FileInputStream(cacheFile);
+					in=new DataInputStream(fis);
+					weather = new Weather();
+					weather.readFromInputStream(in);
+				}
+			} catch (Throwable e) {
+				e.printStackTrace();
+				if(cacheFile!=null){
+					cacheFile.delete();
+				}
+			}finally{
+				try {
+					if(in!=null){
+						in.close();
+					}
+					if(fis!=null){
+						fis.close();
+					}
+				} catch (Exception e2) {
+				}
+			}
+		}
+		return weather;
 	}
 }

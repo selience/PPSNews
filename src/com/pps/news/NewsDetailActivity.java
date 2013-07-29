@@ -1,10 +1,25 @@
 package com.pps.news;
 
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import org.apache.http.HttpStatus;
+import tv.pps.module.player.callback.CallbackRefeshExternUI;
+import tv.pps.module.player.callback.CallbackSetVideoData;
+import tv.pps.module.player.callback.CallbackSwitchScreen;
+import tv.pps.module.player.common.ManageObserverable;
+import tv.pps.module.player.localserver.EmsVodInterface;
+import tv.pps.module.player.video.PPSVideoPlayerFragment;
+import tv.pps.module.player.video.bean.PerVideoData;
+import tv.pps.module.player.video.bean.VideoCommonData;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
@@ -28,7 +43,8 @@ import com.pps.news.widget.CommentPanel;
 import com.pps.news.widget.ShareDialog;
 
 public class NewsDetailActivity extends BaseActivity implements TaskListener, 
-	OnClickListener, OnGlobalLayoutListener, Observer {
+	OnClickListener, OnGlobalLayoutListener, Observer,
+	CallbackSetVideoData, CallbackSwitchScreen {
 
 	private TextView txtTitle;
 	private TextView txtDate;
@@ -42,6 +58,9 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 	private ImageView iconShare;
 	private ImageView iconPost;
 	private CommentPanel commentPanel;
+	private View titleView;
+	private View bottomView;
+	private View contentView;
 	
 	private long newsId;
 	private int pageNo = 1;
@@ -50,13 +69,22 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 	private boolean isReady;
 	private boolean isExpand;
 	private News itemNews;
+	private String url;
+	private PPSVideoPlayerFragment videoFragment;
 	
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.news_detail);
 		NewsApplication.getInstance().addObserver(this);
 		itemNews = getIntent().getParcelableExtra(Constants.NEWS_DETAIL_EXTRAS);
 		newsId = itemNews.getInfo_id();
+		url = itemNews.getPfv_url();
+		
+		contentView = findViewById(R.id.content);
+		titleView = findViewById(R.id.news_title);
+		titleView.setVisibility(View.GONE);
+		bottomView = findViewById(R.id.bottom_bar);
 		txtTitle = (TextView)findViewById(R.id.news_detail_title);
 		txtDate = (TextView)findViewById(R.id.news_detail_date);
 		emptyView = (TextView)findViewById(android.R.id.empty);
@@ -78,8 +106,46 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 		ensureUi(itemNews);
 		sendRequest();
 		txtDesc.getViewTreeObserver().addOnGlobalLayoutListener(this);
+		
+		playVideo(); // 加载视频
 	}
 
+	private void playVideo() {
+		// 初始化视频播放
+		EmsVodInterface.getInstance().stopEmsServerTask();
+		videoFragment = new PPSVideoPlayerFragment();
+		videoFragment.setCallbackSetVideoDataListener(this);
+		videoFragment.setCallbackSwitchScreenListener(this);
+		
+		FragmentManager fm = getSupportFragmentManager();
+		FragmentTransaction trans = fm.beginTransaction();
+		trans.add(R.id.container, videoFragment);
+		trans.commit();
+		
+		ManageObserverable.addListener(new CallbackRefeshExternUI() {
+			
+			@Override
+			public void callback_onVideoStart(int index) {
+				titleView.setVisibility(View.GONE);
+			}
+			
+			@Override
+			public void callback_onVideoPause() {
+				titleView.setVisibility(View.VISIBLE);
+			}
+			
+			@Override
+			public void callback_onVideoFinish(int index) {
+				titleView.setVisibility(View.VISIBLE);
+			}
+			
+			@Override
+			public void callback_onVideoError(String errorinfo) {
+				titleView.setVisibility(View.VISIBLE);
+			}
+		});
+	}
+	
 	private void sendRequest() {
 		new GetVideoCommentTask(this, null).execute(String.valueOf(newsId), 
 				String.valueOf(pageNo), 
@@ -134,7 +200,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 			break;
 		case R.id.icon_share:
 			/*SharePopupWindow popup = new SharePopupWindow(this);
-			popup.showPopupWindow(findViewById(R.id.divide));
+			popup.showPopupWindow(findViewById(R.id.bottom_bar));
 			popup.setOnClickListener(this);*/
 			ShareDialog dialog = new ShareDialog(this, itemNews.getDesc_title());
 			dialog.show();
@@ -189,7 +255,6 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 
 	@Override
 	public void update(Observable observable, Object data) {
-		// TODO Auto-generated method stub
 		if (data != null) {
 			TaskData taskData = (TaskData) data; // 重新加载数据
 			if (taskData.getKey().equals(NotificationTask.NOTIFICATION_ADD_COMMENT_TASK)) {
@@ -197,4 +262,56 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 			}
 		}
 	}
+
+	private void showView(boolean isShown) {
+		int visibility = isShown?View.VISIBLE:View.GONE;
+		contentView.setVisibility(visibility);
+		titleView.setVisibility(visibility);
+		bottomView.setVisibility(visibility);
+	}
+	
+	@Override
+	public void callback_switch2FullScreen() {
+		Log.v("VideoFragment", "callback_switch2FullScreen");
+		// 切换到全屏状态
+		showView(false);
+	}
+
+	@Override
+	public void callback_switch2SmallScreen() {
+		Log.v("VideoFragment", "callback_switch2SmallScreen");
+		// 切换到小窗口播放
+		showView(true);
+	}
+
+	@Override
+	public void callback_switch2FloatWindow() {
+	}
+
+	@Override
+	public boolean callback_fillVideoData(String externaldata_requesturl,
+			VideoCommonData videocommondata,
+			ArrayList<PerVideoData> videodata_list,
+			Handler fillvideodata_handler) {
+		PerVideoData pd = new PerVideoData();
+		pd.setVideo_url(url);
+		videodata_list.add(pd);
+		fillvideodata_handler.sendEmptyMessage(CallbackSetVideoData.FILL_VIDEODATA_COMPLETED);
+		return true;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK && 
+				getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+			if (videoFragment.isB_locked()) {
+				ToastUtils.showMessage(this, R.string.news_detail_video_lock_tips, Toast.LENGTH_SHORT);
+				return true;
+			} else {
+				videoFragment.quitFullScreenWhenBackBtnClicked();
+			}
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+	
 }

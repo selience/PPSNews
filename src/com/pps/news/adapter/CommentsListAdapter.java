@@ -22,17 +22,19 @@ import android.widget.TextView;
 
 public class CommentsListAdapter extends BaseAdapter implements Observer {
 
-	private Context context = null;;
-	private List<Comment> comments = null;
-	private ImageCache imageFetcher = null;
+	private Context context;;
+	private List<Comment> comments;
+	private ImageCache imageFetcher;
+	private SparseBooleanArray dataSet;
 	private Handler mHandler = new Handler();
-	private SparseBooleanArray dataSet = new SparseBooleanArray();
-	private Map<String, ImageView> mPhotosMap = new WeakHashMap<String, ImageView>();
+	private Map<String, ImageView> mPhotosMap;
 	
 	public CommentsListAdapter(Context context, List<Comment> datas) {
 		this.context = context;
 		this.comments = datas;
 		this.imageFetcher = ImageCache.getInstance();
+		this.dataSet = new SparseBooleanArray();
+		this.mPhotosMap = new WeakHashMap<String, ImageView>();
 	}
 	
 	@Override
@@ -131,8 +133,7 @@ public class CommentsListAdapter extends BaseAdapter implements Observer {
 			public void run() {
 				for (String item : mPhotosMap.keySet()) {
 					if (item.equals(url)) {
-						ImageView imageView = mPhotosMap.get(item);
-						setPhotos(item, imageView);
+						setPhotos(item, mPhotosMap.get(item));
 					}
 				}
 			}

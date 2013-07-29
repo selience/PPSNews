@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -33,7 +34,8 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 	private ProgressBar mProgressBar;
 	
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.alarm_layout);
 		findViewById(R.id.icon).setOnClickListener(this);
 		imageView = (ImageView) findViewById(R.id.imageView);
@@ -95,9 +97,13 @@ public class AlarmActivity extends BaseActivity implements OnClickListener,Adapt
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		CheckBox ck = (CheckBox) view.findViewById(R.id.ckEnable);
 		Alarm model = (Alarm)parent.getItemAtPosition(position);
-		Intent intent = new Intent(this, AlarmSettingActivity.class);
-		intent.putExtra(Constants.ALARM_EXTRAS, model);
-		startActivity(intent);
+		if (model != null) {
+			model.enabled = ck.isChecked(); // 是否启用
+			Intent intent = new Intent(this, AlarmSettingActivity.class);
+			intent.putExtra(Constants.ALARM_EXTRAS, model);
+			startActivity(intent);
+		}
 	}
 }

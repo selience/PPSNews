@@ -60,7 +60,8 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 	private DaysOfWeek daysOfWeek;
 	
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.alarm_setting);
 		alarm = getIntent().getParcelableExtra(Constants.ALARM_EXTRAS);
 		findViewById(R.id.setting_time).setOnClickListener(this);

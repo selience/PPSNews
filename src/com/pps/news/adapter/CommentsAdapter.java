@@ -22,16 +22,17 @@ import android.widget.TextView;
 
 public class CommentsAdapter extends BaseAdapter implements Observer {
 
-	private Context context = null;;
-	private List<Comment> comments = null;
-	private ImageCache imageFetcher = null;
+	private Context context;;
+	private List<Comment> comments;
+	private ImageCache imageFetcher;
 	private Handler mHandler = new Handler();
-	private Map<String, ImageView> mPhotosMap = new WeakHashMap<String, ImageView>();
+	private Map<String, ImageView> mPhotosMap;
 	
 	public CommentsAdapter(Context context, List<Comment> datas) {
 		this.context = context;
 		this.comments = datas;
 		this.imageFetcher = ImageCache.getInstance();
+		this.mPhotosMap = new WeakHashMap<String, ImageView>();
 	}
 	
 	@Override
@@ -127,15 +128,14 @@ public class CommentsAdapter extends BaseAdapter implements Observer {
 
 	@Override
 	public void update(Observable observable, Object data) {
-		final String url = data.toString();
+		final String imageUrl = data.toString();
 		mHandler.post(new Runnable() {
 			
 			@Override
 			public void run() {
-				for (String item : mPhotosMap.keySet()) {
-					if (item.equals(url)) {
-						ImageView imageView = mPhotosMap.get(item);
-						setPhotos(item, imageView);
+				for (String key : mPhotosMap.keySet()) {
+					if (key.equals(imageUrl)) {
+						setPhotos(key, mPhotosMap.get(key));
 					}
 				}
 			}

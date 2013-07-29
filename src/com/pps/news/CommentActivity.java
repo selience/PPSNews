@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.pps.news.adapter.CommentsAdapter;
 import com.pps.news.app.BaseActivity;
@@ -48,6 +49,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 	private EditText messageView;
 	private View footerView;
 	private FrameLayout moreView;
+	private ProgressBar progress;
 	
 	private int status;
 	private long newsId = 0; //新闻id
@@ -57,7 +59,8 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 	private CommentsAdapter mAdapter;
 	
 	@Override
-	protected void _onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 		setContentView(R.layout.comment_layout);
 		txtTitle = (TextView) findViewById(R.id.title);
 		imageView = (ImageView) findViewById(R.id.icon);
@@ -67,6 +70,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 		listView = (ListView) findViewById(android.R.id.list);
 		imageView.setImageResource(R.drawable.ic_comment);
 		imageView.setOnClickListener(this);
+		progress = (ProgressBar) findViewById(R.id.progress);
 		
 		this.comments = new Group<Comment>();
 		NewsApplication.getInstance().addObserver(this);
@@ -156,12 +160,16 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	public void onTaskStart(String taskName) {
+		if (taskName.equals(GET_COMMENT_TASK)) {
+			progress.setVisibility(View.VISIBLE);
+		}
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public void onTaskFinished(String taskName, Result result) {
 		handlerException(result.getException());
+		progress.setVisibility(View.GONE);
 		if (result.getCode()==HttpStatus.SC_OK) {
 			if (taskName.equals(GET_COMMENT_TASK) && result.getValue()!=null) {
 				Group<Comment> data = (Group<Comment>)result.getValue();

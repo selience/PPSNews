@@ -6,4 +6,9 @@
     <dimen name="alarm_item_padding">20dip</dimen>
     <dimen name="dialog_button_height">45dip</dimen>
     <dimen name="slide_shadow_width">20dip</dimen>
+    
+     <!-- weather start -->
+    <dimen name="weather_details_center_height">286.6dp</dimen>
+    <dimen name="weather_details_bottom_height">173.3dp</dimen>
+    <dimen name="weather_details_img_big_height">146.6dp</dimen>
 </resources>
