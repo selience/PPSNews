@@ -79,6 +79,9 @@ public class ShareDialog extends Dialog implements OnItemClickListener{
 			}
 			else if (packageName.equals("com.tencent.mm")) {
 				list.add(new AppInfo("微信", it));
+				AppInfo info = new AppInfo("朋友圈", it);
+				info.name = "com.tencent.mm.ui.tools.ShareToTimeLineUI";
+				list.add(info);
 			}
 			else if (packageName.equals("com.tencent.mobileqq")) {
 				list.add(new AppInfo("QQ", it));
@@ -119,14 +122,13 @@ public class ShareDialog extends Dialog implements OnItemClickListener{
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		try {
 			AppInfo appItem = appList.get(position);
-			final Intent resolvedIntent = new Intent(newShareIntent(content));
+			final Intent resolvedIntent = newShareIntent(content);
 	        ActivityInfo ai = appItem.resolveInfo.activityInfo;
-	        resolvedIntent.setComponent(new ComponentName(ai.applicationInfo.packageName, ai.name));
+	        resolvedIntent.setComponent(new ComponentName(ai.applicationInfo.packageName, appItem.name));
 	        resolvedIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 	        getContext().startActivity(resolvedIntent);
 	        dismiss();
 		} catch (Exception e) {
-			// TODO: handle exception
 		}
 	}
 	
@@ -185,6 +187,7 @@ public class ShareDialog extends Dialog implements OnItemClickListener{
 	}
 	
 	class AppInfo {
+		String name;
 		
 		String label;
 		
@@ -193,6 +196,7 @@ public class ShareDialog extends Dialog implements OnItemClickListener{
 		public AppInfo(String label, ResolveInfo info) {
 			this.label = label;
 			this.resolveInfo = info;
+			this.name = info.activityInfo.name;
 		}
 	}
 }

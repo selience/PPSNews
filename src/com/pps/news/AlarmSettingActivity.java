@@ -23,9 +23,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.view.ViewStub;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -69,8 +69,6 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 		findViewById(R.id.setting_ringtone).setOnClickListener(this);
 		findViewById(R.id.cancel).setOnClickListener(this);
 		findViewById(R.id.confirm).setOnClickListener(this);
-		ImageView btnDelte = (ImageView)findViewById(R.id.imageView);
-		btnDelte.setOnClickListener(this);
 		
 		txtTime = (TextView) findViewById(R.id.sub_time);
 		txtWeekDays = (TextView) findViewById(R.id.sub_weekdays);
@@ -89,7 +87,8 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			daysOfWeek = alarm.daysOfWeek;
 	    	ckEnable.setChecked(alarm.enabled);
 			ckVibrate.setChecked(alarm.vibrate);
-			btnDelte.setEnabled(true);
+			((ViewStub)findViewById(R.id.toolbar)).inflate();
+			findViewById(R.id.imageView).setOnClickListener(this);
 		} else {
 			alarm = new Alarm();
 			status = SETTING_ALARM_ADD_ITEM;
@@ -97,7 +96,6 @@ public class AlarmSettingActivity extends BaseActivity implements OnClickListene
 			minute = c.get(Calendar.MINUTE);
 			ringtoneUri = alarm.alert;
 			daysOfWeek = alarm.daysOfWeek;
-			btnDelte.setEnabled(false);
 		}
 		updateTime();
 		txtWeekDays.setText(alarm.daysOfWeek.toString(this, true));

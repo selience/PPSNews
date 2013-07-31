@@ -11,7 +11,7 @@ public class Constants {
 	public static final String APP_NAME = "PPSNews";
 
 	// 开发者模式，Release版本更改为false；
-	public static final boolean DEVELOP_MODE = true;
+	public static final boolean DEBUG = false;
 
 	/** 新闻详情传递参数  */
 	public static final String NEWS_ID_EXTRAS = "_newsId";

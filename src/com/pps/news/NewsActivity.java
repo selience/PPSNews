@@ -130,6 +130,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		findViewById(R.id.offline).setOnClickListener(this);
 		findViewById(R.id.rl_alarm).setOnClickListener(this);
 		findViewById(R.id.weather).setOnClickListener(this);
+		findViewById(R.id.ic_alarm).setOnClickListener(this);
 		
 		mPullToRefreshViewPager = (PullToRefreshVerticalViewPager) findViewById(R.id.pull_refresh_vertical_viewpager);
 		mPullToRefreshViewPager.setOnRefreshListener(this);
@@ -198,7 +199,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		String icon = PreferenceUtils.getWeatherIcon(this);
 		String temper = PreferenceUtils.getWeatherTemper(this);
 		weatherCity.setText(city);
-		weatherTemperature.setText(temper==null?"上海":temper);
+		weatherTemperature.setText(temper==null?"未知":temper);
 		if (icon != null) {
 			setPhotos(getWeatherIconUrl(icon), weatherImage);
 		} else {
@@ -258,6 +259,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 			startActivity(new Intent(this, SettingActivity.class));
 			break;
 		case R.id.rl_alarm:
+		case R.id.ic_alarm:
 			startActivity(new Intent(this, AlarmActivity.class));
 			break;
 		case R.id.weather:

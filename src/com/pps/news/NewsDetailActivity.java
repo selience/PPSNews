@@ -18,7 +18,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -272,14 +271,12 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 	
 	@Override
 	public void callback_switch2FullScreen() {
-		Log.v("VideoFragment", "callback_switch2FullScreen");
 		// 切换到全屏状态
 		showView(false);
 	}
 
 	@Override
 	public void callback_switch2SmallScreen() {
-		Log.v("VideoFragment", "callback_switch2SmallScreen");
 		// 切换到小窗口播放
 		showView(true);
 	}

@@ -156,8 +156,8 @@
             android:gravity="center" >
             <ImageView
                 android:id="@+id/weatherImage"
-                android:layout_width="35dip"
-                android:layout_height="35dip"
+                android:layout_width="40dip"
+                android:layout_height="fill_parent"
                 android:layout_centerVertical="true"
                 android:contentDescription="@string/empty"
                 android:scaleType="centerInside"
@@ -195,9 +195,11 @@
             android:gravity="center" >
             <ImageView
                 android:id="@+id/ic_alarm"
-                android:layout_width="48dip"
-                android:layout_height="48dip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:layout_marginRight="5dip"
+                android:clickable="true"
                 android:contentDescription="@string/empty"
                 android:scaleType="center"
                 android:src="@drawable/btn_alarm_selector" />

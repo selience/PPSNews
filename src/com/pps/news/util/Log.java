@@ -2,7 +2,7 @@ package com.pps.news.util;
 
 public class Log {
 	// set the LEVEL with VERBOSE value for inner debug version
-//	public static final int LEVEL = android.util.Log.VERBOSE;
+	//	public static final int LEVEL = android.util.Log.VERBOSE;
 
 	// set the LEVEL with WARN value to disable debug message for release
 	// version

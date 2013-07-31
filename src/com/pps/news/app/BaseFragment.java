@@ -1,11 +1,11 @@
 package com.pps.news.app;
 
+import com.pps.news.util.Log;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import com.pps.news.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +18,7 @@ import android.view.ViewGroup;
  */
 public abstract class BaseFragment extends Fragment {
 
-	private String TAG = BaseFragment.class.getSimpleName();
+	private String TAG = "BaseFragment";
 
 	
 	public final void showFragment(final int pane, final Fragment fragment, final boolean add_to_backstack) {

@@ -45,7 +45,7 @@ import android.util.Log;
  * @description TODO 自定义参数的HttpClient，提供httpGet，httpPost两种传送消息的方式
  */
 public class BetterHttp {
-	private static final boolean DEBUG = Constants.DEVELOP_MODE;
+	private static final boolean DEBUG = Constants.DEBUG;
 	 //日志输出
     private static final String TAG = "BetterHttp";
     

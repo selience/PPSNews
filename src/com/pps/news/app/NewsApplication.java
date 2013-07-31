@@ -2,9 +2,6 @@ package com.pps.news.app;
 
 import java.io.File;
 import java.util.Observer;
-
-import tv.pps.module.player.VideoInit;
-
 import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
 import com.pps.news.location.PPSNewsLocation;
@@ -14,7 +11,6 @@ import com.pps.news.util.FileUtils;
 import com.pps.news.util.ImageCache;
 import com.pps.news.util.Log;
 import com.pps.news.util.UIUtil;
-
 import android.app.Application;
 import android.os.Environment;
 
@@ -38,7 +34,7 @@ public class NewsApplication extends Application {
 	}
 
 	private void initialize() {
-		Log.setLevel(Constants.DEVELOP_MODE);
+		Log.setLevel(Constants.DEBUG);
 		//VideoInit.getInstance().init(this);
 		ImageCache.initInstance("PPSNews"); 
 		PreferenceUtils.setDefaultPreferences(this);
