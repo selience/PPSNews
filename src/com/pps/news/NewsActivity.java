@@ -102,6 +102,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		showWeather();
 		
 		VideoInit.getInstance().init(this);
+		VideoInit.getInstance().setLibDebug(false);
 	}
 
 	private void ensureUi() {

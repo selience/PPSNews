@@ -18,8 +18,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
@@ -44,7 +46,7 @@ import com.pps.news.widget.ShareDialog;
 public class NewsDetailActivity extends BaseActivity implements TaskListener, 
 	OnClickListener, OnGlobalLayoutListener, Observer,
 	CallbackSetVideoData, CallbackSwitchScreen {
-
+	
 	private TextView txtTitle;
 	private TextView txtDate;
 	private TextView emptyView;
@@ -74,6 +76,8 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
+				WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		setContentView(R.layout.news_detail);
 		NewsApplication.getInstance().addObserver(this);
 		itemNews = getIntent().getParcelableExtra(Constants.NEWS_DETAIL_EXTRAS);
@@ -92,6 +96,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 		txtDesc = (TextView)findViewById(R.id.news_detail_desc);
 		txtSummuy = (TextView)findViewById(R.id.summary);
 		iconDown = (ImageView)findViewById(R.id.ic_down);
+		iconDown.setOnClickListener(this);
 		iconBack = (ImageView)findViewById(R.id.icon_back);
 		iconBack.setOnClickListener(this);
 		iconShare = (ImageView)findViewById(R.id.icon_share);
@@ -126,21 +131,25 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 			@Override
 			public void callback_onVideoStart(int index) {
 				titleView.setVisibility(View.GONE);
+				Log.v("news_callback", "onVideoStart");
 			}
 			
 			@Override
 			public void callback_onVideoPause() {
 				titleView.setVisibility(View.VISIBLE);
+				Log.v("news_callback", "onVideoPause");
 			}
 			
 			@Override
 			public void callback_onVideoFinish(int index) {
 				titleView.setVisibility(View.VISIBLE);
+				Log.v("news_callback", "onVideoFinish");
 			}
 			
 			@Override
 			public void callback_onVideoError(String errorinfo) {
 				titleView.setVisibility(View.VISIBLE);
+				Log.v("news_callback", "onVideoError");
 			}
 		});
 	}
@@ -158,9 +167,6 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 			txtCommentNum.setText(String.valueOf(news.getStart_count()));
 			txtSource.setText(getString(R.string.news_detail_source,news.getNews_from()));
 			txtDesc.setText("\u3000\u3000"+news.getDesc_title());
-//			Group<Comment> data = CacheUtil.getCommentCache(newsId);
-//			txtSummuy.setText(data.size()+"");
-//			commentPanel.setItems(CacheUtil.getCommentCache(newsId));
 			onRefresh(CacheUtil.getCommentCache(newsId));
 		}
 	}
@@ -171,6 +177,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 			txtSummuy.setText(data.getTotal()+"");
 			commentPanel.setItems(data);
 		} else {
+			txtSummuy.setText("0");
 			commentPanel.removeAllViews();
 			emptyView.setVisibility(View.VISIBLE);
 		}
@@ -180,7 +187,8 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 		if (!isExpand) {
 			isExpand = true;
 			txtDesc.setMaxLines(lineCount);
-			iconDown.setImageResource(R.drawable.ic_expand);
+			iconDown.setVisibility(View.GONE);
+			//iconDown.setImageResource(R.drawable.ic_expand);
 		} /*else {
 			txtDesc.setMaxLines(maxLine);
 			isExpand = false;
@@ -292,6 +300,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 			Handler fillvideodata_handler) {
 		PerVideoData pd = new PerVideoData();
 		pd.setVideo_url(url);
+		pd.setVideo_name(itemNews.getMain_title());
 		videodata_list.add(pd);
 		fillvideodata_handler.sendEmptyMessage(CallbackSetVideoData.FILL_VIDEODATA_COMPLETED);
 		return true;

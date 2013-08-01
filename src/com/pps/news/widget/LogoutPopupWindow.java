@@ -16,6 +16,7 @@ public class LogoutPopupWindow extends PopupWindow implements android.view.View.
 	private OnClickListener mPositiveClickListener;
 	
 	public LogoutPopupWindow(Context context) {
+		super(context);
 		this.context = context;
 		initialize();
 	}

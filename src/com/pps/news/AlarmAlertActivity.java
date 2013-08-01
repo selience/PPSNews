@@ -1,5 +1,6 @@
 package com.pps.news;
 
+import java.util.Calendar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -15,7 +16,9 @@ import com.pps.news.constant.Constants;
 import com.pps.news.service.AlarmService;
 
 public class AlarmAlertActivity extends BaseActivity implements OnClickListener, OnTouchListener {
-
+	private static final String TIME_HOUER = "kk";
+	private static final String TIME_MINUTE = "mm";
+	
 	private View touchView;
 	private TextView txtHour;
 	private TextView txtMinute;
@@ -41,16 +44,23 @@ public class AlarmAlertActivity extends BaseActivity implements OnClickListener,
 		touchView = findViewById(R.id.touchView);
 		touchView.setOnTouchListener(this);
 		
-		txtHour.setText(DateFormat.format("kk", System.currentTimeMillis()));
-		txtMinute.setText(DateFormat.format("mm", System.currentTimeMillis()));
-		txtDate.setText(DateFormat.format(getText(R.string.alarm_month_and_day), System.currentTimeMillis()));
+		txtHour.setText(formatString(TIME_HOUER, System.currentTimeMillis()));
+		txtMinute.setText(formatString(TIME_MINUTE, System.currentTimeMillis()));
+		txtDate.setText(formatString(getText(R.string.alarm_month_and_day), System.currentTimeMillis()));
 		
 		if (alarm != null) {
-			txtHour.setText(String.valueOf(alarm.hour));
-			txtMinute.setText(String.valueOf(alarm.minutes));
-		}
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, alarm.hour);
+			cal.set(Calendar.MINUTE, alarm.minutes);
+			txtHour.setText(formatString(TIME_HOUER, cal.getTimeInMillis()));
+			txtMinute.setText(formatString(TIME_MINUTE, cal.getTimeInMillis()));
+		} 
 	} 
 
+	private CharSequence formatString(CharSequence inFormat, long inTimeInMillis) {
+		return DateFormat.format(inFormat, inTimeInMillis);
+	}
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
