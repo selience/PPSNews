@@ -32,7 +32,7 @@ public class Constants {
 	public static final String ALARM_ALERT_ACTION = "com.android.alarmclock.ALARM_ALERT";
 
 	/** 自动清空缓存的时间   */
-	public static final long CLEAR_NEWS_CACHE_TIMESTAMP = 7 * 24 * 60 * 60 * 1000;
+	public static final long CLEAR_NEWS_CACHE_TIMESTAMP = 3 * 24 * 60 * 60 * 1000;
 	
 	
 	/** 获取新闻列表 GET请求  */

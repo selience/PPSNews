@@ -1,0 +1,595 @@
+OpenUDID.OpenUDID_manager:
+    public static final java.lang.String PREF_KEY
+    public static final java.lang.String PREFS_NAME
+    public static final java.lang.String TAG
+    private static final boolean LOG
+android.annotation.SuppressLint
+android.annotation.TargetApi
+cn.com.admaster.mobile.tracking.api.ConnectionQueue:
+    private java.lang.String appKey_
+    private java.lang.String serverClickURL_
+    private java.lang.String serverExposeURL_
+    216:217:public void setAppKey(java.lang.String)
+    224:225:public void setServerClickURL(java.lang.String)
+    228:229:public void updateLocation(android.content.Context)
+cn.com.admaster.mobile.tracking.api.Countly:
+    public static final java.lang.String TRACKING_MAC
+    public static final java.lang.String TRACKING_LOCATION
+    public static final java.lang.String TRACKING_OPENUDID
+    public static final java.lang.String TRACKING_OS_VERION
+    public static final java.lang.String TRACKING_DEVICE
+    public static final java.lang.String TRACKING_WIFI
+    public static final java.lang.String TRACKING_NAME
+    public static final java.lang.String TRACKING_KEY
+    48:48:public java.util.Map getMetrics()
+    61:61:public boolean isTrackLocation()
+    66:75:public void setTrackLocation(boolean,android.content.Context)
+cn.com.admaster.mobile.tracking.api.DeviceInfo:
+    public static java.lang.String mericCache
+    351:351:DeviceInfo()
+    360:360:public static java.lang.String getOS()
+    372:379:public static java.lang.String getResolution(android.content.Context)
+    383:384:public static java.lang.String getCarrier(android.content.Context)
+    388:389:public static java.lang.String getLocale()
+    393:399:public static java.lang.String appVersion(android.content.Context)
+    463:481:public static java.lang.String getIP(android.content.Context)
+    485:492:public static java.lang.String getModel()
+    503:522:public static boolean isNetworkAvailable(android.content.Context)
+    594:595:public static void invalidateCache()
+cn.com.admaster.mobile.tracking.api.Event:
+    public java.lang.String type
+    612:612:public java.lang.String getKey()
+    616:616:public java.lang.String getType()
+cn.com.admaster.mobile.tracking.api.TrackJSInterface
+cn.com.admaster.mobile.tracking.api.TrackJSInterface$1
+cn.com.admaster.mobile.tracking.api.TrackJSInterface$2
+com.miaozhen.monitor.MZDeviceInfoHandler:
+    public static final java.lang.String NetworkType_NotActive
+    public static final java.lang.String NetworkType_WIFI
+    public static final java.lang.String NetworkType_Mobile
+com.miaozhen.monitor.MZLogOperation:
+    public static final java.lang.String TABLE_NAME
+    101:119:public synchronized java.util.ArrayList readLog()
+com.miaozhen.monitor.MZMonitor:
+    15:15:public MZMonitor()
+    33:34:public static void reportAction(android.content.Context,java.lang.String,java.lang.String)
+    67:78:public static void reSendReport(android.content.Context)
+com.miaozhen.monitor.MZNetworkConnector:
+    private static final int WIFI_TIMEOUT
+    private static final int MOBILE_TIMEOUT
+    private static final int REDIRECT_TIMEOUT
+com.miaozhen.monitor.MZReporter:
+    private static final java.lang.String VAL_ENCODING
+    private static final java.lang.String MZ_PARAM_APP_NAME
+    private static final java.lang.String MZ_PARAM_PACKAGE_NAME
+    private static final java.lang.String MZ_PARAM_MD5_IMEI
+    private static final java.lang.String MZ_PARAM_TIMESTAMP
+    private static final java.lang.String MZ_PARAM_RETRY_TIME
+    private static final java.lang.String MZ_PARAM_OPENUDID
+    private static final java.lang.String MZ_PARAM_ANDROID_ID
+    private static final java.lang.String MZ_PARAM_NETWORK_TYPE
+    private static final java.lang.String MZ_PARAM_IESID
+    private static final java.lang.String MZ_PARAM_DEVICE_INFO
+com.miaozhen.monitor.MZSQLiteHelper:
+    public static final java.lang.String CREATE_TABLE_SQL
+com.miaozhen.monitor.MZUtils:
+    5:5:public MZUtils()
+    43:43:public static boolean isExpired(java.lang.Integer)
+com.pps.news.AlarmAlertActivity:
+    private static final java.lang.String TIME_HOUER
+    private static final java.lang.String TIME_MINUTE
+com.pps.news.AlarmSettingActivity:
+    private static final int SETTING_DIALOG_ID_TIME
+    private static final int SETTING_DIALOG_ID_DELETE
+    private static final int SETTING_ALARM_EDIT_ITEM
+    private static final int SETTING_ALARM_ADD_ITEM
+com.pps.news.BuildConfig
+com.pps.news.CommentActivity:
+    private static final java.lang.String ADD_COMMENT_TASK
+    private static final java.lang.String GET_COMMENT_TASK
+com.pps.news.CommentEditActivity:
+    private static final java.lang.String GET_COMMENT_TASK
+    private static final java.lang.String DELETE_COMMENT_TASK
+com.pps.news.LoginActivity:
+    138:138:public void onRequestLoading(long,long)
+    142:143:public void onCancel()
+com.pps.news.NewsActivity:
+    private static final java.lang.String GET_NEWS_LIST_TASK
+    private static final java.lang.String GET_SELF_COMMENT_TASK
+    private static final java.lang.String GET_WEATHER_TASK
+    456:456:public void onRequestLoading(long,long)
+    460:460:public void onCancel()
+com.pps.news.R:
+    10:10:public R()
+com.pps.news.RegisterActivity:
+    108:108:public void onRequestLoading(long,long)
+    113:114:public void onCancel()
+com.pps.news.SettingActivity:
+    private static final java.lang.String TAG
+    private static final int MESSAGE_COLLECT_CACHE_SIZE
+com.pps.news.app.BaseActivity:
+    68:73:public final void showFragment(int,android.support.v4.app.Fragment,boolean)
+com.pps.news.app.BaseFragment:
+    25:31:public final void showFragment(int,android.support.v4.app.Fragment,boolean)
+    public abstract android.view.View onCreateView(android.view.LayoutInflater,android.view.ViewGroup,android.os.Bundle)
+com.pps.news.bean.Alarm:
+    private static final java.lang.String ALARM_ALERT_SILENT
+com.pps.news.bean.Alarm$Columns
+com.pps.news.bean.Comment:
+    74:74:public int getRn()
+    106:106:public int getP_id()
+    146:146:public int getUser_type()
+    154:154:public int getCmt_flag()
+    162:162:public int getCmd_type()
+    170:170:public int getChannel_id()
+    178:178:public java.lang.String getUrllink()
+    186:186:public java.lang.String getPic()
+    194:194:public int getReply_count()
+    202:202:public int getVot_up()
+    210:210:public int getVot_down()
+    218:218:public int getIs_top_quality()
+    226:226:public java.lang.String getPinglun()
+    234:234:public java.lang.String getTimeline()
+    242:242:public int getReply_info_total()
+    246:247:public void setReply_info_total(int)
+com.pps.news.bean.Group:
+    27:28:public Group(java.util.Collection)
+com.pps.news.bean.News:
+    public static final int NEWS_POSITION_FLAG_TOP
+    public static final int NEWS_POSITION_FLAG_LEFT_TOP
+    public static final int NEWS_POSITION_FLAG_RIGHT_TOP
+    public static final int NEWS_POSITION_FLAG_LEFT_BOTTOM
+    public static final int NEWS_POSITION_FLAG_RIGHT_BOTTOM
+    78:78:public int getShow_order()
+    94:94:public java.lang.String getUrl_key()
+    118:118:public java.lang.String getImage_url()
+    134:134:public java.lang.String getLink_url()
+    142:142:public long getStart_time()
+    150:150:public long getEnd_time()
+    166:166:public java.lang.String getSub_title()
+com.pps.news.bean.Result:
+    private java.lang.String error
+    49:49:public java.lang.String getError()
+    53:54:public void setError(java.lang.String)
+    58:72:public void setErrorCode()
+com.pps.news.bean.Weather:
+    68:68:public java.lang.String getPmInfo()
+com.pps.news.common.AlarmAlertWakeLock:
+    private static final java.lang.String LOGTAG
+    11:11:public AlarmAlertWakeLock()
+com.pps.news.constant.Constants:
+    public static final java.lang.String APP_NAME
+    public static final boolean DEBUG
+    public static final java.lang.String NEWS_ID_EXTRAS
+    public static final java.lang.String NEWS_DETAIL_EXTRAS
+    public static final int NEWS_DETAIL_SELF_COMMENT
+    public static final int NEWS_DETAIL_FRIEND_COMMENT
+    public static final java.lang.String NEWS_DETAIL_PAGESIZE
+    public static final java.lang.String COMMENTS_LIST_PAGESIZE
+    public static final java.lang.String ALARM_EXTRAS
+    public static final java.lang.String ALARM_INTENT_EXTRA
+    public static final java.lang.String ALARM_ALERT_ACTION
+    public static final long CLEAR_NEWS_CACHE_TIMESTAMP
+    9:9:public Constants()
+com.pps.news.constant.PreferenceUtils:
+    private static final java.lang.String PREFERENCE_FILE_NAME
+    private static final java.lang.String PREFERENCE_USER_ID
+    private static final java.lang.String PREFERENCE_USER_NAME
+    private static final java.lang.String PREFERENCE_USER_PASSWORD
+    private static final java.lang.String PREFERENCE_USER_AVATAR
+    private static final java.lang.String PREFERENCE_USER_NICKNAME
+    private static final java.lang.String PREFERENCE_USER_TYPE
+    private static final java.lang.String PREFERENCE_USER_LEVEL
+    private static final java.lang.String PREFERENCE_IS_AUTO_LOGIN
+    private static final java.lang.String PREFERENCE_IS_AUTO_CLEAR_CACHE
+    private static final java.lang.String PREFERENCE_LAST_AUTO_CLEAR_TIMESTAMP
+    private static final java.lang.String PREFERENCE_LAST_UPDATE_TIMESTAMP
+    private static final java.lang.String PREFERENCE_WEATHER_CITY
+    private static final java.lang.String PREFERENCE_WEATHER_ICON
+    private static final java.lang.String PREFERENCE_WEATHER_TEMPERATURE
+    20:21:private PreferenceUtils()
+    180:183:public static void clearAll(android.content.Context)
+com.pps.news.database.DatabaseHelper:
+    50:52:public long update(int,boolean)
+com.pps.news.database.SQLiteHelper:
+    private static final java.lang.String DATABASE_NAME
+    private static final int DATABASE_VERSION
+    public static final java.lang.String ALARM_TABLE
+com.pps.news.fragment.NewsFragment:
+    private static final java.lang.String FRAGMENT_ARGUMENT_EXTRAS
+com.pps.news.network.BetterHttp:
+    private static final boolean DEBUG
+    private static final java.lang.String TAG
+    public static final int CONNECTION_TIMEOUT
+    public static final int CON_TIME_OUT_MS
+    public static final int SO_TIME_OUT_MS
+    public static final int MAX_CONNECTIONS_PER_HOST
+    public static final int MAX_TOTAL_CONNECTIONS
+com.pps.news.network.RequestExecutor:
+    private static final int THREAD_NUMBER
+    14:14:public RequestExecutor()
+com.pps.news.parser.GroupParser:
+    18:29:public com.pps.news.bean.Group parse(org.json.JSONObject)
+com.pps.news.service.AlarmService:
+    private static final boolean DEBUG
+    private static final java.lang.String TAG
+    private static final int ALARM_TIMEOUT_SECONDS
+com.pps.news.task.GenericTask:
+    40:43:public void cancelTask(boolean)
+    50:50:protected java.lang.String getTaskName()
+com.pps.news.task.NotificationTask:
+    public static final java.lang.String NOTIFICATION_ADD_COMMENT_TASK
+    public static final java.lang.String NOTIFICATION_DELETE_COMMENT_TASK
+com.pps.news.task.NotificationTask$TaskData:
+    36:36:public java.lang.Object getValue()
+com.pps.news.test.TestFragment
+com.pps.news.test.TestFragmentAdapter
+com.pps.news.util.CacheUtil:
+    private static final java.lang.String CACHE_FILE_APPENDIX_NEWS_LIST
+    private static final java.lang.String CACHE_FILE_APPENDIX_COMMENT
+    private static final java.lang.String CACHE_FILE_APPENDIX_WEATHER
+    public static final java.lang.String CACHE_DIRECTORY
+    24:24:public CacheUtil()
+    55:56:public static void writeBoolean(java.io.DataOutputStream,boolean)
+    59:59:public static boolean readBoolean(java.io.DataInputStream)
+    82:83:public static void writeFloat(java.io.DataOutputStream,float)
+    86:86:public static float readFloat(java.io.DataInputStream)
+    91:92:public static void writeDouble(java.io.DataOutputStream,double)
+    95:95:public static java.lang.Double readDouble(java.io.DataInputStream)
+com.pps.news.util.DateUtils:
+    private static final java.lang.String M12
+    private static final java.lang.String M24
+    21:22:private DateUtils()
+com.pps.news.util.FileUtils:
+    12:12:public FileUtils()
+    43:58:public static void cleanCacheFile(java.lang.String,java.lang.String)
+com.pps.news.util.ImageCache:
+    private static final java.lang.String TAG
+    private static final java.lang.String NOMEDIA
+    public static final java.lang.String CACHE_DIRECTORY
+    134:135:public boolean invalidate(java.lang.String)
+com.pps.news.util.ImageUtils
+com.pps.news.util.Log:
+    3:3:public Log()
+    22:31:public static void v(java.lang.String)
+    46:49:public static void v(java.lang.String,java.lang.String,java.lang.Throwable)
+    54:63:public static void d(java.lang.String)
+    76:79:public static void d(java.lang.String,java.lang.String,java.lang.Throwable)
+    90:93:public static void i(java.lang.String,java.lang.String,java.lang.Throwable)
+    97:103:public static void w(java.lang.String,java.lang.String)
+    131:134:public static varargs void v(java.lang.String,java.lang.String,java.lang.Object[])
+    138:141:public static varargs void v(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+    146:149:public static varargs void d(java.lang.String,java.lang.String,java.lang.Object[])
+    153:156:public static varargs void d(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+    161:164:public static varargs void i(java.lang.String,java.lang.String,java.lang.Object[])
+    168:171:public static varargs void i(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+    175:178:public static varargs void w(java.lang.String,java.lang.String,java.lang.Object[])
+    182:185:public static varargs void w(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+    189:192:public static varargs void e(java.lang.String,java.lang.String,java.lang.Object[])
+    196:199:public static varargs void e(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+com.pps.news.util.ParcelUtil:
+    12:12:public ParcelUtil()
+    33:38:public static void writeBooleanToParcel(android.os.Parcel,boolean)
+    41:45:public static boolean readBooleanFromParcel(android.os.Parcel)
+    66:67:public static void writeFloatToParcel(android.os.Parcel,float)
+    70:70:public static float readFloatFromParcel(android.os.Parcel)
+    74:75:public static void writeDoubleToParcel(android.os.Parcel,double)
+    78:78:public static java.lang.Double readDoubleFromParcel(android.os.Parcel)
+    84:84:public static android.os.Parcelable readParcelableFromParcel(android.os.Parcel,java.lang.ClassLoader)
+    89:90:public static void writeParcelableToParcel(android.os.Parcel,android.os.Parcelable,int)
+com.pps.news.util.ToastUtils:
+    10:11:private ToastUtils()
+com.pps.news.util.UIUtil:
+    34:35:private UIUtil()
+    38:38:public static int sdkVersion()
+    42:42:public static boolean isNullOrEmpty(java.lang.CharSequence)
+    77:78:public static int px2dip(android.content.Context,float)
+    177:181:public static android.content.Intent newShareIntent(android.content.Context,java.lang.String,java.lang.String,java.lang.String)
+com.pps.news.util.Utility
+com.pps.news.weather.WeatherActivity:
+    private static final java.lang.String GET_WEATHER_TASK
+com.pps.news.widget.BaseAlertDialog:
+    85:86:public com.pps.news.widget.BaseAlertDialog setNegativeClickListener(android.content.DialogInterface$OnClickListener)
+com.pps.news.widget.SharePopupWindow
+com.pps.news.widget.SlideNavigationView:
+    private static final java.lang.String TAG
+    public static final int SLIDING_WINDOW
+    public static final int SLIDING_CONTENT
+    public static final int TOUCHMODE_MARGIN
+    public static final int TOUCHMODE_FULLSCREEN
+    public static final int LEFT
+    public static final int RIGHT
+    141:143:public SlideNavigationView(android.app.Activity,int)
+    192:193:public void attachToActivity(android.app.Activity,int)
+    203:238:public void attachToActivity(android.app.Activity,int,boolean)
+    265:265:public android.view.View getContent()
+    292:292:public android.view.View getMenu()
+    302:303:public void setSecondaryMenu(int)
+    311:313:public void setSecondaryMenu(android.view.View)
+    320:320:public android.view.View getSecondaryMenu()
+    330:331:public void setSlidingEnabled(boolean)
+    339:339:public boolean isSlidingEnabled()
+    358:358:public int getMode()
+    367:378:public void setStatic(boolean)
+    384:385:public void showMenu()
+    401:402:public void showSecondaryMenu()
+    411:412:public void showSecondaryMenu(boolean)
+    434:435:public void toggle()
+    465:465:public boolean isSecondaryMenuShowing()
+    474:474:public int getBehindOffset()
+    508:509:public void setAboveOffset(int)
+    517:519:public void setAboveOffsetRes(int)
+    528:541:public void setBehindWidth(int)
+    550:552:public void setBehindWidthRes(int)
+    560:560:public float getBehindScrollScale()
+    570:573:public void setBehindScrollScale(float)
+    581:582:public void setBehindCanvasTransformer(com.pps.news.widget.SlideNavigationView$CanvasTransformer)
+    590:590:public int getTouchModeAbove()
+    616:621:public void setTouchModeBehind(int)
+    647:648:public void setSecondaryShadowDrawable(int)
+    656:657:public void setSecondaryShadowDrawable(android.graphics.drawable.Drawable)
+    683:684:public void setFadeEnabled(boolean)
+    693:694:public void setFadeDegree(float)
+    702:703:public void setSelectorEnabled(boolean)
+    711:712:public void setSelectedView(android.view.View)
+    720:721:public void setSelectorDrawable(int)
+    729:730:public void setSelectorBitmap(android.graphics.Bitmap)
+    738:739:public void addIgnoredView(android.view.View)
+    747:748:public void removeIgnoredView(android.view.View)
+    754:755:public void clearIgnoredViews()
+    764:765:public void setOnOpenListener(com.pps.news.widget.SlideNavigationView$OnOpenListener)
+    774:775:public void setOnCloseListener(com.pps.news.widget.SlideNavigationView$OnCloseListener)
+    783:784:public void setOnOpenedListener(com.pps.news.widget.SlideNavigationView$OnOpenedListener)
+    792:793:public void setOnClosedListener(com.pps.news.widget.SlideNavigationView$OnClosedListener)
+com.pps.news.widget.SlideNavigationView$1:
+    public static final int POSITION_OPEN
+    public static final int POSITION_CLOSE
+com.pps.news.widget.SlideRelativeLayout
+com.pps.news.widget.SlideRelativeLayout$1
+com.pps.news.widget.SlideViewAbove:
+    private static final java.lang.String TAG
+    private static final boolean DEBUG
+    private static final boolean USE_CACHE
+    private static final int MAX_SETTLE_DURATION
+    private static final int MIN_DISTANCE_FOR_FLING
+    private static final int INVALID_POINTER
+    261:262:public void setOnOpenedListener(com.pps.news.widget.SlideNavigationView$OnOpenedListener)
+    265:266:public void setOnClosedListener(com.pps.news.widget.SlideNavigationView$OnClosedListener)
+    281:284:public void addIgnoredView(android.view.View)
+    287:288:public void removeIgnoredView(android.view.View)
+    291:292:public void clearIgnoredViews()
+    324:324:public int getContentLeft()
+    349:355:public int getChildWidth(int)
+    360:360:public boolean isSlidingEnabled()
+    364:365:public void setSlidingEnabled(boolean)
+    374:375:void smoothScrollTo(int,int)
+    438:438:public android.view.View getContent()
+    480:482:public void setAboveOffset(int)
+    570:570:public int getTouchMode()
+    911:928:protected boolean canScroll(android.view.View,boolean,int,int,int)
+com.pps.news.widget.SlideViewAbove$SimpleOnPageChangeListener:
+    145:145:public void onPageScrollStateChanged(int)
+com.pps.news.widget.SlideViewBehind:
+    private static final java.lang.String TAG
+    private static final int MARGIN_THRESHOLD
+    private android.graphics.drawable.Drawable mSecondaryShadowDrawable
+    50:51:public void setCanvasTransformer(com.pps.news.widget.SlideNavigationView$CanvasTransformer)
+    70:70:public android.view.View getContent()
+    78:82:public void setSecondaryContent(android.view.View)
+    85:85:public android.view.View getSecondaryContent()
+    161:161:public int getMode()
+    165:166:public void setScrollScale(float)
+    169:169:public float getScrollScale()
+    178:180:public void setSecondaryShadowDrawable(android.graphics.drawable.Drawable)
+    188:189:public void setFadeEnabled(boolean)
+    192:195:public void setFadeDegree(float)
+    272:273:public void setTouchMode(int)
+    369:370:public void setSelectorEnabled(boolean)
+    373:382:public void setSelectedView(android.view.View)
+    391:393:public void setSelectorBitmap(android.graphics.Bitmap)
+com.pps.news.widget.WeekPickerDialog:
+    115:115:public com.pps.news.bean.DaysOfWeek getDaysOfWeek()
+org.OpenUDID.OpenUDID_manager:
+    public static final java.lang.String PREF_KEY
+    public static final java.lang.String PREFS_NAME
+    public static final java.lang.String TAG
+    private static final boolean LOG
+org.openudid.OpenUDID_manager:
+    public static final java.lang.String PREF_KEY
+    public static final java.lang.String PREFS_NAME
+    public static final java.lang.String TAG
+    private static final boolean LOG
+tv.pps.modules.R:
+    9:9:public R()
+tv.pps.modules.deliver.BaseDeliverMap:
+    22:27:public java.lang.String get(java.lang.String)
+    32:33:public void remove(java.lang.String)
+    37:38:public void clear()
+    1:1:public bridge synthetic java.lang.Object get(java.lang.Object)
+    1:1:public bridge synthetic void remove(java.lang.Object)
+    1:1:public bridge synthetic void put(java.lang.Object,java.lang.Object)
+tv.pps.modules.deliver.DeliverMap
+tv.pps.modules.deliver.FileUtils
+tv.pps.modules.deliver.PPSDataUtils
+tv.pps.modules.deliver.PPSDeliverData
+tv.pps.modules.deliver.PPSDeliverMap:
+    private static final java.lang.String AM
+    private static final java.lang.String AP
+    private static final java.lang.String TAG
+    25:28:public PPSDeliverMap(java.lang.String,java.util.HashMap)
+    45:45:public java.lang.String get(java.lang.String)
+    50:51:public void remove(java.lang.String)
+    55:56:public void clear()
+    59:59:public final java.util.HashMap snapshot()
+    64:85:public final void sendMobileMessageByGet(android.content.Context)
+    89:99:public final void sendMobileMessageByPost(android.content.Context)
+    103:123:public final void sendPadMessageByGet(android.content.Context)
+    127:137:public final void sendPadMessageByPost(android.content.Context)
+tv.pps.modules.deliver.SharedPreferencesHelper
+tv.pps.modules.listlogic.ListBinaryResponseHandler
+tv.pps.modules.listlogic.ListClient
+tv.pps.modules.listlogic.ListClient$1
+tv.pps.modules.listlogic.ListClient$2
+tv.pps.modules.listlogic.ListClient$InflatingEntity
+tv.pps.modules.listlogic.ListClientRequest
+tv.pps.modules.listlogic.ListClientRequestParams
+tv.pps.modules.listlogic.ListClientRequestParams$FileWrapper
+tv.pps.modules.listlogic.ListClientSync
+tv.pps.modules.listlogic.ListClientSync$1
+tv.pps.modules.listlogic.ListJsonResponseHandler
+tv.pps.modules.listlogic.ListLogic
+tv.pps.modules.listlogic.ListMultipartEntity
+tv.pps.modules.listlogic.ListPersistentCookieStore
+tv.pps.modules.listlogic.ListResponseHandler
+tv.pps.modules.listlogic.ListResponseHandler$1
+tv.pps.modules.listlogic.ListRetryHandler
+tv.pps.modules.listlogic.ListSerializableCookie
+tv.pps.modules.listlogic.Log
+tv.pps.vipmodule.R:
+    9:9:public R()
+tv.pps.vipmodule.log.Log:
+    public static final int LEVEL
+    3:3:public Log()
+    21:21:public static void v(java.lang.String)
+    33:33:public static void v(java.lang.String,java.lang.String)
+    39:39:public static void v(java.lang.String,java.lang.String,java.lang.Throwable)
+    53:53:public static void d(java.lang.String)
+    69:69:public static void d(java.lang.String,java.lang.String,java.lang.Throwable)
+    80:80:public static void i(java.lang.String,java.lang.String)
+    86:86:public static void i(java.lang.String,java.lang.String,java.lang.Throwable)
+    91:96:public static void w(java.lang.String,java.lang.String)
+    100:102:public static void w(java.lang.String,java.lang.String,java.lang.Throwable)
+    107:112:public static void e(java.lang.String,java.lang.String)
+    116:118:public static void e(java.lang.String,java.lang.String,java.lang.Throwable)
+    127:127:public static varargs void v(java.lang.String,java.lang.String,java.lang.Object[])
+    134:134:public static varargs void v(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+    142:142:public static varargs void d(java.lang.String,java.lang.String,java.lang.Object[])
+    149:149:public static varargs void d(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+    157:157:public static varargs void i(java.lang.String,java.lang.String,java.lang.Object[])
+    164:164:public static varargs void i(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+    169:171:public static varargs void w(java.lang.String,java.lang.String,java.lang.Object[])
+    176:178:public static varargs void w(java.lang.String,java.lang.Throwable,java.lang.String,java.lang.Object[])
+    183:185:public static varargs void e(java.lang.String,java.lang.String,java.lang.Object[])
+tv.pps.vipmodule.vip.AES_Encrypt_Decrypt
+tv.pps.vipmodule.vip.AccountVerify:
+    public static final java.lang.String OPT_NORMAL
+    public static final java.lang.String OPT_SILVER
+    public static final java.lang.String OPT_GOLD
+    private java.lang.String mCID
+    67:67:public java.lang.String getmPassword()
+    71:72:public void setmPassword(java.lang.String)
+    75:75:public java.lang.String getmCID()
+    79:80:public void setmCID(java.lang.String)
+    91:91:public java.lang.String getmSecond()
+    95:96:public void setmSecond(java.lang.String)
+    135:135:public java.lang.String getmDay()
+    143:143:public java.lang.String getmGift()
+    147:148:public void setmGift(java.lang.String)
+    151:151:public boolean ismSkipAD()
+    159:159:public java.lang.String getmAuthCookie()
+    167:179:public void clear()
+tv.pps.vipmodule.vip.bean.UserInfo:
+    private int subscribeNum
+    private int videoNum
+    private int userScore
+    private int userGrade
+    private int channelNum
+    private int albumNum
+    private java.lang.String userID
+    private java.lang.String nickName
+    private java.lang.String userFace
+    private java.lang.String userSex
+    private java.lang.String password
+    private boolean rememberPWD
+    private boolean autoLogin
+    private static final java.lang.String ENCRYPT_SEED
+    27:27:public int getSubscribeNum()
+    30:31:public void setSubscribeNum(int)
+    33:33:public int getVideoNum()
+    36:37:public void setVideoNum(int)
+    39:39:public int getUserScore()
+    42:43:public void setUserScore(int)
+    45:45:public int getUserGrade()
+    48:49:public void setUserGrade(int)
+    51:51:public int getChannelNum()
+    54:55:public void setChannelNum(int)
+    57:57:public int getAlbumNum()
+    60:61:public void setAlbumNum(int)
+    63:63:public java.lang.String getUserID()
+    66:67:public void setUserID(java.lang.String)
+    75:75:public java.lang.String getNickName()
+    78:79:public void setNickName(java.lang.String)
+    81:81:public java.lang.String getUserFace()
+    84:85:public void setUserFace(java.lang.String)
+    87:87:public java.lang.String getUserSex()
+    90:91:public void setUserSex(java.lang.String)
+    93:99:public java.lang.String getPassword()
+    102:109:public void setPassword(java.lang.String)
+    111:111:public boolean isRememberPWD()
+    114:115:public void setRememberPWD(boolean)
+    117:117:public boolean isAutoLogin()
+    120:121:public void setAutoLogin(boolean)
+tv.pps.vipmodule.vip.connector.HTTPConnector:
+    public static final int RESPONSE_ERROR_CODE_TIMEOUT
+    private static final int RESPONSE_ERROR_CODE_NETWORK_DISABLE
+    private static final int TIMEOUT
+    private static final java.lang.String EXCEPTION_SERVER_ERROR
+    private static final java.lang.String EXCEPTION_NETWORK_DISABLE
+    64:65:public HTTPConnector()
+tv.pps.vipmodule.vip.connector.KeyValuePair:
+    14:15:public void setKey(java.lang.Object)
+    20:21:public void setValue(java.lang.Object)
+tv.pps.vipmodule.vip.exception.VipExceptionHandler
+tv.pps.vipmodule.vip.exception.VipExceptionHandler$1
+tv.pps.vipmodule.vip.observers.ObserverVip
+tv.pps.vipmodule.vip.observers.ObserverVip$onLogonStateChangedListener
+tv.pps.vipmodule.vip.protol.BaseProtocol:
+    protected static final java.lang.String VIP_REQUEST_SUCCESS
+    static final java.lang.String AGENT_TYPE
+    java.lang.String fileName
+    80:81:public void setDownloadListener(tv.pps.vipmodule.vip.connector.HTTPConnector$DownloadListener)
+    109:125:public varargs tv.pps.vipmodule.vip.connector.KeyValuePair postWithFile(java.io.File,java.lang.Object[])
+    190:191:void setTask(java.util.concurrent.FutureTask)
+    195:196:public void cancel()
+tv.pps.vipmodule.vip.protol.BaseProtocol$RequestCallBack:
+    public abstract void onRequestLoading(long,long)
+    public abstract void onCancel()
+tv.pps.vipmodule.vip.protol.ExecutableRequestCallback:
+    51:58:public void onRequestLoading(long,long)
+    61:68:public void onCancel()
+tv.pps.vipmodule.vip.protol.ExecutableRequestCallback$4
+tv.pps.vipmodule.vip.protol.ExecutableRequestCallback$5
+tv.pps.vipmodule.vip.protol.Protocol
+tv.pps.vipmodule.vip.protol.ProtocolLogout:
+    static final java.lang.String TAG
+tv.pps.vipmodule.vip.protol.ProtocolUpdateUserInfo
+tv.pps.vipmodule.vip.protol.ProtocolUpdateUserInfo$1
+tv.pps.vipmodule.vip.protol.ProtocolUserInfo
+tv.pps.vipmodule.vip.protol.ProtocolUserInfo$1
+tv.pps.vipmodule.vip.utils.AES_Encrypt_Decrypt
+tv.pps.vipmodule.vip.utils.Common:
+    6:6:public Common()
+    16:18:public static void init(java.lang.String,java.lang.String)
+    25:26:public static void setsUrlAnalysisLoginOper(java.lang.String)
+    33:34:public static void setsUrlAnalysisLoginError(java.lang.String)
+    56:60:public static java.util.HashMap getLogoutMap(java.lang.String)
+tv.pps.vipmodule.vip.utils.RuntimeUtils:
+    8:8:public RuntimeUtils()
+    10:12:public static void main(java.lang.String[])
+tv.pps.vipmodule.vip.utils.SdkUtils
+tv.pps.vipmodule.vip.utils.ThreadPool:
+    7:7:public ThreadPool()
+tv.pps.vipmodule.vip.utils.UserInfoCheck
+tv.pps.vipmodule.vip.utils.Utils:
+    12:12:public Utils()
+    22:30:public static final java.lang.String getApplicationVersionName(android.content.Context)
+    40:40:public static final java.lang.String getOSLevel()
+    50:54:public static final java.lang.String getLocalModel()
+    58:75:public static final java.lang.String MD5(java.lang.String)
+    85:86:public static final java.lang.String getIPStr(android.content.Context)
+    97:105:public static final int getIpAddress(android.content.Context)
+    110:114:public static java.lang.String getLocalManufacturer()
+    117:126:public static java.lang.String gbEncoding(java.lang.String)
+    129:133:public static void checkIfRunOnUiThread(android.content.Context)
+tv.pps.vipmodule.vip.utils.XTextUtils:
+    3:3:public XTextUtils()

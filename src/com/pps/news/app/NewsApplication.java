@@ -35,7 +35,6 @@ public class NewsApplication extends Application {
 
 	private void initialize() {
 		Log.setLevel(Constants.DEBUG);
-		//VideoInit.getInstance().init(this);
 		ImageCache.initInstance("PPSNews"); 
 		PreferenceUtils.setDefaultPreferences(this);
 		PreferenceUtils.obtainUser(); // 获取用户状态
@@ -44,23 +43,24 @@ public class NewsApplication extends Application {
 	}
 
 	private void clearNews() {
-		// 自动清除过期新闻
-		long lastTimeStamp = PreferenceUtils.getLastClearTimeStamp(this);
-		boolean isFlag = System.currentTimeMillis() - lastTimeStamp >= Constants.CLEAR_NEWS_CACHE_TIMESTAMP;
-		if (PreferenceUtils.getIsAutoClearCache(this) && isFlag) {
-			Thread thread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					if (UIUtil.isSDCardAvailable()) {
-						ImageCache.getInstance().clear();
-						File dirPath = new File(Environment.getExternalStorageDirectory(), CacheUtil.CACHE_DIRECTORY);
-						FileUtils.deleteAllFile(dirPath.getAbsolutePath()); 
-						PreferenceUtils.storeLastClearCacheTimeStamp(NewsApplication.this, System.currentTimeMillis());
+		long nowTimestamp = System.currentTimeMillis();
+		long lastCleanTimestamp = PreferenceUtils.getLastClearTimeStamp(this);
+		if (lastCleanTimestamp>nowTimestamp || (nowTimestamp-lastCleanTimestamp)>Constants.CLEAR_NEWS_CACHE_TIMESTAMP) {
+			if (PreferenceUtils.getIsAutoClearCache(this)) { // 自动清除过期新闻
+				Thread thread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						if (UIUtil.isSDCardAvailable()) {
+							ImageCache.getInstance().clear();
+							File dirPath = new File(Environment.getExternalStorageDirectory(), CacheUtil.CACHE_DIRECTORY);
+							FileUtils.deleteAllFile(dirPath.getAbsolutePath()); 
+							PreferenceUtils.storeLastClearCacheTimeStamp(NewsApplication.this, System.currentTimeMillis());
+						}
 					}
-				}
-			});
-			thread.setPriority(Thread.MIN_PRIORITY);
-			thread.start();
+				});
+				thread.setPriority(Thread.MIN_PRIORITY);
+				thread.start();
+			}
 		}
 	}
 	

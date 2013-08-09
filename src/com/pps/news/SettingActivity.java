@@ -11,6 +11,8 @@ import android.os.Process;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.pps.news.app.BaseActivity;
@@ -19,10 +21,12 @@ import com.pps.news.network.RequestExecutor;
 import com.pps.news.util.CacheUtil;
 import com.pps.news.util.FileUtils;
 import com.pps.news.util.ImageCache;
+import com.pps.news.util.Log;
 import com.pps.news.util.UIUtil;
 import com.pps.news.widget.BaseAlertDialog;
 
-public class SettingActivity extends BaseActivity implements OnClickListener {
+public class SettingActivity extends BaseActivity implements OnClickListener, OnCheckedChangeListener {
+	private static final String TAG = "SettingActivity";
 	private static final int MESSAGE_COLLECT_CACHE_SIZE = 0x100;
 	
 	private TextView txtView;
@@ -40,10 +44,12 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		TextView txtSummury = (TextView)findViewById(R.id.summary);
 		txtSummury.setText("Setting");
 		txtView	= (TextView) findViewById(R.id.setting_clear_cache);
+		txtView.setText(R.string.setting_clear_cache);
 		txtView.setOnClickListener(this);
+		
 		ckIsAuto = (CheckBox)findViewById(R.id.setting_auto_clear);
 		ckIsAuto.setChecked(PreferenceUtils.getIsAutoClearCache(this));
-		txtView.setText(R.string.setting_clear_cache);
+		ckIsAuto.setOnCheckedChangeListener(this);
 		
 		collectCacheSize();
 	}
@@ -99,12 +105,6 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 		}
 	}
 
-	@Override
-	protected void onPause() {
-		super.onPause();
-		PreferenceUtils.storeIsAutoClearCache(this, ckIsAuto.isChecked());
-	}
-	
 	private Handler mHandler = new Handler() {
 
 		@Override
@@ -116,5 +116,11 @@ public class SettingActivity extends BaseActivity implements OnClickListener {
 			}
 		}
 	};
+
+	@Override
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		Log.d(TAG, "onCheckedChanged::"+isChecked);
+		PreferenceUtils.storeIsAutoClearCache(this, isChecked);
+	}
 
 }

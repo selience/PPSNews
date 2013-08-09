@@ -79,9 +79,9 @@ public class ShareDialog extends Dialog implements OnItemClickListener{
 			}
 			else if (packageName.equals("com.tencent.mm")) {
 				list.add(new AppInfo("微信", it));
-				/*AppInfo info = new AppInfo("朋友圈", it);
+				AppInfo info = new AppInfo("朋友圈", it);
 				info.name = "com.tencent.mm.ui.tools.ShareToTimeLineUI";
-				list.add(info);*/
+				list.add(info);
 			}
 			else if (packageName.equals("com.tencent.mobileqq")) {
 				list.add(new AppInfo("QQ", it));
