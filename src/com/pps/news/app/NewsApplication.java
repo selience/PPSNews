@@ -2,6 +2,7 @@ package com.pps.news.app;
 
 import java.io.File;
 import java.util.Observer;
+import com.pps.news.common.WXShare;
 import com.pps.news.constant.Constants;
 import com.pps.news.constant.PreferenceUtils;
 import com.pps.news.location.PPSNewsLocation;
@@ -11,6 +12,7 @@ import com.pps.news.util.FileUtils;
 import com.pps.news.util.ImageCache;
 import com.pps.news.util.Log;
 import com.pps.news.util.UIUtil;
+import com.tencent.mm.sdk.openapi.IWXAPI;
 import android.app.Application;
 import android.os.Environment;
 
@@ -23,6 +25,8 @@ import android.os.Environment;
 public class NewsApplication extends Application {
 	private static NewsApplication _instance;
 
+	private IWXAPI api; 
+	
 	private NotificationTask notifyTask = new NotificationTask();
 	
 	@Override
@@ -40,6 +44,7 @@ public class NewsApplication extends Application {
 		PreferenceUtils.obtainUser(); // 获取用户状态
 		PPSNewsLocation.getInstance().getLocation(); // 启用定位
 		clearNews();
+		api = WXShare.registerAppId(this);
 	}
 
 	private void clearNews() {
@@ -80,6 +85,10 @@ public class NewsApplication extends Application {
 	
 	public void removeObserver(Observer observer) {
 		notifyTask.deleteObserver(observer);
+	}
+
+	public IWXAPI getWXAPI() {
+		return this.api;
 	}
 	
 	public static NewsApplication getInstance() {

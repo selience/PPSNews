@@ -48,6 +48,7 @@ public class WeatherCityActivity extends BaseActivity implements OnItemClickList
 
 	public void initViewId() {
 		findViewById(R.id.icon).setVisibility(View.GONE);
+		((TextView)findViewById(R.id.summary)).setText("City");
 		titleName = (TextView) this.findViewById(R.id.title);
 		listView = (ListView) this.findViewById(R.id.weather_city_listview);
 		dingweiCity = (TextView) this.findViewById(R.id.weather_city_tv);

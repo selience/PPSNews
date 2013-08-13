@@ -132,6 +132,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 		findViewById(R.id.rl_alarm).setOnClickListener(this);
 		findViewById(R.id.weather).setOnClickListener(this);
 		findViewById(R.id.ic_alarm).setOnClickListener(this);
+		findViewById(R.id.weatherImage).setOnClickListener(this);
 		
 		mPullToRefreshViewPager = (PullToRefreshVerticalViewPager) findViewById(R.id.pull_refresh_vertical_viewpager);
 		mPullToRefreshViewPager.setOnRefreshListener(this);
@@ -264,6 +265,7 @@ public class NewsActivity extends BaseActivity implements OnClickListener, TaskL
 			startActivity(new Intent(this, AlarmActivity.class));
 			break;
 		case R.id.weather:
+		case R.id.weatherImage:
 			Intent intent = new Intent(this, WeatherActivity.class);
 			intent.putExtra("city", city);
 			startActivity(intent);

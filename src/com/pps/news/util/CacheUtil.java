@@ -6,10 +6,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.content.res.AssetManager;
 import android.os.Environment;
 
+import com.pps.news.app.NewsApplication;
 import com.pps.news.bean.Comment;
 import com.pps.news.bean.Group;
 import com.pps.news.bean.News;
@@ -158,6 +162,35 @@ public class CacheUtil {
 		}
 	}
 
+	public static List<News> getNewsCacheFromAsset() {
+		List<News> news =new ArrayList<News>();
+		InputStream is = null;
+		DataInputStream dis = null;
+		try {
+			NewsApplication mClient = NewsApplication.getInstance();
+			AssetManager mAssetManager = mClient.getAssets();
+			is = mAssetManager.open("data/"+CACHE_FILE_APPENDIX_NEWS_LIST);
+			dis = new DataInputStream(is);
+			int size = readInt(dis);
+			for(int i=0;i<size;i++){
+				news.add(readNews(dis));
+			}	
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} finally {
+			try {
+				if (dis != null) {
+					dis.close();
+				}
+				if (is != null) {
+					is.close();
+				}
+			} catch (Exception ex) {
+			}
+		}
+		return news;
+	}
+	
 	public static List<News> getNewsCache(){
 		List<News> news =new ArrayList<News>();
 		if(UIUtil.isSDCardAvailable()){
@@ -192,6 +225,12 @@ public class CacheUtil {
 				}
 			}
 		}
+		
+		if (news.isEmpty()) {
+			// 使用缺省缓存数据
+			return getNewsCacheFromAsset();
+		}
+		
 		return news;
 	}
 	
