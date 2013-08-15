@@ -44,7 +44,7 @@ public class NewsApplication extends Application {
 		PreferenceUtils.obtainUser(); // 获取用户状态
 		PPSNewsLocation.getInstance().getLocation(); // 启用定位
 		clearNews();
-		api = WXShare.registerAppId(this);
+		api = WXShare.register(this, Constants.APP_ID);
 	}
 
 	private void clearNews() {

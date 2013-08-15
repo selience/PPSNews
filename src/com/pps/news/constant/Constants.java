@@ -13,6 +13,9 @@ public class Constants {
 	// 开发者模式，Release版本更改为false；
 	public static final boolean DEBUG = false;
 	
+	// 微信开发者APPID
+    public static final String APP_ID = "wxd5e8675b8e8d0006";
+    
 	/** 新闻详情传递参数  */
 	public static final String NEWS_ID_EXTRAS = "_newsId";
 	public static final String NEWS_DETAIL_EXTRAS = "_news";
@@ -22,7 +25,7 @@ public class Constants {
 	/** 新闻详情显示数目  */
 	public static final String NEWS_DETAIL_PAGESIZE = "5";
 	/** 评论列表显示数目  */
-	public static final String COMMENTS_LIST_PAGESIZE = "8";
+	public static final String COMMENTS_LIST_PAGESIZE = "20";
 	
 	/** 闹钟设置传递参数  */
 	public static final String ALARM_EXTRAS = "intent.extra";
@@ -31,6 +34,9 @@ public class Constants {
 	/** 闹钟通知Intent Action */
 	public static final String ALARM_ALERT_ACTION = "com.android.alarmclock.ALARM_ALERT";
 
+	/** 新闻详情Intent Action */
+	public static final String NEWS_SHARE_DIALOG_ACTION = "com.pps.news.action.DISMISS_DIALOG";
+	
 	/** 自动清空缓存的时间   */
 	public static final long CLEAR_NEWS_CACHE_TIMESTAMP = 3 * 24 * 60 * 60 * 1000;
 	
@@ -43,6 +49,11 @@ public class Constants {
 	/** 获取所有评论  */
 	public static String getCommentByVideoId(String pageID) {
 		return "http://vcomment.pt.pps.tv/api.php?act=CommentGetByVideo&returntype=json&encode=gbk&pageID="+pageID;
+	}
+	
+	/** 获取单条评论  */
+	public static String getCommentGetByCmt() {
+		return "http://vcomment.pt.pps.tv/api.php?act=CommentGetByCmt";
 	}
 	
 	/** 新增评论  */

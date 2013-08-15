@@ -173,11 +173,17 @@ public final class UIUtil {
 		return null;
 	}
 	
-	public static Intent newShareIntent(Context context, String subject, String message, String dialogTitle) {
-        Intent shareIntent = new Intent(Intent.ACTION_SEND); //启动分享发送的属性  
-        shareIntent.putExtra(Intent.EXTRA_SUBJECT, subject); //分享的主题
-        shareIntent.putExtra(Intent.EXTRA_TEXT, message); //分享的内容  
-        shareIntent.setType("text/plain"); //分享发送的数据类型  
-        return Intent.createChooser(shareIntent, dialogTitle); 
-    }
+	public static Intent newShareIntent(String content, Uri uri) {
+		Intent shareIntent = new Intent(Intent.ACTION_SEND); 
+		if(uri!=null){
+			shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+			shareIntent.setType("image/*"); 
+			//当用户选择短信时使用sms_body取得文字
+			shareIntent.putExtra("sms_body", content);
+		}else{
+			shareIntent.setType("text/plain"); 
+		}
+		shareIntent.putExtra(Intent.EXTRA_TEXT, content);
+		return Intent.createChooser(shareIntent, "分享资源"); 
+	}
 }

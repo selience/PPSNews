@@ -1,7 +1,6 @@
 package com.pps.news;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import org.apache.http.HttpStatus;
 import android.os.Bundle;
@@ -168,8 +167,14 @@ public class CommentEditActivity extends BaseActivity implements OnClickListener
 		comments.addAll(data);
 		comments.setCur_page(data.getCur_page());
 		comments.setTotal(data.getTotal());
-		comments.setTotal_page(data.getTotal_page());
-		Collections.sort(comments);
+		comments.setTotal_page(totalPage(data.getTotal()));
+	}
+	
+	// 计算总页数
+	private int totalPage(int totalSize) {
+		int pageSize = Integer.valueOf(Constants.COMMENTS_LIST_PAGESIZE);
+		int totalPage = totalSize % pageSize == 0 ? totalSize / pageSize : totalSize / pageSize + 1;
+		return totalPage;
 	}
 	
 	// 显示加载更多
@@ -205,7 +210,6 @@ public class CommentEditActivity extends BaseActivity implements OnClickListener
 		int lastIndex = itemsLastIndex + 1;  //加上底部的loadMoreView项 
 		if (scrollState == OnScrollListener.SCROLL_STATE_IDLE) {
 			if (lastItem == lastIndex && pageNo < comments.getTotal_page()) {
-				 System.out.println("加载下一页");
 				 pageNo++;
 				 sendRequest();
 			}

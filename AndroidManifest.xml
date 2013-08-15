@@ -52,6 +52,10 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".NewsDetailActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".LoginActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateVisible|adjustResize"
@@ -60,10 +64,6 @@
             android:name=".RegisterActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateVisible|adjustResize"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".NewsDetailActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait" />
          <activity
             android:name=".SettingActivity"
@@ -98,8 +98,13 @@
              android:name=".weather.WeatherActivity"
              android:configChanges="keyboardHidden|orientation|screenSize"
              android:screenOrientation="portrait" />
-          <activity 
+         <activity 
              android:name=".weather.WeatherCityActivity"
+             android:configChanges="keyboardHidden|orientation|screenSize"
+             android:screenOrientation="portrait" />
+         <activity 
+             android:name=".wxapi.WXEntryActivity"
+             android:exported="true"
              android:configChanges="keyboardHidden|orientation|screenSize"
              android:screenOrientation="portrait" />
          

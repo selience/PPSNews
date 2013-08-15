@@ -1,8 +1,5 @@
 package com.pps.news;
 
-import java.util.Collections;
-import java.util.Observable;
-import java.util.Observer;
 import org.apache.http.HttpStatus;
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,7 +23,9 @@ import com.pps.news.bean.Comment;
 import com.pps.news.bean.Group;
 import com.pps.news.bean.Result;
 import com.pps.news.constant.Constants;
+import com.pps.news.parser.CommentParser;
 import com.pps.news.task.AddCommentTask;
+import com.pps.news.task.GetCommentByCmtTask;
 import com.pps.news.task.GetVideoCommentTask;
 import com.pps.news.task.GetUserCommentTask;
 import com.pps.news.task.NotificationTask;
@@ -35,9 +34,10 @@ import com.pps.news.task.NotificationTask.TaskData;
 import com.pps.news.util.UIUtil;
 
 public class CommentActivity extends BaseActivity implements OnClickListener, 
-	TaskListener, OnScrollListener, Observer {
+	TaskListener, OnScrollListener {
 	private static final String ADD_COMMENT_TASK = "ADD_COMMENT_TASK";
 	private static final String GET_COMMENT_TASK = "GET_COMMENT_TASK";
+	private static final String GET_SINGLE_COMMENT_TASK = "GET_SINGLE_COMMENT_TASK";
 	
 	private TextView txtTitle;
 	private TextView txtSummuy;
@@ -72,8 +72,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 		imageView.setOnClickListener(this);
 		progress = (ProgressBar) findViewById(R.id.progress);
 		
-		this.comments = new Group<Comment>();
-		NewsApplication.getInstance().addObserver(this);
+		comments = new Group<Comment>();
 		moreView = new FrameLayout(this);
 		footerView = View.inflate(this, R.layout.list_footer_view, null);
 		listView.addFooterView(moreView);
@@ -93,7 +92,6 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 			postView = (TextView)findViewById(R.id.postView);
 			postView.setOnClickListener(this);
 		}
-
 		sendRequest();
 	}
 
@@ -160,7 +158,7 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 
 	@Override
 	public void onTaskStart(String taskName) {
-		if (taskName.equals(GET_COMMENT_TASK)) {
+		if (taskName.equals(ADD_COMMENT_TASK)) {
 			progress.setVisibility(View.VISIBLE);
 		}
 	}
@@ -169,16 +167,26 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 	@SuppressWarnings("unchecked")
 	public void onTaskFinished(String taskName, Result result) {
 		handlerException(result.getException());
-		progress.setVisibility(View.GONE);
 		if (result.getCode()==HttpStatus.SC_OK) {
 			if (taskName.equals(GET_COMMENT_TASK) && result.getValue()!=null) {
 				Group<Comment> data = (Group<Comment>)result.getValue();
 				addAllData(data);
 				onRefresh(comments);
+				progress.setVisibility(View.GONE);
 			} else if (taskName.equals(ADD_COMMENT_TASK)) {
+				// 查询单条评论
+				String cmt_id = new CommentParser().parseCommentId(result.getMessage());
+				System.out.println("cmt_id::"+cmt_id);
+				new GetCommentByCmtTask(this, GET_SINGLE_COMMENT_TASK).execute(String.valueOf(newsId), cmt_id);
+				
 				messageView.setText("");
 				TaskData data = new TaskData(NotificationTask.NOTIFICATION_ADD_COMMENT_TASK, null);
 				NewsApplication.getInstance().notifyObservers(data);
+			} else if (taskName.equals(GET_SINGLE_COMMENT_TASK)) {
+				Comment comment = (Comment) result.getValue();
+				comments.add(comment);
+				onRefresh(comments);
+				progress.setVisibility(View.GONE);
 			}
 		}
 	}
@@ -188,8 +196,15 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 		comments.addAll(data);
 		comments.setCur_page(data.getCur_page());
 		comments.setTotal(data.getTotal());
-		comments.setTotal_page(data.getTotal_page());
-		Collections.sort(comments);
+		// 服务器返回总页数不准确，需要手动计算
+		comments.setTotal_page(totalPage(data.getTotal()));
+	}
+	
+	// 计算总页数
+	private int totalPage(int totalSize) {
+		int pageSize = Integer.valueOf(Constants.COMMENTS_LIST_PAGESIZE);
+		int totalPage = totalSize % pageSize == 0 ? totalSize / pageSize : totalSize / pageSize + 1;
+		return totalPage;
 	}
 	
 	// 显示加载更多
@@ -234,14 +249,5 @@ public class CommentActivity extends BaseActivity implements OnClickListener,
 		if (mAdapter!=null) {
 			mAdapter.deleteObservers();
 		}
-		NewsApplication.getInstance().removeObserver(this);
-	}
-
-	@Override
-	public void update(Observable observable, Object data) {
-		// TODO Auto-generated method stub
-		comments.clear();
-		pageNo = 1;
-		sendRequest();
 	}
 }

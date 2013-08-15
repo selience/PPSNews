@@ -12,12 +12,16 @@ import tv.pps.module.player.localserver.EmsVodInterface;
 import tv.pps.module.player.video.PPSVideoPlayerFragment;
 import tv.pps.module.player.video.bean.PerVideoData;
 import tv.pps.module.player.video.bean.VideoCommonData;
+import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -46,7 +50,7 @@ import com.pps.news.widget.ShareDialog;
 public class NewsDetailActivity extends BaseActivity implements TaskListener, 
 	OnClickListener, OnGlobalLayoutListener, Observer,
 	CallbackSetVideoData, CallbackSwitchScreen {
-	
+
 	private TextView txtTitle;
 	private TextView txtDate;
 	private TextView emptyView;
@@ -62,6 +66,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 	private View titleView;
 	private View bottomView;
 	private View contentView;
+	private Dialog dialog;
 	
 	private long newsId;
 	private int pageNo = 1;
@@ -71,6 +76,9 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 	private boolean isExpand;
 	private News itemNews;
 	private String url;
+	
+	private BroadcastReceiver dialogReceiver; 
+	private LocalBroadcastManager localManager;
 	private PPSVideoPlayerFragment videoFragment;
 	
 	@Override
@@ -112,6 +120,10 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 		txtDesc.getViewTreeObserver().addOnGlobalLayoutListener(this);
 		
 		playVideo(); // 加载视频
+		
+		localManager = LocalBroadcastManager.getInstance(this);
+		dialogReceiver = new DialogBroadcastReceiver(); // 注册通知销毁dialog
+		localManager.registerReceiver(dialogReceiver, new IntentFilter(Constants.NEWS_SHARE_DIALOG_ACTION));
 	}
 
 	private void playVideo() {
@@ -206,10 +218,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 			finish();
 			break;
 		case R.id.icon_share:
-			/*SharePopupWindow popup = new SharePopupWindow(this);
-			popup.showPopupWindow(findViewById(R.id.bottom_bar));
-			popup.setOnClickListener(this);*/
-			ShareDialog dialog = new ShareDialog(this, itemNews.getDesc_title());
+			dialog = new ShareDialog(this, itemNews);
 			dialog.show();
 			break;
 		case R.id.icon_comment:
@@ -258,6 +267,7 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 		super.onDestroy();
 		commentPanel.deleteObservers();
 		NewsApplication.getInstance().removeObserver(this);
+		localManager.unregisterReceiver(dialogReceiver);
 	}
 
 	@Override
@@ -308,16 +318,22 @@ public class NewsDetailActivity extends BaseActivity implements TaskListener,
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && 
-				getRequestedOrientation() == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-			if (videoFragment.isB_locked()) {
-				ToastUtils.showMessage(this, R.string.news_detail_video_lock_tips, Toast.LENGTH_SHORT);
-				return true;
-			} else {
-				videoFragment.quitFullScreenWhenBackBtnClicked();
-			}
+		if (videoFragment.isConsumeKeyBackEvent()) {
+			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
 	
+	
+	class DialogBroadcastReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			if (intent.getAction().equals(Constants.NEWS_SHARE_DIALOG_ACTION)) {
+				if (dialog!=null && dialog.isShowing()) {
+					dialog.dismiss();
+				}
+			}
+		}
+	}
 }

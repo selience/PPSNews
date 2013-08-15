@@ -13,7 +13,7 @@
         android:layout_height="30dip"
         android:layout_marginRight="10dip"
         android:contentDescription="@string/empty"
-        android:scaleType="centerCrop"
+        android:scaleType="fitXY"
         android:src="@drawable/ic_avatar" />
     <TextView
         android:id="@+id/textView"

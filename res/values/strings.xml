@@ -87,4 +87,9 @@
     <string name="day_concat">" "</string>
     
     <string name="weather_title_tv">选择城市</string>
+    
+   	<string name="errcode_success">发送成功</string>
+	<string name="errcode_cancel">发送取消</string>
+	<string name="errcode_deny">发送被拒绝</string>
+	<string name="errcode_unknown">发送返回</string>
 </resources>

@@ -40,6 +40,29 @@ public class CommentParser extends Parser<Comment> {
 		return comment;
 	}
 
+	public String parseCommentId(String content) {
+		try {
+			JSONObject json = new JSONObject(content);
+			return json.optString("data");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public Comment parseComment(String content) {
+		try {
+			JSONObject json = new JSONObject(content);
+			Object itemObject = json.opt("data");
+			if (itemObject instanceof JSONObject) {
+				return parse((JSONObject) itemObject);
+			}
+		} catch (JSONException ex) {
+			ex.printStackTrace();
+		}
+		return null;
+	}
+	
 	public Group<Comment> parse(String content) {
 		Group<Comment> comments = new Group<Comment>();
 		try {
